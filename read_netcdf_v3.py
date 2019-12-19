@@ -6,6 +6,7 @@ Created on Mon Dec 16 10:10:09 2019
 """
 import os
 import pandas as pd
+import numpy as np
 from netCDF4 import Dataset
 
 
@@ -29,12 +30,12 @@ def readnetcdf(path, predictor):
     
     pred_name = str('era_interim_')+str(predictor)
     checker = lambda x: x.startswith(pred_name)
-    files_sub = files[list(map(checker, files))]
+    files_sub = files[list(map(checker, files[0]))]
     
     f = str() #define string for the nc file
     count = 0; 
     time = pd.DataFrame(); pred = pd.DataFrame()
-    for ii in files_sub:
+    for ii in files_sub[0]:
         
         print(ii)
         
@@ -47,7 +48,8 @@ def readnetcdf(path, predictor):
         
         
         time = pd.concat([time, pd.DataFrame(g.variables['time'][:])], axis = 0)
-        pred = pd.concat([pred, g.variables[var[predictor]][:]], axis = 0)
+        #concatenate 3D arrays
+        pred = np.concatenate([pred, g.variables[var[predictor]][:]],1)
         
         print(pred.shape)
         
