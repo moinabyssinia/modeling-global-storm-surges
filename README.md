@@ -13,5 +13,8 @@ The master script to initiate othe scripts
 #subset
 Used to filter predictor information for the closest grid points for the specified tide gauge
 
+#surgets
+Used to prepare the storm surge time series for training
+
 #timelag_v2
 Used to compute lagged variables for the predictors and predictand
