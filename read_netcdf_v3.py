@@ -34,7 +34,7 @@ def readnetcdf(path, predictor):
     
     f = str() #define string for the nc file
     count = 0; 
-    time = pd.DataFrame(); pred = pd.DataFrame()
+    time = pd.DataFrame(); pred = []
     for ii in files_sub[0]:
         
         print(ii)

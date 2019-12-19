@@ -27,6 +27,7 @@ tg_cord = Coordinate(8.7167, 53.867)
 ##################
 #read netcdf files
 ##################
+
 nc_files = readnetcdf(data_path, 'vwnd', '2003_2006')
 lon, lat, time, pred = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
 
