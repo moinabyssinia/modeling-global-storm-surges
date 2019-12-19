@@ -35,3 +35,8 @@ pred_sub = subsetter(pred, ind_grids, time)
 #choose surge time series
 surge = pd.read_csv('cuxhaven-germany-bsh.mat.mat.csv', header=None)
 surge_with_date = add_date(surge)
+
+#merge predictors and predictand with 'date' as a key
+pred_surge = pd.merge(pred_sub, surge_with_date.iloc[:,8:10], \
+                      on = "date", how = "inner")
+    
