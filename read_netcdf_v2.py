@@ -18,6 +18,8 @@ def readnetcdf(path, predictor, year):
     reads components of a netcdf file
     predictor: 'slp', 'uwnd', 'vwnd'
     year: start_end
+    year_start: {1979, 1983, 1987, 1991, 1995, 1999, 2003, 2007, 2011}
+    
     """
     var = {"slp":"msl", "uwnd":"u10", "vwnd":"v10"}
     
