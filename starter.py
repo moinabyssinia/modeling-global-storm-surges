@@ -39,4 +39,5 @@ surge_with_date = add_date(surge)
 #merge predictors and predictand with 'date' as a key
 pred_surge = pd.merge(pred_sub, surge_with_date.iloc[:,8:10], \
                       on = "date", how = "inner")
+
     
