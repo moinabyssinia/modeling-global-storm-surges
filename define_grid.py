@@ -26,7 +26,7 @@ class Coordinate:
         lonmax = self.Longitude + delta
         if lonmax > 360:
             lonmax = lonmax - 360
-        elif: lonmax < 0:
+        elif lonmax < 0:
             lonmax = lonmax + 360
         lonmin = self.Longitude - delta
         if lonmin < 0:

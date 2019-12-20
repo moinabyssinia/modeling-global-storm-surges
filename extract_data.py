@@ -25,8 +25,9 @@ def extract_data(delta):
     
     #cd to the obs_surge dir
     os.chdir(surge_path)
+    tg_list = os.listdir()
     
-    for ii in range(len(os.listdir())): #used iterator for resumability
+    for ii in range(len(tg_list)): #used iterator for resumability
         
         tg = os.listdir()[ii] #the name of the tide gauge
         
