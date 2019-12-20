@@ -50,8 +50,15 @@ def findPixels(tg_cord, delta, lon, lat):
     long = lon
     latt = lat
 
-    #
-    lon_sub = long[(long[0] > lon_margin[0]) & (long[0] < lon_margin[1])]
+    #account for negative values of tg lon - to match that of the netcdfs
+    if lon_margin[0] > lon_margin[1]:
+        part1 = long[(long[0] > lon_margin[0]) & (long[0] < 360)]
+        part2 = long[(long[0] > 0) & (long[0] < lon_margin[1])]
+        lon_sub = pd.concat([part1, part2], axis = 0)
+    else:
+        lon_sub = long[(long[0] > lon_margin[0]) & (long[0] < lon_margin[1])]
+        
+        
     lat_sub = latt[(latt[0] > lat_margin[0]) & (latt[0] < lat_margin[1])]
 
     #print(lon_sub)
