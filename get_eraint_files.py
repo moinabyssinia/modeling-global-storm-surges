@@ -40,7 +40,7 @@ def get_eraint_files(pred_name, tg_cord, delta, path):
     time = pd.DataFrame(); pred_sub = pd.DataFrame()
     
     for ii in files_sub[0]:
-                
+        print(ii)
         if count == 0:
             lon,lat = readnetcdf(pred_name, ii)[0], readnetcdf(pred_name, ii)[1]
             close_grids = findPixels(tg_cord, delta, lon, lat)

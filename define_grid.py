@@ -54,8 +54,8 @@ def findPixels(tg_cord, delta, lon, lat):
     lon_sub = long[(long[0] > lon_margin[0]) & (long[0] < lon_margin[1])]
     lat_sub = latt[(latt[0] > lat_margin[0]) & (latt[0] < lat_margin[1])]
 
-    print(lon_sub)
-    print(lat_sub)
+    #print(lon_sub)
+    #print(lat_sub)
 
     for ii in lon_sub[0]:
         for jj in lat_sub[0]:
