@@ -4,7 +4,7 @@ Created on Thu Dec 19 09:30:37 2019
 
 @author: Michael Tadesse
 """
-
+import time 
 import os 
 import pandas as pd
 
@@ -17,21 +17,19 @@ from define_grid import Coordinate, findPixels, findindx
 from read_netcdf_v2 import readnetcdf
 from subset import subsetter
 from surgets import add_date
+from get_eraint_files import get_eraint_files
+
+
 
 #define tide gauge
-
-
 tg_cord = Coordinate(8.7167, 53.867)
 
+#get nc files
+t0 = time.time()
+nc_files = get_eraint_files("uwnd", tg_cord, 5, data_path)
+print(time.time() - t0)
 
-#read netcdf files
-
-os.chdir(data_path)
-files = pd.DataFrame(os.listdir())
-
-
-nc_files = readnetcdf(data_path, 'vwnd', '2003_2006')
-lon, lat, time, pred = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
+lon, lat, time, pred_sub = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
 
 
 #subset lon/lat/pred
