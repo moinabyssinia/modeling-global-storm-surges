@@ -8,10 +8,10 @@ Created on Thu Dec 19 09:30:37 2019
 import os 
 import pandas as pd
 
-script_path = "C:/Users/WahlInstall/Documents/ml_project_v3/scripts"
+script_path = "C:/Users/WahlInstall/Documents/ml_project_v3/scripts/modeling_storm_surge"
 os.chdir(script_path)
 
-data_path = "E:\era_interim" #where netcdf files are stored
+data_path = "E:\data\era_interim" #where netcdf files are stored
 
 from define_grid import Coordinate, findPixels, findindx
 from read_netcdf_v2 import readnetcdf
@@ -28,6 +28,7 @@ tg_cord = Coordinate(8.7167, 53.867)
 
 os.chdir(data_path)
 files = pd.DataFrame(os.listdir())
+
 
 nc_files = readnetcdf(data_path, 'vwnd', '2003_2006')
 lon, lat, time, pred = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
