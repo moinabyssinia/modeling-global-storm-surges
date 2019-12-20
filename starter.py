@@ -21,18 +21,22 @@ from compiler import compile_predictors
 #define tide gauge
 tg_cord = Coordinate(8.7167, 53.867)
 
+#provide the observed surge
+surge = pd.read_csv('cuxhaven-germany-bsh.mat.mat.csv', header=None)
+#add date column to the surge time series
+surge_with_date = add_date(surge)
+
 #get nc files
 t0 = time.time()
 nc_files = compile_predictors(tg_cord, 5, data_path)
 print(time.time() - t0)
 
-#lon, lat, time, pred_sub = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
+#concatenated predictors
+pred_combo = nc_files[3]
 
 
-#choose surge time series
 
-surge = pd.read_csv('cuxhaven-germany-bsh.mat.mat.csv', header=None)
-surge_with_date = add_date(surge)
+
 
 
 #this is to be done last
