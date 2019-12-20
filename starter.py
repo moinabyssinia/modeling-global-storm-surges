@@ -13,12 +13,9 @@ os.chdir(script_path)
 
 data_path = "E:\data\era_interim" #where netcdf files are stored
 
-from define_grid import Coordinate, findPixels, findindx
-from read_netcdf_v2 import readnetcdf
-from subset import subsetter
+from define_grid import Coordinate
 from surgets import add_date
-from get_eraint_files import get_eraint_files
-
+from compiler import compile_predictors
 
 
 #define tide gauge
@@ -26,17 +23,10 @@ tg_cord = Coordinate(8.7167, 53.867)
 
 #get nc files
 t0 = time.time()
-nc_files = get_eraint_files("uwnd", tg_cord, 5, data_path)
+nc_files = compile_predictors(tg_cord, 5, data_path)
 print(time.time() - t0)
 
-lon, lat, time, pred_sub = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
-
-
-#subset lon/lat/pred
-
-close_grids = findPixels(tg_cord, 5, lon, lat)
-ind_grids = findindx(close_grids, lon, lat)
-pred_sub = subsetter(pred, ind_grids, time)
+#lon, lat, time, pred_sub = nc_files[0], nc_files[1], nc_files[2], nc_files[3]
 
 
 #choose surge time series

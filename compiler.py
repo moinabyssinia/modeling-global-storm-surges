@@ -4,7 +4,6 @@ Created on Fri Dec 20 09:07:00 2019
 
 @author: WahlInstall
 """
-import pandas as pd
 from get_eraint_files import get_eraint_files
 
 def compile_predictors(tg_cord, delta, path):
@@ -39,8 +38,11 @@ def compile_predictors(tg_cord, delta, path):
     pred_vwnd_v10 = pred_vwnd[3]
     pred_slp_msl = pred_slp[3]
     
-    pred_combo = pd.merge(pred_uwnd_u10, pred_vwnd_v10, pred_slp_msl, \
-                          on = 'date', how = 'inner', \
-                              suffixes=('_uwnd', '_vwnd', '_slp'))
+    uwnd_vwnd = pred_uwnd_u10.merge(pred_vwnd_v10, on='date', \
+                              how = 'inner', suffixes=('_uwnd', '_vwnd'))
     
-    return pred_uwnd, pred_vwnd, pred_slp, pred_combo
+    uwnd_vwnd_slp = uwnd_vwnd.merge(pred_slp_msl, on='date', \
+                                    how = 'inner', suffixes=('_', '_slp'))
+
+    
+    return pred_uwnd, pred_vwnd, pred_slp, uwnd_vwnd_slp
