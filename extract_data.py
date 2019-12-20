@@ -4,6 +4,7 @@ Created on Fri Dec 20 12:41:05 2019
 
 @author: Michael Tadesse
 """
+import time
 import os 
 import pandas as pd
 from define_grid import Coordinate
@@ -25,7 +26,9 @@ def extract_data(delta):
     #cd to the obs_surge dir
     os.chdir(surge_path)
     
-    for tg in os.listdir():
+    for ii in range(len(os.listdir())): #used iterator for resumability
+        
+        tg = os.listdir()[ii] #the name of the tide gauge
         
         t0 = time.time()
         #extract lon and lat data
