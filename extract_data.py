@@ -27,7 +27,7 @@ def extract_data(delta):
     os.chdir(surge_path)
     tg_list = os.listdir()
     
-    for ii in range(1, len(tg_list)): #used iterator for resumability
+    for ii in range(34, len(tg_list)): #used iterator for resumability
         
         tg = tg_list[ii] #the name of the tide gauge
         
