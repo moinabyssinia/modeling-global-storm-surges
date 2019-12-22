@@ -27,15 +27,20 @@ def extract_data(delta):
     os.chdir(surge_path)
     tg_list = os.listdir()
     
-    for ii in range(34, len(tg_list)): #used iterator for resumability
+    for ii in range(146, len(tg_list)): #used iterator for resumability
         
         tg = tg_list[ii] #the name of the tide gauge
+        
+        #check if the surge file is empty
+        os.chdir(surge_path)
+        if os.stat(tg).st_size == 0:
+            print('\n', "This tide gauge has no surge data!", '\n')
+            continue
         
         t0 = time.time()
         #extract lon and lat data
         print(tg, '\n')
         
-        os.chdir(surge_path)
         surge = pd.read_csv(tg, header = None)
         surge_with_date = add_date(surge)
         
@@ -56,7 +61,7 @@ def extract_data(delta):
         os.chdir(csv_path)
         save_name = tg.split('.mat.mat.csv')[0] + ".csv"
         pred_and_surge.to_csv(save_name)
-
-        print(time.time() - t0)
+        
+        print('\n',time.time() - t0, '\n')
         
         
