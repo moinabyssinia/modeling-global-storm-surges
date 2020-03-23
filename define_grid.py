@@ -78,7 +78,7 @@ def findPixels(tg_cord, delta, lon, lat):
 # find indices of lon & lat of the closest grid points
 ######################################################
 def findindx(point, lon, lat):
-    """Finds the lon/lat index for the given grid poin
+    """Finds the lon/lat index for the given grid point
        point is a coordinate class
     """
       
