@@ -8,8 +8,8 @@ import time
 import os 
 import pandas as pd
 from d_define_grid import Coordinate, findPixels, findindx
-from surgets import add_date
-from e_compiler import compile_predictors
+#from surgets import add_date
+#from e_compiler import compile_predictors
 from c_read_netcdf import readnetcdf
 from f_subset import subsetter
 
@@ -21,6 +21,9 @@ def extract_data(delta):
     
     delta: distance (in degrees) from the tide gauge
     """
+    
+    print('Delta =  {}'.format(delta), '\n')
+    
     #defining the folders for predictors
     nc_path = {'prcp' : "D:\data\era_interim\era_interim_netcdf\prcp", \
                'slp' : "D:\data\era_interim\era_interim_netcdf\slp",\
@@ -38,11 +41,15 @@ def extract_data(delta):
     #looping through the predictor folders
     #prcp; slp; sst; uwnd; vwnd
     for pf in nc_path.keys():
+        
+        print(pf, '\n')
         os.chdir(nc_path[pf])
         
         #looping through the years of the chosen predictor
         for py in os.listdir():
             
+            os.chdir(nc_path[pf]) #back to the predictor folder
+            print(py, '\n')
             #get netcdf components  - give predicor name and predictor file
             nc_file = readnetcdf(pf, py)
             lon, lat, time, pred = nc_file[0], nc_file[1], nc_file[2], \
@@ -58,6 +65,11 @@ def extract_data(delta):
                 #extract lon and lat data
                 print(tg, '\n')
                 os.chdir(surge_path)
+                
+                if os.stat(tg).st_size == 0:
+                    print('\n', "This tide gauge has no surge data!", '\n')
+                    continue
+                
                 surge = pd.read_csv(tg, header = None)
                 #surge_with_date = add_date(surge)
         
@@ -66,46 +78,53 @@ def extract_data(delta):
                 
                 
                 #find closest grid points and their indices
-                close_grids = findPixels(tg_cord, 5, lon, lat)
+                close_grids = findPixels(tg_cord, delta, lon, lat)
                 ind_grids = findindx(close_grids, lon, lat)                
                 
                 
                 #subset predictor on selected grid size
                 pred_new = subsetter(pred, ind_grids, time)
                 
-
+                #create directoriesto save pred_new
+                os.chdir(csv_path)
                 
+                #tide gauge directory
+                tg_name = tg.split('.mat.mat.csv')[0]
+                
+                try:
+                    os.makedirs(tg_name)
+                    os.chdir(tg_name) #cd to it after creating it
+                except FileExistsError:
+                    #directory already exists
+                    os.chdir(tg_name)
+                
+                #delta directory
+                del_name = 'D' + str(delta)
+                
+                try:
+                    os.makedirs(del_name)
+                    os.chdir(del_name) #cd to it after creating it
+                except FileExistsError:
+                    #directory already exists
+                    os.chdir(del_name)
+                
+                #predictor directory
+                pred_name  = pf
+                
+                try:
+                    os.makedirs(pred_name)
+                    os.chdir(pred_name) #cd to it after creating it
+                except FileExistsError:
+                    #directory already exists
+                    os.chdir(pred_name)
+                
+                #save as csv
+                yr_name = py.split('_')[3]
+                save_name = '_'.join([tg_name, pred_name, del_name,yr_name])\
+                    + ".csv"
+                pred_new.to_csv(save_name)
             
-            
-    
-            
-            
-            
-            
-            
-            
-            
-    for ii in range(0, len(tg_list)): #used iterator for resumability
-
-        t0 = time.time()
-
-        
-        
-        
-       
-
-        #concatenated predictors
-        pred_combo = nc_files[3]
-        
-        #concatenate predictors with obs_surge
-        pred_and_surge = pd.merge(pred_combo, surge_with_date.iloc[:,8:], \
-                          on="date", how="inner")
-        
-        #save as csv
-        os.chdir(csv_path)
-        save_name = tg.split('.mat.mat.csv')[0] + ".csv"
-        pred_and_surge.to_csv(save_name)
-        
-        print('\n',time.time() - t0, '\n')
-        
+            #return to the predictor directory
+            os.chdir(nc_path[pf])
+                        
         

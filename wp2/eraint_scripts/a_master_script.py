@@ -19,18 +19,10 @@ This is the master script that runs the following processes
 """
 
 import os 
-os.chdir("E:\data\scripts\modeling_storm_surge")
+os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\eraint_scripts")
 from b_eraint_extract_data import extract_data
          
 del_options = [5, 4, 3, 2, 1.5]
 #looping through different grid size options
 for delta in del_options:
     extract_data(delta)
-    
-    
-
-
-         
-
-
-
