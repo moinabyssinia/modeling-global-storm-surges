@@ -15,12 +15,29 @@ dir_out = 'F:\eraint_combined_predictors'
 
 #load predictors
 #load corresponding surge time series
+os.chdir('F:\\dmax_surge')
+surge = pd.read_csv('abashiri-japan-jma.csv')
+
+os.chdir('F:\\eraint_combined_predictors')
+pred = pd.read_csv('abashiri-japan-jma.csv')
+
+"""
+check redundancy of surge timeseries
+some tide gauges have more than one daily max surge
+"""
+duplicate = surge.duplicated(subset='ymd', keep='first')
+surge = surge[~duplicate]
+
 
 #in some cases the surge ts might start earlier than pred ts
 #use the join function to filter the overlapping period
 
 surge_time = pd.DataFrame(surge['ymd'])
 surge_time.columns = ['date']
+
+
+ 
+
 
 #need to change the string format of dates to datetime
 #these will be the time lagging dataframes
@@ -75,10 +92,16 @@ for ii in range(1,time_all.shape[1]): #to loop through the lagged time series
     lag_ts = pd.DataFrame(time_all.iloc[:,ii]) 
     lag_ts.columns = ['date']
     #merge the selected tlagged time with the predictor on = "date"
-    pred_new = pd.merge(pred_subset_wo_nans, lag_ts, on = ['date'], how = 'right')
+    pred_new = pd.merge(pred_subset_wo_nans, lag_ts, on = ['date'], how = 'left')
+    pred_new.drop('Unnamed: 0', axis = 1, inplace = True)
     #sometimes nan values go to the bottom of the dataframe
     pred_new.sort_values(by = 'date', inplace=True)
-    pred_lagged = pd.concat([pred_lagged, pred_new], axis = 1)
+    
+    #concatenate lagged dataframe
+    if ii == 1:
+        pred_lagged = pred_new
+    else: 
+        pred_lagged = pd.merge(pred_lagged, pred_new, on = ['date'], how = 'left')
     
     
 
