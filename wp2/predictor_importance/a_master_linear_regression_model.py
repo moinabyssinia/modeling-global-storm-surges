@@ -11,6 +11,11 @@ sst_case =  wnd_u, wnd_v, slp, sst
 @author: Michael Tadesse
 """
 
+from b_preprocess import preprocess
 
-## continue from line 76 on linear_regression_model.py
+#predictors to remove from the predictor matrix as per the case
+pred_case = {'base_case':['sst', 'prcp'],'prcp_case':['sst'], \
+             'sst_case':['prcp']}
+
+validation = preprocess('base_case')
 
