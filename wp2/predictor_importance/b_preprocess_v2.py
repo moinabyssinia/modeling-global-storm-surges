@@ -16,7 +16,8 @@ Adjust script for later use - if reconstruction is needed
 import os 
 from datetime import datetime
 import pandas as pd
-from c_train_test_regression import lr_reg
+from sklearn.decomposition import PCA
+from c_train_test_regression_v2 import lr_reg
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
@@ -61,7 +62,7 @@ def preprocess(case):
         os.chdir(dir_in)
         
         tg_name = os.listdir()[tg]
-        print(tg, tg_name)
+        print(tg, case, tg_name)
 
         #load predictor
         pred = pd.read_csv(tg_name)
@@ -116,9 +117,17 @@ def preprocess(case):
         X = pred_surge.iloc[:,1:-1]
         y = pred_surge['surge']
         
-        X_train, X_test, y_train, y_test, = \
-            train_test_split(X,y, test_size = 0.2, random_state = 101)
         
+                
+        #make an instance of the model - explained variance == 95%
+        pca = PCA(.95)
+        pca.fit(X)
+        X_pca = pca.transform(X)
+
+        
+        X_train, X_test, y_train, y_test, = \
+            train_test_split(X_pca,y, test_size = 0.2, random_state = 101)
+
         
         #model validation
         [corrn, rmse] = lr_reg(X_train, X_test, y_train, y_test)
@@ -132,7 +141,7 @@ def preprocess(case):
         
         
         #save df as cs - in case of interruption
-        os.chdir(dir_out)
+        os.chdir(dir_out+'\\'+case)
         df.to_csv('eraint_lrreg_validation.csv')
             
 

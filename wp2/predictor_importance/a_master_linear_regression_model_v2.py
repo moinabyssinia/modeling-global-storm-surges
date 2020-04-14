@@ -14,7 +14,13 @@ sst_case =  wnd_u, wnd_v, slp, sst
 import os 
 os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\predictor_importance')
 
-from b_preprocess import preprocess
+from b_preprocess_v2 import preprocess
 
-validation = preprocess('base_case')
+#predictors to remove from the predictor matrix as per the case
+pred_case = {'base_case':['sst', 'prcp'],'prcp_case':['sst'], \
+             'sst_case':['prcp']}
+
+for ii in pred_case.keys():
+    print(ii)
+    validation = preprocess(ii)
 

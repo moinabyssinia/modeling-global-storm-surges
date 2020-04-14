@@ -8,7 +8,6 @@ Train and Test linear regression model
 @author: Michael Tadesse
 """
 import numpy as np
-import pandas as pd
 from sklearn import metrics
 from scipy import stats
 from sklearn.linear_model import LinearRegression
@@ -16,7 +15,8 @@ import matplotlib.pyplot as plt
 
 
 def lr_reg(X_train, X_test, y_train, y_test):
-    
+
+    #train regression model
     lm = LinearRegression()
     lm.fit(X_train, y_train)
     
