@@ -10,6 +10,7 @@ Global Mapping (correlation/RMSE) script
 
 import os
 import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 #locate the file that basemap needs
 os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\basemap";
@@ -24,6 +25,8 @@ dat_new.drop(['index'], axis =1, inplace = True)
 dat_new.drop(['Unnamed: 0'], axis =1, inplace = True)
 
 
+sns.set_context('notebook', font_scale = 2)
+
 #plotting rmse
 fig=plt.figure(figsize=(16, 12) )
 m=Basemap(projection='mill', lat_ts=10, llcrnrlon=-180, \
@@ -35,6 +38,9 @@ plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = dat_new['rmse'], c
 cbar = m.colorbar(location = 'bottom')
 plt.clim(0, 0.3)
 plt.title('Base_case - RMSE(m)')
+
+#save figure
+plt.savefig("base_case_corr.png", dpi = 400)
 
 
 #plotting correlation

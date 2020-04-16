@@ -45,9 +45,12 @@ def preprocess(case):
     
     
     #predictors to remove from the predictor matrix as per the case
-    pred_case = {'base_case':['sst', 'prcp'],'prcp_case':['sst'], \
-                 'sst_case':['prcp']}
-        
+    # pred_case = {'base_case':['sst', 'prcp'],'prcp_case':['sst'], \
+    #              'sst_case':['prcp']}
+    
+    #for extra testing
+    pred_case = {'u_v_case': ['sst', 'prcp', 'slp']}
+    
     #load predictors
     #cd to the lagged predictors directory
     
