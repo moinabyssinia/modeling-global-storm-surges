@@ -15,8 +15,7 @@ os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\grid_size_sa\\model')
 
 from b_preprocess_v2 import preprocess
 
-folder_name = ['eraint_D4', 'eraint_D3', 'eraint_D2', 'eraint_D1.5', \
-               'eraint_D1', 'eraint_D0.5']
+folder_name = ['eraint_D0.5']
     
 for ii in folder_name:
     preprocess(ii)

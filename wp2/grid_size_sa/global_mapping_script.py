@@ -34,6 +34,7 @@ m=Basemap(projection='mill', lat_ts=10, llcrnrlon=-180, \
   resolution='c')
 x,y = m(dat_new['lon'].tolist(), dat_new['lat'].tolist())
 m.drawcoastlines()
+m.fillcontinents(color='coral',lake_color='aqua')
 plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = dat_new['rmse'], cmap = 'hot_r')
 cbar = m.colorbar(location = 'bottom')
 plt.clim(0, 0.3)
@@ -57,8 +58,35 @@ plt.clim(0, 1)
 plt.title('Base_case  - Correlation')
 
 
+#plotting rmse with bluemarble basemap
+fig=plt.figure(figsize=(16, 12) )
+m=Basemap(projection='mill', lat_ts=10, llcrnrlon=-180, \
+  urcrnrlon=180,llcrnrlat=-80,urcrnrlat=80, \
+  resolution='c')
+x,y = m(grid_rmse['lon'].tolist(), grid_rmse['lat'].tolist())
+m.drawcoastlines()
+m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
+plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = grid_rmse['rmse_g1'], cmap = 'hot_r')
+cbar = m.colorbar(location = 'bottom')
+#plt.clim(0, 0.3)
+#plt.title('Base_case - RMSE(m)')
+
+
 
 #extract correlation data from dat_new
-get_corr = lambda x: float(x.split('(')[1].split(',')[0])
-corr_data = pd.DataFrame(list(map(get_corr, dat_new['corrn'])), columns = ['corrn'])
+gridcorr_data = pd.DataFrame(list(map(get_corr, dat_new['corrn'])), columns = ['corrn'])
 dat_new['corr_data'] = corr_data
+
+
+#get histogram plot
+plt.figure()
+sns.distplot(rmse['g10_g1'], hist = True, kde = False)
+
+
+#plot scatterplot with seaborn - hue and style
+plt.figure(figsize = (10, 8))
+sns.scatterplot(x = 'time', y = 'delta_rmse', hue = 'Grid Sizes', style='Grid Sizes', data = comp, s=200)
+plt.legend(ncol = 2)
+plt.grid(alpha = 0.4)
+plt.ylabel('Average increase in RMSE (cm)')
+plt.xlabel('Run Time (hrs.)')

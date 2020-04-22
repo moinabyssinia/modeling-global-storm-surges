@@ -15,11 +15,13 @@ import pandas as pd
 dir_in = 'F:\\01_eraint_predictors'
 dir_out = 'F:\\02_eraint_combined_predictors'
 
+folder_name = 'eraint_D0.5'
+
 def combine(folder_name):
     #looping through tide gauges
     os.chdir(os.path.join(dir_in, folder_name))
     
-    for tg in os.listdir():
+    for tg in ['le_havre-france-refmar']:
         print(tg, '\n')
         
         

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 13 10:28:07 2020
+Created on Thu Apr 17 14:29:00 2020
 
 Apply PCA on data set 
 Train and Test linear regression model 

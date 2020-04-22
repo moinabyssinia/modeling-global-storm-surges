@@ -23,8 +23,8 @@ def lag(folder_name):
     #looping through tide gauges
     os.chdir(os.path.join(dir_in, folder_name))
 
-    for tg in range(len(os.listdir())):
-        tg_name = os.listdir()[tg]
+    for tg in ['le_havre-france-refmar.csv']:
+        tg_name = tg
         print(tg, ' ', tg_name, '\n')
     
         pred = pd.read_csv(tg_name)

@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Apr  9 13:57:21 2020
+Created on Thu Apr 17 14:29:00 2020
 
+--------------------------------------------------------------------
 This script standardizes the predictor data 
 and trains a linear regression model
 
 This script might be used for reconstructing surges also
 
-*Notice that K-Fold CV was not used and thus reconstruction can not be done here
-Adjust script for later use - if reconstruction is needed
+*Notice that K-Fold CV was not used and thus reconstruction cannot 
+be done here - Adjust script for later use - 
+if reconstruction is needed
+--------------------------------------------------------------------
 
 @author: Michael Tadesse
 """
@@ -21,51 +24,38 @@ from c_train_test_regression_v2 import lr_reg
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
+    
+#defining directories    
+dir_in = 'F:\\03_eraint_lagged_predictors'
+dir_out = 'F:\\04_eraint_lrreg_validation'
+surge_path = 'F:\\05_dmax_surge_georef'
+    
 
-
-def preprocess(case):
+def preprocess(folder_name):
     """
     This function loads lagged predictors - loads surge time series 
     standardizes predictors - prepares the predictors belonging to each case
     prepare data for training/testing
     
-    base_case = wnd_u, wnd_v, slp
-    prcp_case =  wnd_u, wnd_v, slp, prcp
-    sst_case =  wnd_u, wnd_v, slp, sst
-    
     
     output: training and testing predictor and predictand data
     """
-
-    
-    #defining directories    
-    dir_in = 'F:\\eraint_lagged_predictors'
-    dir_out = 'F:\\eraint_lrreg_validation'
-    surge_path = 'F:\\dmax_surge_georef'
-    
-    
-    #predictors to remove from the predictor matrix as per the case
-    # pred_case = {'base_case':['sst', 'prcp'],'prcp_case':['sst'], \
-    #              'sst_case':['prcp']}
-    
-    #for extra testing
-    pred_case = {'u_v_case': ['sst', 'prcp', 'slp']}
     
     #load predictors
     #cd to the lagged predictors directory
-    
-    os.chdir(dir_in)
+    os.chdir(os.path.join(dir_in, folder_name))
     
     #empty dataframe for model validation
-    df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'corrn', 'rmse'])
+    df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'corrn', 'rmse', \
+                                 'original_size', 'pca_size'])
     
     #looping through TGs
     for tg in range(len(os.listdir())):
         
-        os.chdir(dir_in)
+        os.chdir(os.path.join(dir_in, folder_name))
         
         tg_name = os.listdir()[tg]
-        print(tg, case, tg_name)
+        print(tg, folder_name, tg_name)
 
         #load predictor
         pred = pd.read_csv(tg_name)
@@ -106,6 +96,7 @@ def preprocess(case):
             print('-'*80)
             continue
         
+        """
         #remove predictors of choice - as per chosen case
         test = lambda x: x.startswith(ii)
         for ii in pred_case[case]:
@@ -113,7 +104,7 @@ def preprocess(case):
             remove_cols = pred_surge.columns[list(map(test, pred_surge.columns))]
             # pred_remove = pred_surge.loc[:, remove_cols]
             pred_surge = pred_surge.drop(remove_cols, axis = 1)
-        
+        """
         
         
         #split data to training and testing 
@@ -137,21 +128,28 @@ def preprocess(case):
         lon = surge.lon[0]
         lat = surge.lat[0]
         
-        new_df = pd.DataFrame([tg_name, lon, lat, corrn, rmse]).T
-        new_df.columns = ['tg', 'lon', 'lat', 'corrn', 'rmse']
+        #adding original and post-pca matrix size
+        sz_orgn = X.shape[1]
+        sz_pca = X_pca.shape[1]
+        
+        print('pca ', sz_orgn, '-', sz_pca)
+        
+        #original size and pca size of matrix added
+        new_df = pd.DataFrame([tg_name, lon, lat, corrn, rmse, sz_orgn, sz_pca]).T
+        new_df.columns = ['tg', 'lon', 'lat', 'corrn', 'rmse', \
+                          'original_size', 'pca_size']
         df = pd.concat([df, new_df], axis = 0)
-        print(df)
+        # print(df)
         
         
         #save df as cs - in case of interruption
-        os.chdir(dir_out+'\\'+case)
+        os.chdir(os.path.join(dir_out, folder_name))
         df.to_csv('eraint_lrreg_validation.csv')
             
 
         #cd to dir_in
-        os.chdir(dir_in)
+        os.chdir(os.path.join(dir_in, folder_name))
 
-    return df
     
     
     

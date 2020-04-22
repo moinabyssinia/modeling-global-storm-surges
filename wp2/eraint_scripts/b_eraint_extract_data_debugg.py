@@ -48,20 +48,20 @@ def extract_data(delta):
         #looping through the years of the chosen predictor
         for py in os.listdir():
             
-            os.chdir(nc_path[pf]) #back to the predictor folder
+         ++   os.chdir(nc_path[pf]) #back to the predictor folder
             print(py, '\n')
             #get netcdf components  - give predicor name and predictor file
             nc_file = readnetcdf(pf, py)
             lon, lat, time, pred = nc_file[0], nc_file[1], nc_file[2], \
                 nc_file[3]
             
-            
+            tg_bank  = ['le_havre-france-refmar.mat.mat.csv']
             #looping through individual tide gauges
-            for t in range(0, len(tg_list)):
-                
+            # for t in range(0, len(tg_list)):
+            for t in tg_bank:
                 #the name of the tide gauge - for saving purposes
                 # tg = tg_list[t].split('.mat.mat.csv')[0] 
-                tg = tg_list[t]
+                tg = t
                 
                 #extract lon and lat data from surge csv file
                 print(tg, '\n')
