@@ -78,10 +78,13 @@ gridcorr_data = pd.DataFrame(list(map(get_corr, dat_new['corrn'])), columns = ['
 dat_new['corr_data'] = corr_data
 
 
-#get histogram plot
-plt.figure()
-sns.distplot(rmse['g10_g1'], hist = True, kde = False)
-
+#get histogram plot - add edge colors to the histogram
+plt.figure(figsize=(8,6))
+sns.distplot(combo_rmse_clean['rmse95d5'], hist = True, kde = False, bins=100, hist_kws=dict(edgecolor="k", linewidth=1))
+plt.xlim(0, 0.8)
+plt.ylabel('No. Tide Gauges')
+plt.title('10 x 10')
+plt.xlabel('RMSE(m)')
 
 #plot scatterplot with seaborn - hue and style
 plt.figure(figsize = (10, 8))
@@ -90,3 +93,25 @@ plt.legend(ncol = 2)
 plt.grid(alpha = 0.4)
 plt.ylabel('Average increase in RMSE (cm)')
 plt.xlabel('Run Time (hrs.)')
+
+
+#to place legend outside the plotting box
+plt.figure(figsize=(18, 12))
+sns.boxplot(x = 'variable', y = mdf_rmse['value']*100, hue = 'variable', data = mdf_rmse, palette = 'Accent')
+plt.legend(ncol = 8)
+plt.legend(bbox_to_anchor=(0,1.02,1,0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=7)
+plt.ylabel('Absolute Rmse (cm)')
+plt.xlabel('Grid Sizes')
+
+
+#plot scatterplot with errorbars
+plt.figure(figsize=(10, 8))
+sns.scatterplot(x = 'time', y = 'avg_rmse', hue = 'grid_size', style='grid_size', data = comp, s=200)
+plt.errorbar(comp['time'], comp['avg_rmse'], yerr=comp['rmse_std'], ecolor= 'gray', alpha = 0.6, capsize = 20)
+plt.legend(bbox_to_anchor=(0,1.02,1,0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=8)
+plt.ylabel('Absolute Rmse (cm)')
+plt.xlabel('Grid Sizes')
+plt.grid()
+plt.ylim(0, 40)
