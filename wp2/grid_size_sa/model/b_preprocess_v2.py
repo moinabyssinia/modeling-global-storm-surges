@@ -25,10 +25,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
     
-#defining directories    
-dir_in = 'F:\\03_eraint_lagged_predictors'
-dir_out = 'F:\\04_eraint_lrreg_validation'
-surge_path = 'F:\\05_dmax_surge_georef'
+    #defining directories    
+    dir_in = 'F:\\03_eraint_lagged_predictors'
+    dir_out = 'F:\\04_eraint_lrreg_validation'
+    surge_path = 'F:\\05_dmax_surge_georef'
     
 
 def preprocess(folder_name):
