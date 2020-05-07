@@ -12,13 +12,13 @@ import os
 import numpy as np
 from sklearn import metrics
 from scipy import stats
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
 
 
-def validate():
+def validateRF():
     """
     run KFOLD method for regression 
     """
@@ -123,11 +123,12 @@ def validate():
             y_train, y_test = y['surge'][train_index], y['surge'][test_index]
             
             #train regression model
-            lm = LinearRegression()
-            lm.fit(X_train, y_train)
+            rf= RandomForestRegressor(n_estimators = 50, random_state = 101, \
+                                      min_samples_leaf = 1)
+            rf.fit(X_train, y_train)
             
             #predictions
-            predictions = lm.predict(X_test)
+            predictions = rf.predict(X_test)
             # pred_obs = pd.concat([pd.DataFrame(np.array(predictions)), \
             #                       pd.DataFrame(np.array(y_test))], \
             #                      axis = 1)
@@ -166,7 +167,7 @@ def validate():
         
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        df.to_csv('eraint_lrreg_kfold.csv')
+        df.to_csv('eraint_randForest_kfold.csv')
         
         #cd to dir_in
         os.chdir(dir_in)

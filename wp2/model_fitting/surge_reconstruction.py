@@ -8,33 +8,36 @@ linear regression model by using the KFOLD method
 
 @author: Michael Tadesse
 """
-import os
-import numpy as np
-from sklearn import metrics
-from scipy import stats
-from sklearn.linear_model import LinearRegression
-from sklearn.decomposition import PCA
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import StandardScaler
-
-
-def validate():
+def reconstruct():
     """
     run KFOLD method for regression 
     """
+    #import packages
+    import os
+    import numpy as np
+    import pandas as pd
+    from sklearn import metrics
+    from scipy import stats
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    import statsmodels.api as sm
+    from datetime import datetime
+    from sklearn.linear_model import LinearRegression
+    from sklearn.decomposition import PCA
+    from sklearn.model_selection import KFold
+    from sklearn.preprocessing import StandardScaler
+    
+    
     #defining directories    
     dir_in = 'F:\\03_eraint_lagged_predictors\\eraint_D3'
-    dir_out = 'F:\\06_eraint_results\\model_fitting'
+    dir_out = 'F:\\08_eraint_surge_reconstruction'
     surge_path = 'F:\\05_dmax_surge_georef'
 
     
     #cd to the lagged predictors directory
     os.chdir(dir_in)
     
-    #empty dataframe for model validation
-    df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'num_year', \
-                                 'num_95pcs','corrn', 'rmse'])
-    
+
     #looping through 
     for tg in range(len(os.listdir())):
         
@@ -145,28 +148,74 @@ def validate():
                 metric_rmse.append(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
             
         
-        #number of years used to train/test model
+        # #number of years used to train/test model
         num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
-                             pred_surge['date'][0]).days/365)
+                              pred_surge['date'][0]).days/365)
         longitude = surge['lon'][0]
         latitude = surge['lat'][0]
         num_pc = X_pca.shape[1] #number of principal components
         corr = np.mean(metric_corr)
         rmse = np.mean(metric_rmse)
         
-        print('num_year = ', num_years, ' num_pc = ', num_pc ,'avg_corr = ',np.mean(metric_corr), ' -  avg_rmse (m) = ', \
+        print('num_year = ', num_years, ' num_pc = ', num_pc ,'avg_corr = ',\
+              np.mean(metric_corr), ' -  avg_rmse (m) = ', \
               np.mean(metric_rmse), '\n')
         
-        #original size and pca size of matrix added
-        new_df = pd.DataFrame([tg_name, longitude, latitude, num_years, num_pc, corr, rmse]).T
-        new_df.columns = ['tg', 'lon', 'lat', 'num_year', \
-                                 'num_95pcs','corrn', 'rmse']
-        df = pd.concat([df, new_df], axis = 0)
+        #%%
+        #surge reconstruction
+        pred_for_recon = pred[~pred.isna().any(axis = 1)]
+        pred_for_recon = pred_for_recon.reset_index().drop('index', axis = 1)
         
         
+        #standardize predictor data
+        dat = pred_for_recon.iloc[:,1:]
+        scaler = StandardScaler()
+        print(scaler.fit(dat))
+        dat_standardized = pd.DataFrame(scaler.transform(dat), \
+                                        columns = dat.columns)
+        pred_standardized = pd.concat([pred_for_recon['date'], dat_standardized], axis = 1)
+        
+        X_recon = pred_standardized.iloc[:, 1:]
+        
+        #apply PCA
+        pca = PCA(num_pc) #use the same number of PCs used for training
+        pca.fit(X_recon)
+        X_pca_recon = pca.transform(X_recon)
+    
+    
+        #model preparation
+        #first train model using observed surge and corresponding predictors
+        X_pca = sm.add_constant(X_pca)
+        est = sm.OLS(y['surge'], X_pca).fit()
+        
+        #predict with X_recon and get 95% prediction interval
+        X_pca_recon = sm.add_constant(X_pca_recon)
+        predictions = est.get_prediction(X_pca_recon).summary_frame(alpha = 0.05)
+        
+        #final dataframe
+        final_dat = pd.concat([pred_standardized['date'], predictions], axis = 1)
+        final_dat['lon'] = longitude
+        final_dat['lat'] = latitude
+        
+        #plot - optional
+        # time_stamp = lambda x: (datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+        # final_dat['date'] = pd.DataFrame(list(map(time_stamp, final_dat['date'])), columns = ['date'])
+        # surge['date'] = pd.DataFrame(list(map(time_stamp, surge['date'])), columns = ['date'])
+        # sns.set_context('notebook', font_scale = 2)
+        # plt.figure()
+        # plt.plot(final_dat['date'], final_dat['mean'], color = 'green')
+        # plt.scatter(surge['date'], surge['surge'], color = 'blue')
+        #prediction intervals
+        # plt.plot(final_dat['date'], final_dat['obs_ci_lower'], color = 'red',  linestyle = "--", lw = 0.8)
+        # plt.plot(final_dat['date'], final_dat['obs_ci_upper'], color = 'red',  linestyle = "--", lw = 0.8)
+        #confidence intervals
+        # plt.plot(final_dat['date'], final_dat['mean_ci_upper'], color = 'black',  linestyle = "--", lw = 0.8)
+        # plt.plot(final_dat['date'], final_dat['mean_ci_lower'], color = 'black',  linestyle = "--", lw = 0.8)
+
+
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        df.to_csv('eraint_lrreg_kfold.csv')
+        final_dat.to_csv(tg_name)
         
         #cd to dir_in
         os.chdir(dir_in)
