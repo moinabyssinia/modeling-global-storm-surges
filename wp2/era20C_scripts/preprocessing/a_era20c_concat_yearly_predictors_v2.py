@@ -31,30 +31,30 @@ tg_list = os.listdir()
 
 
 
-#%%looping through grid size folders 
 
-#cd to home in case there is an interruption    
-os.chdir(home)
-
-
-#looping through TGs inside the D folders
+#looping through TGs 
 for tg in tg_list:
-    print(grid, ' ', tg)
+    print(tg)
             
     #concatenate folder paths
-    os.chdir(os.path.join(home, tg, grid))
+    os.chdir(os.path.join(home, tg))
         
     #defining the folders for predictors
     #choose only u, v, and slp
     where = os.getcwd()
-    csv_path = {'slp' : os.path.join(where, 'slp'),\
-               "wnd_u": os.path.join(where, 'wnd_u'),\
-               'wnd_v' : os.path.join(where, 'wnd_v')}
     
-    #%%looping through predictors in the chosen grid
+    #run the two until wnd_v is prepared
+    csv_path = {'slp' : os.path.join(where, 'slp'),\
+           "wnd_u": os.path.join(where, 'wnd_u')}
+    
+    # csv_path = {'slp' : os.path.join(where, 'slp'),\
+    #            "wnd_u": os.path.join(where, 'wnd_u'),\
+    #            'wnd_v' : os.path.join(where, 'wnd_v')}
+    
+    #%%looping through predictors
     for pred in csv_path.keys():
-        os.chdir(os.path.join(home, tg, grid))
-        print(grid, ' ', tg, ' ', pred, '\n')
+        os.chdir(os.path.join(home, tg))
+        print(tg, ' ', pred, '\n')
         
         #cd to the chosen predictor
         os.chdir(pred)
@@ -62,7 +62,7 @@ for tg in tg_list:
         #%%looping through the yearly csv files
         count = 1
         for yr in os.listdir():
-            print(grid, ' ', tg, ' ', pred, ' ', yr)
+            print(tg, ' ', pred, ' ', yr)
             if count == 1:
                 dat = pd.read_csv(yr)
                 print('original size is: {}'.format(dat.shape))
@@ -79,16 +79,6 @@ for tg in tg_list:
         #saving concatenated predictor
         #cd to the saving location
         os.chdir(out_path)
-        
-        #create/cd to the grid folder
-        #save name for grid size folder
-        grid_name = '_'.join(['eraint', grid])
-        try:
-            os.makedirs(grid_name)
-            os.chdir(grid_name) #cd to it after creating it
-        except FileExistsError:
-            #directory already exists
-            os.chdir(grid_name)
         
         #create/cd to the tg folder
         try:
