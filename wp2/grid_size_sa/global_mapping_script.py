@@ -27,7 +27,24 @@ dat_new.drop(['Unnamed: 0'], axis =1, inplace = True)
 
 sns.set_context('notebook', font_scale = 2)
 
-#plotting rmse
+#%%plotting netCDF
+#use 'cyl' projection for wider figure (not square)
+#also use the lon.min, lon.max in order not to plot half of the map
+fig=plt.figure(figsize=(12, 8) )
+m=Basemap(projection='cyl',lat_ts=10,llcrnrlon=lon.min(), \
+  urcrnrlon=lon.max(),llcrnrlat=lat.min(),urcrnrlat=lat.max(), \
+  resolution='c')
+x, y = m(*np.meshgrid(lon,lat))
+m.contourf(x,y,pred[0,:,:],cmap='jet')
+m.colorbar(location='bottom')
+m.drawcoastlines()
+m.drawmapboundary()
+#m.drawparallels(np.arange(-90.,90.,30.),labels=[1,0,0,0])
+#m.drawmeridians(np.arange(-180.,180.,60.),labels=[0,0,0,1])
+#plt.title('VWND 09/8/11990
+
+
+#%%plotting rmse
 fig=plt.figure(figsize=(16, 12) )
 m=Basemap(projection='mill', lat_ts=10, llcrnrlon=-180, \
   urcrnrlon=180,llcrnrlat=-80,urcrnrlat=80, \
@@ -115,3 +132,25 @@ plt.ylabel('Absolute Rmse (cm)')
 plt.xlabel('Grid Sizes')
 plt.grid()
 plt.ylim(0, 40)
+
+
+
+#to overlay maps
+#%%plotting netCDF
+#use 'cyl' projection for wider figure (not square)
+#also use the lon.min, lon.max in order not to plot half of the map
+fig=plt.figure(figsize=(12, 8) )
+m=Basemap(projection='cyl',lat_ts=10,llcrnrlon=lon.min(), \
+  urcrnrlon=lon.max(),llcrnrlat=lat.min(),urcrnrlat=lat.max(), \
+  resolution='c')
+x, y = m(*np.meshgrid(lon_sub,lat_sub))
+m.contourf(x,y,pred_sub[0,:,:],cmap='jet')
+m.scatter(tg_cord.Longitude, tg_cord.Latitude)
+m.colorbar(location='bottom')
+#m.drawcoastlines()
+m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
+m.drawmapboundary()
+#m.drawstates()
+#m.drawparallels(np.arange(-90.,90.,30.),labels=[1,0,0,0])
+#m.drawmeridians(np.arange(-180.,180.,60.),labels=[0,0,0,1])
+#plt.title('VWND 09/8/11990
