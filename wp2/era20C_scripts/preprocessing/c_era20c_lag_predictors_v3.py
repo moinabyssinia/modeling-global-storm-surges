@@ -16,17 +16,30 @@ import datetime as dt #used for timedelta
 from datetime import datetime
 
 #define directories
+dir_name = 'F:\\01_erainterim\\03_eraint_lagged_predictors\\eraint_D3'
 dir_in = 'F:\\era20C\\02_era20C_combined_predictors'
 dir_out = 'F:\\era20C\\03_era20C_lagged_predictors'
 
 def lag():
-    #looping through tide gauges
-    os.chdir(dir_in)
-
-    for tg in range(len(os.listdir())):
-        tg_name = os.listdir()[tg]
-        print(tg, ' ', tg_name, '\n')
+    #get name of tide gauges from another folder that has the full names
+    os.chdir(dir_name)
     
+    #get names
+    tg_list_name = os.listdir()
+    
+    for tg in tg_list_name:
+        tg_name = tg
+        print(tg_name, '\n')
+        
+        #check if the file exists
+        os.chdir(dir_out)
+        if (os.path.isfile(tg_name)):
+            print('file already exists')
+            continue
+        
+        #cd to where the actual file is 
+        os.chdir(dir_in)
+        
         pred = pd.read_csv(tg_name)
     
     
