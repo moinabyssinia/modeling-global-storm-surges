@@ -16,12 +16,12 @@ import datetime as dt #used for timedelta
 from datetime import datetime
 
 #define directories
-dir_in = 'F:\\02_eraint_combined_predictors'
-dir_out = 'F:\\03_eraint_lagged_predictors'
+dir_in = 'F:\\era20C\\02_era20C_combined_predictors'
+dir_out = 'F:\\era20C\\03_era20C_lagged_predictors'
 
-def lag(folder_name):
+def lag():
     #looping through tide gauges
-    os.chdir(os.path.join(dir_in, folder_name))
+    os.chdir(dir_in)
 
     for tg in range(len(os.listdir())):
         tg_name = os.listdir()[tg]
@@ -53,8 +53,10 @@ def lag(folder_name):
         """
         
         #prepare lagged time series for time only
+        #note here that since ERA20C has 3hrly data
+        #the lag_hrs is increased from 6(eraint) to 11 (era20C)
         time_lagged = pd.DataFrame()
-        lag_hrs = [0, 6, 12, 18, 24, 30]
+        lag_hrs = [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
         for lag in lag_hrs:
             lag_name = 'lag'+str(lag)
             lam_delta = lambda x: str(x - dt.timedelta(hours = lag))
@@ -89,9 +91,9 @@ def lag(folder_name):
                 
         
         #cd to saving directory
-        os.chdir(os.path.join(dir_out, folder_name))
+        os.chdir(dir_out)
         pred_lagged.to_csv(tg_name)
-        os.chdir(os.path.join(dir_in, folder_name))
+        os.chdir(dir_in)
 
     
     

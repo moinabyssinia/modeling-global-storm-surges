@@ -44,8 +44,7 @@ for tg in tg_list:
     where = os.getcwd()
     
     #run the two until wnd_v is prepared
-    csv_path = {'slp' : os.path.join(where, 'slp'),\
-           "wnd_u": os.path.join(where, 'wnd_u')}
+    csv_path = {'wnd_v' : os.path.join(where, 'wnd_v')}
     
     # csv_path = {'slp' : os.path.join(where, 'slp'),\
     #            "wnd_u": os.path.join(where, 'wnd_u'),\

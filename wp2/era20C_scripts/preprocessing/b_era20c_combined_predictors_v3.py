@@ -12,12 +12,12 @@ import os
 import pandas as pd
 
 #define directories
-dir_in = 'F:\\01_eraint_predictors'
-dir_out = 'F:\\02_eraint_combined_predictors'
+dir_in = 'F:\\era20C\\01_era20C_predictors'
+dir_out = 'F:\\era20C\\02_era20C_combined_predictors'
 
-def combine(folder_name):
+def combine():
     #looping through tide gauges
-    os.chdir(os.path.join(dir_in, folder_name))
+    os.chdir(dir_in)
     
     for tg in os.listdir():
         print(tg, '\n')
@@ -28,13 +28,18 @@ def combine(folder_name):
         
         #defining the path for each predictor
         where = os.getcwd()
+        
+        #to work with slp and wnd_u only 
+        # csv_path = {'slp' : os.path.join(where, 'slp.csv'),\
+        #            "wnd_u": os.path.join(where, 'wnd_u.csv')}
+        
         csv_path = {'slp' : os.path.join(where, 'slp.csv'),\
-                   "wnd_u": os.path.join(where, 'wnd_u.csv'),\
-                   'wnd_v' : os.path.join(where, 'wnd_v.csv')}
+                    "wnd_u": os.path.join(where, 'wnd_u.csv'),\
+                    'wnd_v' : os.path.join(where, 'wnd_v.csv')}
             
         first = True   
         for pr in csv_path.keys():
-            print(folder_name, ' ', tg, ' ', pr)
+            print(tg, ' ', pr)
               
             #read predictor
             pred = pd.read_csv(csv_path[pr])
@@ -59,9 +64,9 @@ def combine(folder_name):
                 pred_combined = pd.merge(pred_combined, pred, on = 'date')
             
         #saving pred_combined
-        os.chdir(os.path.join(dir_out, folder_name))
+        os.chdir(dir_out)
         pred_combined.to_csv('.'.join([tg, 'csv']))
-        os.chdir(os.path.join(dir_in, folder_name))
+        os.chdir(dir_in)
         print('\n')
 
 
