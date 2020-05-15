@@ -2,16 +2,21 @@
 """
 Created on Mon May  4 15:51:30 2020
 
-This program is designed to validate a multiple
-linear regression model by using the KFOLD method
+This program is designed to validate a Random Forest
+model by using the KFOLD method
 
 
 @author: Michael Tadesse
 """
+#import packages
 import os
 import numpy as np
+import pandas as pd
 from sklearn import metrics
 from scipy import stats
+import seaborn as sns
+import matplotlib.pyplot as plt
+from datetime import datetime
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold
@@ -22,26 +27,36 @@ def validateRF():
     """
     run KFOLD method for regression 
     """
-    #defining directories    
-    dir_in = 'F:\\03_eraint_lagged_predictors\\eraint_D3'
-    dir_out = 'F:\\06_eraint_results\\model_fitting'
-    surge_path = 'F:\\05_dmax_surge_georef'
+    #defining directories 
+    #dir_name to get all tide gauge list as I can't for loop
+    #without full list
+    dir_name = 'F:\\01_erainterim\\03_eraint_lagged_predictors\\eraint_D3'
+    dir_in = 'F:\\era20C\\03_era20C_lagged_predictors'
+    dir_out = 'F:\\era20C\\04_era20C_model_validation'
+    surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
 
     
-    #cd to the lagged predictors directory
-    os.chdir(dir_in)
+    #get name of tide gauges from another folder that has the full names
+    os.chdir(dir_name)
+    
+    #get names
+    tg_list_name = os.listdir()
+    
+    
+    # #cd to the lagged predictors directory
+    # os.chdir(dir_in)
     
     #empty dataframe for model validation
     df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'num_year', \
                                  'num_95pcs','corrn', 'rmse'])
     
     #looping through 
-    for tg in range(len(os.listdir())):
+    for tg in tg_list_name:
         
         os.chdir(dir_in)
 
-        tg_name = os.listdir()[tg]
-        print(tg, tg_name)
+        tg_name = tg
+        print(tg_name)
         
         #load predictor
         pred = pd.read_csv(tg_name)
@@ -140,15 +155,16 @@ def validateRF():
                 print("insignificant correlation!")
                 continue
             else:
-                #print(stats.pearsonr(y_test, predictions))
+                print(stats.pearsonr(y_test, predictions))
                 metric_corr.append(stats.pearsonr(y_test, predictions)[0])
-                #print(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+                print(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+                print()
                 metric_rmse.append(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
             
         
         #number of years used to train/test model
-        num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
-                             pred_surge['date'][0]).days/365)
+        num_years = (pred_surge['date'][pred_surge.shape[0]-1] -\
+                             pred_surge['date'][0]).days/365
         longitude = surge['lon'][0]
         latitude = surge['lat'][0]
         num_pc = X_pca.shape[1] #number of principal components
@@ -167,7 +183,7 @@ def validateRF():
         
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        df.to_csv('eraint_randForest_kfold.csv')
+        df.to_csv('era20c_randForest_kfold.csv')
         
         #cd to dir_in
         os.chdir(dir_in)
