@@ -2,9 +2,10 @@
 """
 Created on Mon May  4 15:51:30 2020
 
-This program is designed to validate a multiple
-linear regression model by using the KFOLD method
-
+----------------------------------------------------
+This program is designed to reconstruct ERA20C daily
+maximum surge using MLR
+----------------------------------------------------
 
 @author: Michael Tadesse
 """
@@ -18,8 +19,6 @@ def reconstruct():
     import pandas as pd
     from sklearn import metrics
     from scipy import stats
-    import seaborn as sns
-    import matplotlib.pyplot as plt
     import statsmodels.api as sm
     from datetime import datetime
     from sklearn.linear_model import LinearRegression
@@ -29,9 +28,9 @@ def reconstruct():
     
     
     #defining directories    
-    dir_in = 'F:\\03_eraint_lagged_predictors\\eraint_D3'
-    dir_out = 'F:\\08_eraint_surge_reconstruction'
-    surge_path = 'F:\\05_dmax_surge_georef'
+    dir_in = 'F:\\era20C\\03_era20C_lagged_predictors'
+    dir_out = 'F:\\era20C\\08_era20C_surge_reconstruction\\mlr'
+    surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
 
     
     #cd to the lagged predictors directory
@@ -117,51 +116,56 @@ def reconstruct():
         pca.fit(X)
         X_pca = pca.transform(X)
         
-        #apply 10 fold cross validation
-        kf = KFold(n_splits=10, random_state=29)
+        {
+            # #apply 10 fold cross validation
+        # kf = KFold(n_splits=10, random_state=29)
         
-        metric_corr = []; metric_rmse = []; #combo = pd.DataFrame(columns = ['pred', 'obs'])
-        for train_index, test_index in kf.split(X):
-            X_train, X_test = X_pca[train_index], X_pca[test_index]
-            y_train, y_test = y['surge'][train_index], y['surge'][test_index]
+        # metric_corr = []; metric_rmse = []; #combo = pd.DataFrame(columns = ['pred', 'obs'])
+        # for train_index, test_index in kf.split(X):
+        #     X_train, X_test = X_pca[train_index], X_pca[test_index]
+        #     y_train, y_test = y['surge'][train_index], y['surge'][test_index]
             
-            #train regression model
-            lm = LinearRegression()
-            lm.fit(X_train, y_train)
+        #     #train regression model
+        #     lm = LinearRegression()
+        #     lm.fit(X_train, y_train)
             
-            #predictions
-            predictions = lm.predict(X_test)
-            # pred_obs = pd.concat([pd.DataFrame(np.array(predictions)), \
-            #                       pd.DataFrame(np.array(y_test))], \
-            #                      axis = 1)
-            # pred_obs.columns = ['pred', 'obs']
-            # combo = pd.concat([combo, pred_obs], axis = 0)    
+        #     #predictions
+        #     predictions = lm.predict(X_test)
+        #     # pred_obs = pd.concat([pd.DataFrame(np.array(predictions)), \
+        #     #                       pd.DataFrame(np.array(y_test))], \
+        #     #                      axis = 1)
+        #     # pred_obs.columns = ['pred', 'obs']
+        #     # combo = pd.concat([combo, pred_obs], axis = 0)    
             
-            #evaluation matrix - check p value
-            if stats.pearsonr(y_test, predictions)[1] >= 0.05:
-                print("insignificant correlation!")
-                continue
-            else:
-                #print(stats.pearsonr(y_test, predictions))
-                metric_corr.append(stats.pearsonr(y_test, predictions)[0])
-                #print(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
-                metric_rmse.append(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+        #     #evaluation matrix - check p value
+        #     if stats.pearsonr(y_test, predictions)[1] >= 0.05:
+        #         print("insignificant correlation!")
+        #         continue
+        #     else:
+        #         #print(stats.pearsonr(y_test, predictions))
+        #         metric_corr.append(stats.pearsonr(y_test, predictions)[0])
+        #         #print(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+        #         metric_rmse.append(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
             
         
-        # #number of years used to train/test model
-        num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
-                              pred_surge['date'][0]).days/365)
+        # # #number of years used to train/test model
+        # num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
+        #                       pred_surge['date'][0]).days/365)
+        # longitude = surge['lon'][0]
+        # latitude = surge['lat'][0]
+        # num_pc = X_pca.shape[1] #number of principal components
+        # corr = np.mean(metric_corr)
+        # rmse = np.mean(metric_rmse)
+        
+        # print('num_year = ', num_years, ' num_pc = ', num_pc ,'avg_corr = ',\
+        #       np.mean(metric_corr), ' -  avg_rmse (m) = ', \
+        #       np.mean(metric_rmse), '\n')
+            }
+        
+        num_pc = X_pca.shape[1] #number of principal components
         longitude = surge['lon'][0]
         latitude = surge['lat'][0]
-        num_pc = X_pca.shape[1] #number of principal components
-        corr = np.mean(metric_corr)
-        rmse = np.mean(metric_rmse)
         
-        print('num_year = ', num_years, ' num_pc = ', num_pc ,'avg_corr = ',\
-              np.mean(metric_corr), ' -  avg_rmse (m) = ', \
-              np.mean(metric_rmse), '\n')
-        
-        #%%
         #surge reconstruction
         pred_for_recon = pred[~pred.isna().any(axis = 1)]
         pred_for_recon = pred_for_recon.reset_index().drop('index', axis = 1)
@@ -192,12 +196,19 @@ def reconstruct():
         X_pca_recon = sm.add_constant(X_pca_recon)
         predictions = est.get_prediction(X_pca_recon).summary_frame(alpha = 0.05)
         
+        #drop confidence interval and mean_se columns 
+        predictions.drop(['mean_se', 'mean_ci_lower','mean_ci_upper'], \
+                         axis = 1, inplace = True)
+        
         #final dataframe
         final_dat = pd.concat([pred_standardized['date'], predictions], axis = 1)
         final_dat['lon'] = longitude
         final_dat['lat'] = latitude
+        final_dat.columns = ['date', 'surge_reconsturcted', 'pred_int_lower',\
+                             'pred_int_upper', 'lon', 'lat']
         
-        #plot - optional
+        {
+        # plot - optional
         # time_stamp = lambda x: (datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
         # final_dat['date'] = pd.DataFrame(list(map(time_stamp, final_dat['date'])), columns = ['date'])
         # surge['date'] = pd.DataFrame(list(map(time_stamp, surge['date'])), columns = ['date'])
@@ -205,12 +216,14 @@ def reconstruct():
         # plt.figure()
         # plt.plot(final_dat['date'], final_dat['mean'], color = 'green')
         # plt.scatter(surge['date'], surge['surge'], color = 'blue')
-        #prediction intervals
+        # prediction intervals
         # plt.plot(final_dat['date'], final_dat['obs_ci_lower'], color = 'red',  linestyle = "--", lw = 0.8)
         # plt.plot(final_dat['date'], final_dat['obs_ci_upper'], color = 'red',  linestyle = "--", lw = 0.8)
-        #confidence intervals
+        # confidence intervals
         # plt.plot(final_dat['date'], final_dat['mean_ci_upper'], color = 'black',  linestyle = "--", lw = 0.8)
         # plt.plot(final_dat['date'], final_dat['mean_ci_lower'], color = 'black',  linestyle = "--", lw = 0.8)
+
+            }
 
 
         #save df as cs - in case of interruption

@@ -13,9 +13,6 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics
 from scipy import stats
-import seaborn as sns
-import matplotlib.pyplot as plt
-import statsmodels.api as sm
 from datetime import datetime
 from sklearn.linear_model import LinearRegression
 from sklearn.decomposition import PCA
@@ -150,8 +147,8 @@ def validate():
             
         
         #number of years used to train/test model
-        num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
-                             pred_surge['date'][0]).days/365)
+        num_years = (pred_surge['date'][pred_surge.shape[0]-1] -\
+                             pred_surge['date'][0]).days/365
         longitude = surge['lon'][0]
         latitude = surge['lat'][0]
         num_pc = X_pca.shape[1] #number of principal components
@@ -170,7 +167,7 @@ def validate():
         
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        df.to_csv('eraint_lrreg_kfold.csv')
+        df.to_csv('era20c_lrreg_kfold.csv')
         
         #cd to dir_in
         os.chdir(dir_in)
