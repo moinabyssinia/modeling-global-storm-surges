@@ -135,6 +135,35 @@ plt.ylim(0, 40)
 
 
 
+#to plot prediction intervals
+time_stamp = lambda x: (datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+final_dat['date'] = pd.DataFrame(list(map(time_stamp, final_dat['date'])), columns = ['date'])
+surge['date'] = pd.DataFrame(list(map(time_stamp, surge['date'])), columns = ['date'])
+sns.set_context('notebook', font_scale = 2)
+plt.figure()
+plt.plot(final_dat['date'], final_dat['mean'], color = 'green')
+plt.scatter(surge['date'], surge['surge'], color = 'blue')
+# prediction intervals
+plt.plot(final_dat['date'], final_dat['obs_ci_lower'], color = 'red',  linestyle = "--", lw = 0.8)
+plt.plot(final_dat['date'], final_dat['obs_ci_upper'], color = 'red',  linestyle = "--", lw = 0.8)
+# confidence intervals
+plt.plot(final_dat['date'], final_dat['mean_ci_upper'], color = 'black',  linestyle = "--", lw = 0.8)
+plt.plot(final_dat['date'], final_dat['mean_ci_lower'], color = 'black',  linestyle = "--", lw = 0.8)
+
+
+plt.figure()
+plt.plot(cux_mlr['date'], cux_mlr['surge_reconsturcted'], color = 'blue', label = 'mlr_recon')
+plt.plot(cux_rf['date'], cux_rf['surge_reconsturcted'], color = 'green', label = 'rf_recon')
+#mlr pred intervals
+plt.plot(cux_mlr['date'], cux_mlr['pred_int_lower'], lw = 0.5 ,ls = '--', color = 'blue', label = 'pred_lower interval')
+plt.plot(cux_mlr['date'], cux_mlr['pred_int_upper'], lw = 0.5, ls = '--', color = 'blue', label = 'pred_upper interval')
+#rf pred intervals
+plt.plot(cux_rf['date'], cux_rf['pred_int_lower'], lw = 0.5 ,ls = '--', color = 'green', label = 'pred_lower interval')
+plt.plot(cux_rf['date'], cux_rf['pred_int_upper'], lw = 0.5, ls = '--', color = 'green', label = 'pred_upper interval')
+plt.legend()
+
+
+
 #to overlay maps
 #%%plotting netCDF
 #use 'cyl' projection for wider figure (not square)

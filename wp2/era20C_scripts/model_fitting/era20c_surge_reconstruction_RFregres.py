@@ -2,9 +2,8 @@
 """
 Created on Mon May  7 11:39:00 2020
 
-This program is designed to validate a Random Forest
-regression model by using the KFOLD method
-
+This program is designed to reconstruct
+daily max surge using RF
 
 @author: Michael Tadesse
 """
@@ -28,9 +27,9 @@ def reconstructRF():
     
     
     #defining directories    
-    dir_in = 'F:\\03_eraint_lagged_predictors\\eraint_D3'
-    dir_out = 'F:\\08_eraint_surge_reconstruction\\randomForest'
-    surge_path = 'F:\\05_dmax_surge_georef'
+    dir_in = 'F:\\era20C\\03_era20C_lagged_predictors'
+    dir_out = 'F:\\era20C\\08_era20C_surge_reconstruction\\rf'
+    surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
 
     # #load KFOLD result csv file
     # os.chdir('F:\\06_eraint_results\\sonstig')
