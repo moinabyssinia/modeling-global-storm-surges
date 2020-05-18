@@ -19,14 +19,14 @@ def chooseModel():
     import shutil
     
     #define directories
-    dir_in = 'F:\\06_eraint_results\\model_fitting'
-    dir_out_surge = 'F:\\08_eraint_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
+    dir_in = 'F:\\02_era20C\\04_era20C_model_validation'
+    dir_out_surge = 'F:\\02_era20C\\08_era20C_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
    #dir_out_metadata = 'F:\\08_eraint_surge_reconstruction\\bestReconstruction\\metaData'
     
     #read kfold validation csvs
     os.chdir(dir_in)
-    lr = pd.read_csv('eraint_lrreg_kfold.csv')
-    rf = pd.read_csv('eraint_randForest_kfold.csv')
+    lr = pd.read_csv('era20c_lrreg_kfold.csv')
+    rf = pd.read_csv('era20c_randForest_kfold.csv')
     
     #merge the two csvs
     comp = pd.merge(lr, rf, on = 'tg', how = 'right')
@@ -51,7 +51,7 @@ def chooseModel():
     for ii in range(len(comp)):
         if comp['bestModel'][ii] == 'MLR':
             print(comp['bestModel'][ii])
-            os.chdir('F:\\08_eraint_surge_reconstruction\\lreg')
+            os.chdir('F:\\02_era20C\\08_era20C_surge_reconstruction\\mlr')
             source = os.path.join(os.path.abspath(os.getcwd()), comp['tg'][ii])
             destination = os.path.join(dir_out_surge, comp['tg'][ii])
             
@@ -64,7 +64,7 @@ def chooseModel():
                 print("error occured while copying file")
         else:
             comp['bestModel'][ii]
-            os.chdir('F:\\08_eraint_surge_reconstruction\\randomForest')
+            os.chdir('F:\\02_era20C\\08_era20C_surge_reconstruction\\rf')
             source = os.path.join(os.path.abspath(os.getcwd()), comp['tg'][ii])
             destination = os.path.join(dir_out_surge, comp['tg'][ii])
             
