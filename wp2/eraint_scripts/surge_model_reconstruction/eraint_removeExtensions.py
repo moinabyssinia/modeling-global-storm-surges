@@ -15,8 +15,8 @@ def removeExtension():
     
     import os    
     
-    dir_in = 'F:\\02_era20C\\08_era20C_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
-    dir_out = 'F:\\02_era20C\\08_era20C_surge_reconstruction\\bestReconstruction\\surgeReconstructed_new'
+    dir_in = 'F:\\01_erainterim\\08_eraint_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
+    dir_out = 'F:\\01_erainterim\\08_eraint_surge_reconstruction\\bestReconstruction\\surgeReconstructed_new'
 
 
     os.chdir(dir_in)
