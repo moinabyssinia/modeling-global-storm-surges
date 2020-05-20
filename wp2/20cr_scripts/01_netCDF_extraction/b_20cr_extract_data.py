@@ -115,7 +115,10 @@ def extract_data(delta):
                     os.chdir(pred_name)
                 
                 #save as csv
-                yr_name = py.split('.')[2]
+                if py.startswith('prmsl'):
+                    yr_name = py.split('.')[1]
+                else:
+                    yr_name = py.split('.')[2]
                 save_name = '_'.join([tg_name, pred_name, yr_name])\
                     + ".csv"
                 pred_new.to_csv(save_name)

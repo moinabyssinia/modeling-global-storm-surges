@@ -9,6 +9,6 @@ of yearly predictor csvs
 """
 
 import os 
-dir_in = 'D:\\data\\scripts\\modeling_storm_surge\\wp2\\\era20C_scripts\preprocessing'
+dir_in = 'D:\\data\\scripts\\modeling_storm_surge\\wp2\\20cr_scripts\\02_preprocessing'
 os.chdir(dir_in)
-import a_era20c_concat_yearly_predictors_v2
+import a_20cr_concat_yearly_predictors_v2

@@ -4,8 +4,6 @@ Created on Tue May 13 10:02:00 2020
 ---------------------------------------------------------
 This script concatenates yearly predictor files
 
-Browses the different grid size folders for the chosen TG
-
 Browses the predictor folders for the chosen TG
 
 Concatenates the yearly csvs for the chosen predictor
@@ -21,8 +19,8 @@ import os
 import pandas as pd
 
 #%% define directories
-home = 'F:\\era20C\\era20C_localized'
-out_path = 'F:\\era20C\\01_era20C_predictors'
+home = 'E:\\03_20cr\\20cr_localized'
+out_path = 'E:\\03_20cr\\01_20cr_predictiors'
 
 
 #cd to the home dir to get TG information
@@ -43,8 +41,8 @@ for tg in tg_list:
     #choose only u, v, and slp
     where = os.getcwd()
     
-    #run the two until wnd_v is prepared
-    csv_path = {'wnd_v' : os.path.join(where, 'wnd_v')}
+    #run slp until wnd_u and wnd_v are prepared
+    csv_path = {'slp' : os.path.join(where, 'slp')}
     
     # csv_path = {'slp' : os.path.join(where, 'slp'),\
     #            "wnd_u": os.path.join(where, 'wnd_u'),\
@@ -53,7 +51,7 @@ for tg in tg_list:
     #%%looping through predictors
     for pred in csv_path.keys():
         os.chdir(os.path.join(home, tg))
-        print(tg, ' ', pred, '\n')
+        # print(tg, ' ', pred, '\n')
         
         #cd to the chosen predictor
         os.chdir(pred)
@@ -61,10 +59,10 @@ for tg in tg_list:
         #%%looping through the yearly csv files
         count = 1
         for yr in os.listdir():
-            print(tg, ' ', pred, ' ', yr)
+            print(pred, ' ', yr)
             if count == 1:
                 dat = pd.read_csv(yr)
-                print('original size is: {}'.format(dat.shape))
+                # print('original size is: {}'.format(dat.shape))
                 
             else:
                 #remove the header of the subsequent csvs before merging
@@ -72,9 +70,10 @@ for tg in tg_list:
                 dat_yr = pd.read_csv(yr)
                 dat_yr.shape
                 dat = pd.concat([dat, dat_yr], axis = 0)
-                print('concatenated size is: {}'.format(dat.shape))
+                # print('concatenated size is: {}'.format(dat.shape))
             count+=1
     
+        print(dat.shape)
         #saving concatenated predictor
         #cd to the saving location
         os.chdir(out_path)
