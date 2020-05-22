@@ -7,7 +7,6 @@ Global Mapping (correlation/RMSE) script
 
 @author: Michael Tadesse
 """
-
 import os
 import pandas as pd
 import seaborn as sns
@@ -15,6 +14,7 @@ import matplotlib.pyplot as plt
 #locate the file that basemap needs
 os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\basemap";
 from mpl_toolkits.basemap import Basemap
+
 
 
 #load file to be plotted

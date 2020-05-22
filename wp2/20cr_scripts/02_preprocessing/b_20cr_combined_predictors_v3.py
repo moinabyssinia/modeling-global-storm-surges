@@ -12,15 +12,25 @@ import os
 import pandas as pd
 
 #define directories
-dir_in = 'F:\\era20C\\01_era20C_predictors'
-dir_out = 'F:\\era20C\\02_era20C_combined_predictors'
+dir_name = 'F:\\01_erainterim\\01_eraint_predictors\\eraint_D3'
+dir_in = 'E:\\03_20cr\\01_20cr_predictiors'
+dir_out = 'E:\\03_20cr\\02_20cr_combined_predictors'
 
 def combine():
-    #looping through tide gauges
+    #get name of tide gauges from another folder that has the full names
+    #checked 882 tgs in eraint folde; same ones in 20CR folder -> go ahead
+    os.chdir(dir_name)
+    
+    #get names
+    tg_list_name = os.listdir()
+    
+    #cd to where the actual file is 
     os.chdir(dir_in)
     
-    for tg in os.listdir():
-        print(tg, '\n')
+    
+    for tg in tg_list_name:
+        tg_name = tg
+        print(tg_name, '\n')
         
         
         #looping through each TG folder
@@ -29,14 +39,13 @@ def combine():
         #defining the path for each predictor
         where = os.getcwd()
         
-        #to work with slp and wnd_u only 
-        # csv_path = {'slp' : os.path.join(where, 'slp.csv'),\
-        #            "wnd_u": os.path.join(where, 'wnd_u.csv')}
-        
+    
         csv_path = {'slp' : os.path.join(where, 'slp.csv'),\
                     "wnd_u": os.path.join(where, 'wnd_u.csv'),\
                     'wnd_v' : os.path.join(where, 'wnd_v.csv')}
-            
+        
+     
+        
         first = True   
         for pr in csv_path.keys():
             print(tg, ' ', pr)

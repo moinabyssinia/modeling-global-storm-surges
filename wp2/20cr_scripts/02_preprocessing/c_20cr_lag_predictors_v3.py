@@ -17,11 +17,12 @@ from datetime import datetime
 
 #define directories
 dir_name = 'F:\\01_erainterim\\03_eraint_lagged_predictors\\eraint_D3'
-dir_in = 'F:\\era20C\\02_era20C_combined_predictors'
-dir_out = 'F:\\era20C\\03_era20C_lagged_predictors'
+dir_in = 'E:\\03_20cr\\02_20cr_combined_predictors'
+dir_out = 'E:\\03_20cr\\03_20cr_lagged_predictors'
 
 def lag():
     #get name of tide gauges from another folder that has the full names
+    #checked 882 tgs in eraint folde; same ones in 20CR folder -> go ahead
     os.chdir(dir_name)
     
     #get names
@@ -31,11 +32,11 @@ def lag():
         tg_name = tg
         print(tg_name, '\n')
         
-        #check if the file exists
-        os.chdir(dir_out)
-        if (os.path.isfile(tg_name)):
-            print('file already exists')
-            continue
+        # #check if the file exists
+        # os.chdir(dir_out)
+        # if (os.path.isfile(tg_name)):
+        #     print('file already exists')
+        #     continue
         
         #cd to where the actual file is 
         os.chdir(dir_in)
