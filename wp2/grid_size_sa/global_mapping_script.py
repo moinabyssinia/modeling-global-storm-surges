@@ -183,3 +183,19 @@ m.drawmapboundary()
 #m.drawparallels(np.arange(-90.,90.,30.),labels=[1,0,0,0])
 #m.drawmeridians(np.arange(-180.,180.,60.),labels=[0,0,0,1])
 #plt.title('VWND 09/8/11990
+
+
+#plot only a subset of a map
+fig=plt.figure(figsize=(12, 8) )
+m=Basemap(projection='cyl',lat_ts=10,llcrnrlon=260, \
+  urcrnrlon=280,llcrnrlat=10,urcrnrlat=40, \
+  resolution='c')
+x, y = m(*np.meshgrid(lon_sub,lat_sub))
+m.pcolor(x,y,pred_sub,cmap='jet')
+#m.scatter(tg_cord.Longitude, tg_cord.Latitude)
+m.colorbar()
+m.drawcoastlines()
+m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
+m.drawmapboundary()
+plt.clim(98750, 100750)
+plt.title('Hurricane Katrina - SLP - ERA5 - 08/29/2005 06:00:00')
