@@ -3,7 +3,7 @@
 Created on Mon May  4 15:51:30 2020
 
 ----------------------------------------------------
-This program is designed to reconstruct ERA20C daily
+This program is designed to reconstruct 20thCR daily
 maximum surge using MLR
 ----------------------------------------------------
 
@@ -28,8 +28,8 @@ def reconstruct():
     
     
     #defining directories    
-    dir_in = 'F:\\era20C\\03_era20C_lagged_predictors'
-    dir_out = 'F:\\era20C\\08_era20C_surge_reconstruction\\mlr'
+    dir_in = 'E:\\03_20cr\\03_20cr_lagged_predictors'
+    dir_out = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\mlr'
     surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
 
     
