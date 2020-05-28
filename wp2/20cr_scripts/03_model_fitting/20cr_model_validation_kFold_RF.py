@@ -43,7 +43,7 @@ def validateRF():
                                  'num_95pcs','corrn', 'rmse'])
     
     #looping through 
-    for tg in range(len(os.listdir())):
+    for tg in range(347,len(os.listdir())):
         
         os.chdir(dir_in)
 

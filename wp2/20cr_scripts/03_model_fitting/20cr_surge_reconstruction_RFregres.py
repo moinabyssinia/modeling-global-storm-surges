@@ -15,20 +15,20 @@ def reconstructRF():
     import os
     import numpy as np
     import pandas as pd
-    from sklearn import metrics
-    from scipy import stats
-    import seaborn as sns
-    import matplotlib.pyplot as plt
+    #from sklearn import metrics
+    #from scipy import stats
+    #import seaborn as sns
+    #import matplotlib.pyplot as plt
+    #from sklearn.model_selection import KFold
     from datetime import datetime
     from sklearn.ensemble import RandomForestRegressor
     from sklearn.decomposition import PCA
-    from sklearn.model_selection import KFold
     from sklearn.preprocessing import StandardScaler
     
     
-    #defining directories    
-    dir_in = 'F:\\era20C\\03_era20C_lagged_predictors'
-    dir_out = 'F:\\era20C\\08_era20C_surge_reconstruction\\rf'
+   #defining directories    
+    dir_in = 'E:\\03_20cr\\03_20cr_lagged_predictors'
+    dir_out = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\rf'
     surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
 
     # #load KFOLD result csv file
@@ -125,7 +125,8 @@ def reconstructRF():
         pca.fit(X)
         X_pca = pca.transform(X)
         
-        # #apply 10 fold cross validation
+        
+        {# #apply 10 fold cross validation
         # kf = KFold(n_splits=10, random_state=29)
         
         # metric_corr = []; metric_rmse = []; #combo = pd.DataFrame(columns = ['pred', 'obs'])
@@ -159,6 +160,8 @@ def reconstructRF():
         # #number of years used to train/test model
         # num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
         #                       pred_surge['date'][0]).days/365)
+            }
+        
         longitude = surge['lon'][0]
         latitude = surge['lat'][0]
         num_pc = X_pca.shape[1] #number of principal components
@@ -239,7 +242,7 @@ def reconstructRF():
         final_dat.columns = ['date', 'surge_reconsturcted', 'pred_int_lower',\
                              'pred_int_upper', 'lon', 'lat']
         
-        #plot - optional
+        {#plot - optional
         # time_stamp = lambda x: (datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
         # final_dat['date'] = pd.DataFrame(list(map(time_stamp, final_dat['date'])), columns = ['date'])
         # surge['date'] = pd.DataFrame(list(map(time_stamp, surge['date'])), columns = ['date'])
@@ -253,7 +256,7 @@ def reconstructRF():
         #confidence intervals
         # plt.plot(final_dat['date'], final_dat['mean_ci_upper'], color = 'black',  linestyle = "--", lw = 0.8)
         # plt.plot(final_dat['date'], final_dat['mean_ci_lower'], color = 'black',  linestyle = "--", lw = 0.8)
-
+        }
 
         #save df as cs - in case of interruption
         os.chdir(dir_out)

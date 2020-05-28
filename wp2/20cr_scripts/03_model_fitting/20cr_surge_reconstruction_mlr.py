@@ -27,7 +27,7 @@ def reconstruct():
     from sklearn.preprocessing import StandardScaler
     
     
-    #defining directories    
+   #defining directories    
     dir_in = 'E:\\03_20cr\\03_20cr_lagged_predictors'
     dir_out = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\mlr'
     surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
@@ -38,7 +38,7 @@ def reconstruct():
     
 
     #looping through 
-    for tg in range(len(os.listdir())):
+    for tg in range(16,len(os.listdir())):
         
         os.chdir(dir_in)
 
