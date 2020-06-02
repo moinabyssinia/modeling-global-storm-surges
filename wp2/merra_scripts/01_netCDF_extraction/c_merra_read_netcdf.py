@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Dec 16 10:10:09 2019
+Created on Mon Jun 01 11:54:00 2020
 
 @author: Michael Tadesse
 """
-import os
 import pandas as pd
 from netCDF4 import Dataset
 
@@ -13,7 +12,7 @@ from netCDF4 import Dataset
 # Reading NetCDF file
 #####################
 
-def readnetcdf(pred_name, pred_file):
+def readnetcdf(pred_file):
     """ 
     reads components of a netcdf file
     
@@ -35,7 +34,6 @@ def readnetcdf(pred_name, pred_file):
     #extracting time values (in minutes)
     timeClean = pd.DataFrame(time_raw[:], columns=['minutes'])
     
-    return lon, lat, timeClean, pred
-
+    return lon, lat, timeClean, predSLP, predU10, predV10
 
 

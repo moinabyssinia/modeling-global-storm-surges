@@ -24,13 +24,12 @@ class Coordinate:
         away around the tide gauge - delta is in degrees
         """
         lonmax = self.Longitude + delta
-        if lonmax > 360:
-            lonmax = lonmax - 360
-        elif lonmax < 0:
-            lonmax = lonmax + 360
+        if lonmax > 179.375:
+            lonmax = -180 + (lonmax - 179.375)
+            
         lonmin = self.Longitude - delta
-        if lonmin < 0:
-            lonmin = lonmin + 360
+        if lonmin < -180:
+            lonmin = 180 - (-180 - lonmin)
         latmax = self.Latitude + delta
         latmin = self.Latitude - delta
         return (lonmin, lonmax), (latmin, latmax)
@@ -54,8 +53,8 @@ def findPixels(tg_cord, delta, lon, lat):
 
     #account for negative values of tg lon - to match that of the netcdfs
     if lon_margin[0] > lon_margin[1]:
-        part1 = long[(long[0] > lon_margin[0]) & (long[0] < 360)]
-        part2 = long[(long[0] >= 0) & (long[0] < lon_margin[1])]
+        part1 = long[(long[0] > lon_margin[0]) & (long[0] < 180)]
+        part2 = long[(long[0] >= -180) & (long[0] < lon_margin[1])]
         lon_sub = pd.concat([part1, part2], axis = 0)
     else:
         lon_sub = long[(long[0] > lon_margin[0]) & (long[0] < lon_margin[1])]

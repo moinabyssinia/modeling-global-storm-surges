@@ -36,25 +36,32 @@ def extract_data(delta):
     os.chdir(dir_in)
     years = os.listdir()
     
-    
+    #################################
     #looping through the year folders
+    #################################
+
     for yr in years:
         os.chdir(dir_in)
         print(yr, '\n')
         os.chdir(os.path.join(dir_in, yr))
 
-        
+        ####################################
         #looping through the daily .nc files
+        ####################################
+
         for dd in os.listdir():
             
             os.chdir(os.path.join(dir_in, yr)) #back to the predictor folder
             print(dd, '\n')
             
-            #get netcdf components  - give predicor name and predictor file            
-                        
-            nc_file = readnetcdf(pf, py)
-            lon, lat, time, pred = nc_file[0], nc_file[1], nc_file[2], \
-                nc_file[3]
+            #########################################
+            #get netcdf components  - predictor file            
+            #########################################
+
+            nc_file = readnetcdf(dd)
+            lon, lat, time, predSLP, predU10, predV10 = \
+                nc_file[0], nc_file[1], nc_file[2], nc_file[3], nc_file[4]\
+                    , nc_file[5]
             
             
             #looping through individual tide gauges
