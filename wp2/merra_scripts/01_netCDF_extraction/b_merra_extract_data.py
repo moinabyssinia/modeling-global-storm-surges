@@ -91,6 +91,8 @@ def extract_data(delta):
                 ind_grids = findindx(close_grids, lon, lat)                
                 
                 
+                #loop through preds#
+                
                 #subset predictor on selected grid size
                 pred_new = subsetter(pred, ind_grids, time)
                 

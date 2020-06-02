@@ -12,7 +12,7 @@ import datetime
 # Subset predictors
 #####################
 
-def subsetter(pred, ind_grids, time):
+def subsetter(dd, pred, ind_grids, time):
     """
     subsets the given predictor for the provided
     indices of closest grids
@@ -32,10 +32,15 @@ def subsetter(pred, ind_grids, time):
         #print(kk)
         pred_sub[kk] = pred[:, ind_grids[1][kk], ind_grids[0][kk]]
     print("total features: ", pred_sub.shape[1])
-    time_original = pd.to_datetime('1800-01-01')
+    
+    #get the timestamp from the netCDF
+    ncTime = dd.split('.')[2]
+    ncTimeClean = '-'.join([ncTime[:4],ncTime[4:6], ncTime[6:]])
+    
+    time_original = pd.to_datetime(ncTimeClean)
     int_changer = lambda x: int(x)
-    time_int = pd.DataFrame(map(int_changer, time[0]))    
-    time_convertor = lambda x: time_original + datetime.timedelta(hours = x)
+    time_int = pd.DataFrame(map(int_changer, time['minutes']))    
+    time_convertor = lambda x: time_original + datetime.timedelta(minutes = x)
     time_readable = pd.DataFrame(map(time_convertor, time_int[0]), columns = ['date'])
     pred_sub_concat = pd.concat([time_readable, pred_sub], axis = 1)
     
