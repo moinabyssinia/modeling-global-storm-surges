@@ -22,11 +22,11 @@ def extract_data(delta):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    nc_path = {'slp' : "D:\\data\\20thC_ReanV3\\slp",\
-               "wnd_u": "D:\\data\\20thC_ReanV3\\wnd_u",\
-               'wnd_v' : "D:\\data\\20thC_ReanV3\\wnd_v"}
+    nc_path = {'slp' : "D:\\data\\era_five\\slp",\
+               "wnd_u": "D:\\data\\era_five\\wnd_u",\
+               'wnd_v' : "D:\\data\\era_five\\wnd_v"}
     surge_path = "D:\data\obs_surge"
-    csv_path = "E:\\03_20cr\\20cr_localized"
+    csv_path = "G:\\05_era5\\era5_localized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)

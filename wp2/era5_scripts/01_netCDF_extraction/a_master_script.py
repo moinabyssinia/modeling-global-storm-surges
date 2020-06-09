@@ -2,7 +2,7 @@
 """
 Created on Fri May 08 15:43:00 2020
 
-This is the master script that runs the following processes for 20thCR predictors
+This is the master script that runs the following processes for ERA5 predictors
 
 #1 Reading the observed surge time series for 902 tide gauges
 
@@ -17,8 +17,8 @@ This is the master script that runs the following processes for 20thCR predictor
 """
 
 import os 
-os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\20cr_scripts\\01_netCDF_extraction")
-from b_20cr_extract_data import extract_data
+os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\era5_scripts\\01_netCDF_extraction")
+from b_era5_extract_data import extract_data
          
 #del_options = [5, 4, 3, 2, 1.5]
 #looping through different grid size options
