@@ -21,15 +21,15 @@ def readnetcdf(pred_name, pred_file):
     ('era_interim_uwnd_2011_2014.nc')
 
     """
-    var = {"slp":"prmsl", "wnd_u":"uwnd", "wnd_v":"vwnd", "prcp":"tp","sst":"sst"}
+    var = {"slp":"msl", "wnd_u":"u10", "wnd_v":"v10", "prcp":"tp","sst":"sst"}
     
     #print(f)
     g = Dataset(pred_file)
     #print(g.variables)
     
-    lon, lat, time, pred = pd.DataFrame(g.variables['lon'][:]), \
-        pd.DataFrame(g.variables['lat'][:]),\
-            pd.DataFrame(g.variables['time'][:]), g.variables[var[pred_name]][:]
+    lon, lat, time, pred = pd.DataFrame(g.variables['longitude'][:]), \
+        pd.DataFrame(g.variables['latitude'][:]),\
+            pd.DataFrame(g.variables['time'][:]), g.variables[var[pred_name]]
   
     return lon, lat, time, pred
 

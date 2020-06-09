@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar 23 11:48:00 2020
+Created on Mon Jun 01 10:00:00 2020
+
+ERA5 netCDF extraction script
 
 @author: Michael Tadesse
 """ 
+import time as tt
 import os 
+os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\era5_scripts\\01_netCDF_extraction")
 import pandas as pd
 from d_define_grid import Coordinate, findPixels, findindx
 from c_read_netcdf import readnetcdf
-from f_subset import subsetter
+from f_era5_subset import subsetter
 
-def extract_data(delta):
+def extract_data(delta= 3):
     """
     This is the master function that calls subsequent functions
     to extract uwnd, vwnd, slp for the specified
@@ -23,8 +27,8 @@ def extract_data(delta):
     
     #defining the folders for predictors
     nc_path = {'slp' : "D:\\data\\era_five\\slp",\
-               "wnd_u": "D:\\data\\era_five\\wnd_u",\
-               'wnd_v' : "D:\\data\\era_five\\wnd_v"}
+           "wnd_u": "D:\\data\\era_five\\wnd_u",\
+           'wnd_v' : "D:\\data\\era_five\\wnd_v"}
     surge_path = "D:\data\obs_surge"
     csv_path = "G:\\05_era5\\era5_localized"
     
@@ -33,14 +37,19 @@ def extract_data(delta):
     tg_list = os.listdir()
     
     
+    #################################
     #looping through the predictor folders
-    #slp; uwnd; vwnd
+    #################################
+
     for pf in nc_path.keys():
-        
+
         print(pf, '\n')
         os.chdir(nc_path[pf])
-        
-        #looping through the years of the chosen predictor
+
+        ####################################
+         #looping through the years of the chosen predictor
+        ####################################
+
         for py in os.listdir():
             
             os.chdir(nc_path[pf]) #back to the predictor folder
@@ -78,9 +87,11 @@ def extract_data(delta):
                 ind_grids = findindx(close_grids, lon, lat)                
                 
                 
+                #loop through preds#
                 #subset predictor on selected grid size
                 pred_new = subsetter(pred, ind_grids, time)
                 
+            
                 #create directories to save pred_new
                 os.chdir(csv_path)
                 
@@ -94,16 +105,6 @@ def extract_data(delta):
                     #directory already exists
                     os.chdir(tg_name)
                 
-                # #delta directory
-                # del_name = 'D' + str(delta)
-                
-                # try:
-                #     os.makedirs(del_name)
-                #     os.chdir(del_name) #cd to it after creating it
-                # except FileExistsError:
-                #     #directory already exists
-                #     os.chdir(del_name)
-                
                 #predictor directory
                 pred_name  = pf
                 
@@ -113,15 +114,13 @@ def extract_data(delta):
                 except FileExistsError:
                     #directory already exists
                     os.chdir(pred_name)
-                
-                #save as csv
-                if py.startswith('prmsl'):
-                    yr_name = py.split('.')[1]
-                else:
-                    yr_name = py.split('.')[2]
+                    
+                #time for saving file
+                yr_name = py.split('_')[3]
                 save_name = '_'.join([tg_name, pred_name, yr_name])\
                     + ".csv"
                 pred_new.to_csv(save_name)
+                            
             
             #return to the predictor directory
             os.chdir(nc_path[pf])
