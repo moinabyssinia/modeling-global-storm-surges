@@ -26,9 +26,9 @@ def extract_data(delta= 3):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    dir_in = "G:\\04_merra\\merraNetCDF"
+    dir_in = "D:\\data\\MERRAv2\\data"
     surge_path = "D:\data\obs_surge"
-    csv_path = "G:\\04_merra\\merraNewLocalized"
+    csv_path = "G:\\04_merra\\merra_localized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)
@@ -36,7 +36,7 @@ def extract_data(delta= 3):
     
     #cd to the obs_surge dir to get TG information
     os.chdir(dir_in)
-    years = os.listdir()
+    years = os.listdir()[0:10]
     
     #################################
     #looping through the year folders

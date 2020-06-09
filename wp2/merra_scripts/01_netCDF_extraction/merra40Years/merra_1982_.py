@@ -7,6 +7,7 @@ MERRAv2 netCDF extraction script
 @author: Michael Tadesse
 """ 
 import time as tt
+import numpy as np
 import os 
 os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction")
 import pandas as pd
@@ -26,9 +27,9 @@ def extract_data(delta= 3):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    dir_in = "G:\\04_merra\\merraNetCDF"
+    dir_in = "D:\\data\\MERRAv2\\data"
     surge_path = "D:\data\obs_surge"
-    csv_path = "G:\\04_merra\\merraNewLocalized"
+    csv_path = "G:\\04_merra\\merra_localized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)
@@ -36,7 +37,7 @@ def extract_data(delta= 3):
     
     #cd to the obs_surge dir to get TG information
     os.chdir(dir_in)
-    years = os.listdir()
+    years = ['1982']
     
     #################################
     #looping through the year folders
@@ -141,5 +142,7 @@ def extract_data(delta= 3):
             
             # #return to the predictor directory
             # os.chdir(nc_path[pf])
+#start function
+extract_data(delta= 3)
                         
         

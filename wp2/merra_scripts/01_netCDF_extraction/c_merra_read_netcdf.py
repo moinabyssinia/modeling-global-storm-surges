@@ -23,7 +23,7 @@ def readnetcdf(pred_file):
     var = {"slp":"SLP", "wnd_u":"U10M", "wnd_v":"V10M", "prcp":"tp","sst":"sst"}
     
     #print(f)
-    g = Dataset(pred_file)
+    g = Dataset(pred_file, mode = 'r')
     #print(g.variables)
     
     lon, lat, time_raw, predSLP, predU10, predV10 = pd.DataFrame(g.variables['lon'][:]), \
