@@ -2,17 +2,18 @@
 """
 Created on Mon Jun 01 10:00:00 2020
 
-MERRAv2 netCDF extraction script
+MERRAv2 netCDF extraction script - Test
 
 @author: Michael Tadesse
 """ 
+import os
 import time as tt
-import os 
-os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction")
 import pandas as pd
-from d_merra_define_grid import Coordinate, findPixels, findindx
 from c_merra_read_netcdf import readnetcdf
+from d_merra_define_grid import Coordinate, findPixels, findindx
 from f_merra_subset import subsetter
+
+
 
 def extract_data(delta= 3):
     """
@@ -26,9 +27,9 @@ def extract_data(delta= 3):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    dir_in = "D:\\data\\MERRAv2\\data"
-    surge_path = "D:\data\obs_surge"
-    csv_path = "G:\\04_merra\\merra_localized"
+    dir_in = "/lustre/fs0/home/mtadesse/MERRAv2/data"
+    surge_path = "/lustre/fs0/home/mtadesse/obs_surge"
+    csv_path = "/lustre/fs0/home/mtadesse/merraLocalized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)
@@ -36,7 +37,7 @@ def extract_data(delta= 3):
     
     #cd to the obs_surge dir to get TG information
     os.chdir(dir_in)
-    years = os.listdir()[11:21]
+    years = os.listdir()
     
     #################################
     #looping through the year folders
@@ -74,7 +75,7 @@ def extract_data(delta= 3):
                 tg = tg_list[t]
                 
                 #extract lon and lat data from surge csv file
-                print(tg, '\n')
+                print(yr, " - ", dd, " - ",tg, '\n')
                 os.chdir(surge_path)
                 
                 if os.stat(tg).st_size == 0:
@@ -100,11 +101,11 @@ def extract_data(delta= 3):
                 
                 for xx in predictors.keys():
                     
-                    start_time = tt.time()
+                    #start_time = tt.time()
                     
                     pred_new = subsetter(dd, predictors[xx], ind_grids, time)
                     
-                    print("--- %s seconds ---" % (tt.time() - start_time))
+                    #print("--- %s seconds ---" % (tt.time() - start_time))
 
                     
                     #create directories to save pred_new
@@ -141,5 +142,8 @@ def extract_data(delta= 3):
             
             # #return to the predictor directory
             # os.chdir(nc_path[pf])
+
+#run script
+extract_data(delta= 3)
                         
         

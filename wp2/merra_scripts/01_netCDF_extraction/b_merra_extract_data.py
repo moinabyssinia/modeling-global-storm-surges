@@ -6,8 +6,8 @@ MERRAv2 netCDF extraction script
 
 @author: Michael Tadesse
 """ 
-import time as tt
 import os 
+import time as tt
 os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction")
 import pandas as pd
 from d_merra_define_grid import Coordinate, findPixels, findindx

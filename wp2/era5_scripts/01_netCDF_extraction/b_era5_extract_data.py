@@ -68,7 +68,7 @@ def extract_data(delta= 3):
                 tg = tg_list[t]
                 
                 #extract lon and lat data from surge csv file
-                print(tg, '\n')
+                print("tide gauge", tg, '\n')
                 os.chdir(surge_path)
                 
                 if os.stat(tg).st_size == 0:
@@ -89,6 +89,7 @@ def extract_data(delta= 3):
                 
                 #loop through preds#
                 #subset predictor on selected grid size
+                print("subsetting \n")
                 pred_new = subsetter(pred, ind_grids, time)
                 
             
@@ -116,6 +117,7 @@ def extract_data(delta= 3):
                     os.chdir(pred_name)
                     
                 #time for saving file
+                print("saving as csv")
                 yr_name = py.split('_')[3]
                 save_name = '_'.join([tg_name, pred_name, yr_name])\
                     + ".csv"

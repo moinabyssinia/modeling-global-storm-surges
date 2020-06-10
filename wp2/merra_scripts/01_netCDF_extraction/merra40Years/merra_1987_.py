@@ -6,9 +6,8 @@ MERRAv2 netCDF extraction script
 
 @author: Michael Tadesse
 """ 
-import time as tt
-import numpy as np
 import os 
+import time as tt
 os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction")
 import pandas as pd
 from d_merra_define_grid import Coordinate, findPixels, findindx
@@ -27,9 +26,9 @@ def extract_data(delta= 3):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    dir_in = "D:\\data\\MERRAv2\\data"
+    dir_in = "G:\\04_merra\\merraNetCDF"
     surge_path = "D:\data\obs_surge"
-    csv_path = "G:\\04_merra\\merra_localized"
+    csv_path = "G:\\04_merra\\merraNewLocalized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)
@@ -60,15 +59,11 @@ def extract_data(delta= 3):
             #########################################
             #get netcdf components  - predictor file            
             #########################################
-            
-            start_time = tt.time()
 
             nc_file = readnetcdf(dd)
             lon, lat, time, predSLP, predU10, predV10 = \
                 nc_file[0], nc_file[1], nc_file[2], nc_file[3], nc_file[4]\
                     , nc_file[5]
-                    
-            print("--- %s sec --- reading nc file ---" % (tt.time() - start_time))
             
             
             #looping through individual tide gauges
@@ -80,9 +75,6 @@ def extract_data(delta= 3):
                 
                 #extract lon and lat data from surge csv file
                 print(tg, '\n')
-                
-                start_time = tt.time()
-                
                 os.chdir(surge_path)
                 
                 if os.stat(tg).st_size == 0:
@@ -91,8 +83,6 @@ def extract_data(delta= 3):
                 
                 surge = pd.read_csv(tg, header = None)
                 #surge_with_date = add_date(surge)
-        
-                print("--- %s sec --- reading surge data ---" % (tt.time() - start_time))
         
                 #define tide gauge coordinate(lon, lat)
                 tg_cord = Coordinate(surge.iloc[0,0], surge.iloc[0,1])
@@ -108,12 +98,15 @@ def extract_data(delta= 3):
                 predictors = {'slp':predSLP, 'wnd_u':predU10, \
                               'wnd_v':predV10}
                 
-                start_time = tt.time()
-                    
                 for xx in predictors.keys():
-                                        
+                    
+                    start_time = tt.time()
+                    
                     pred_new = subsetter(dd, predictors[xx], ind_grids, time)
-                                        
+                    
+                    print("--- %s seconds ---" % (tt.time() - start_time))
+
+                    
                     #create directories to save pred_new
                     os.chdir(csv_path)
                     
@@ -144,10 +137,9 @@ def extract_data(delta= 3):
                     save_name = '_'.join([tg_name, pred_name, ncTime])\
                         + ".csv"
                     pred_new.to_csv(save_name)
-                print("--- %s sec --- extract and save ncfile to csv ---" % (tt.time() - start_time))
+                            
+            
             # #return to the predictor directory
             # os.chdir(nc_path[pf])
-#start function
-extract_data(delta= 3)
                         
         

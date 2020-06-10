@@ -6,9 +6,8 @@ MERRAv2 netCDF extraction script
 
 @author: Michael Tadesse
 """ 
-import time as tt
-import numpy as np
 import os 
+import time as tt
 os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction")
 import pandas as pd
 from d_merra_define_grid import Coordinate, findPixels, findindx
@@ -27,9 +26,9 @@ def extract_data(delta= 3):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    dir_in = "D:\\data\\MERRAv2\\data"
+    dir_in = "G:\\04_merra\\merraNetCDF"
     surge_path = "D:\data\obs_surge"
-    csv_path = "G:\\04_merra\\merra_localized"
+    csv_path = "G:\\04_merra\\merraNewLocalized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)
@@ -142,7 +141,5 @@ def extract_data(delta= 3):
             
             # #return to the predictor directory
             # os.chdir(nc_path[pf])
-#start function
-extract_data(delta= 3)
                         
         
