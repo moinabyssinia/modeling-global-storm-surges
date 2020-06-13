@@ -3,6 +3,7 @@
 Created on Mon Jun 01 10:00:00 2020
 
 MERRAv2 netCDF extraction script - template
+To create an extraction script for each tide gauge
 
 @author: Michael Tadesse
 """ 
@@ -65,8 +66,8 @@ def extract_data(delta= 3):
                     , nc_file[5]
             
             
-            x = startVal
-            y = endVal
+            x = 26
+            y = 27
             
             #looping through individual tide gauges
             for t in range(x, y):
@@ -109,22 +110,22 @@ def extract_data(delta= 3):
                     print("--- %s seconds ---" % (tt.time() - start_time))
 
                     
-                    #create directories to save pred_new
-                    os.chdir(csv_path)
+                    # #create directories to save pred_new
+                    # os.chdir(csv_path)
                     
-                    #compressed folder 
-                    folderName = getFolderName
-                    try:
-                        os.makedirs(folderName)
-                        os.chdir(folderName) #cd to it after creating it
-                    except FileExistsError:
-                        #directory already exists
-                        os.chdir(folderName)
+                    # #compressed folder 
+                    # folderName = getFolderName
+                    # try:
+                    #     os.makedirs(folderName)
+                    #     os.chdir(folderName) #cd to it after creating it
+                    # except FileExistsError:
+                    #     #directory already exists
+                    #     os.chdir(folderName)
                     
                     
                     #tide gauge directory
-                    tg_name = tg.split('.mat.mat.csv')[0]
-                    
+                    tg_name_old = tg.split('.mat.mat.csv')[0]
+                    tg_name = '-'.join([str(t), tg_name_old])
                     try:
                         os.makedirs(tg_name)
                         os.chdir(tg_name) #cd to it after creating it
