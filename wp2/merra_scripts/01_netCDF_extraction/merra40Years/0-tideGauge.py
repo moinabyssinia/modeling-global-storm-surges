@@ -8,6 +8,7 @@ To create an extraction script for each tide gauge
 @author: Michael Tadesse
 """ 
 import os 
+import glob
 import time as tt
 import pandas as pd
 from d_merra_define_grid import Coordinate, findPixels, findindx
@@ -26,9 +27,9 @@ def extract_data(delta= 3):
     print('Delta =  {}'.format(delta), '\n')
     
     #defining the folders for predictors
-    dir_in = "/lustre/fs0/home/mtadesse/MERRAv2/data"
-    surge_path = "/lustre/fs0/home/mtadesse/obs_surge"
-    csv_path = "/lustre/fs0/home/mtadesse/merraLocalized"
+    dir_in = "D:\\data\\MERRAv2\\data"
+    surge_path = "D:\data\obs_surge"
+    csv_path = "G:\\04_merra\\merra_localized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)
@@ -36,7 +37,7 @@ def extract_data(delta= 3):
     
     #cd to the obs_surge dir to get TG information
     os.chdir(dir_in)
-    years = os.listdir()
+    years = ['1980']#os.listdir()[0]
     
     #################################
     #looping through the year folders
@@ -51,7 +52,7 @@ def extract_data(delta= 3):
         #looping through the daily .nc files
         ####################################
 
-        for dd in os.listdir():
+        for dd in os.listdir()[0:32]:
             
             os.chdir(os.path.join(dir_in, yr)) #back to the predictor folder
             print(dd, '\n')
@@ -110,8 +111,8 @@ def extract_data(delta= 3):
                     print("--- %s seconds ---" % (tt.time() - start_time))
 
                     
-                    # #create directories to save pred_new
-                    # os.chdir(csv_path)
+                    #create directories to save pred_new
+                    os.chdir(csv_path)
                     
                     # #compressed folder 
                     # folderName = getFolderName
@@ -155,4 +156,21 @@ def extract_data(delta= 3):
             # #return to the predictor directory
             # os.chdir(nc_path[pf])                
 #run script
-extract_data(delta= 3)        
+extract_data(delta= 3)    
+
+#concatenate individual files
+predictors = ['slp', 'wnd_u', 'wnd_v']
+os.chdir("..")
+
+for xx in predictors:
+    print('concatenating ', xx)
+    os.chdir(xx)
+    extension = 'csv'
+    all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
+    #combine all files in the list
+    combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames ])
+    os.chdir("..")
+    #export to csv
+    combined_csv.to_csv( '.'.join([xx, 'csv']), index=False, encoding='utf-8-sig')
+
+    

@@ -8,6 +8,7 @@ To create an extraction script for each tide gauge
 @author: Michael Tadesse
 """ 
 import os 
+import glob
 import time as tt
 import pandas as pd
 from d_merra_define_grid import Coordinate, findPixels, findindx
@@ -110,8 +111,8 @@ def extract_data(delta= 3):
                     print("--- %s seconds ---" % (tt.time() - start_time))
 
                     
-                    # #create directories to save pred_new
-                    # os.chdir(csv_path)
+                    #create directories to save pred_new
+                    os.chdir(csv_path)
                     
                     # #compressed folder 
                     # folderName = getFolderName
@@ -156,3 +157,21 @@ def extract_data(delta= 3):
             # os.chdir(nc_path[pf])                
 #run script
 extract_data(delta= 3)        
+
+#concatenate individual files
+predictors = ['slp', 'wnd_u', 'wnd_v']
+os.chdir("..")
+
+for xx in predictors:
+    print('concatenating ', xx)
+    os.chdir(xx)
+    extension = 'csv'
+    all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
+    #combine all files in the list
+    combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames ])
+    os.chdir("..")
+    #export to csv
+    combined_csv.to_csv( '.'.join([xx, 'csv']), index=False, encoding='utf-8-sig')
+
+    
+

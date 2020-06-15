@@ -110,8 +110,8 @@ def extract_data(delta= 3):
                     print("--- %s seconds ---" % (tt.time() - start_time))
 
                     
-                    # #create directories to save pred_new
-                    # os.chdir(csv_path)
+                    #create directories to save pred_new
+                    os.chdir(csv_path)
                     
                     # #compressed folder 
                     # folderName = getFolderName
