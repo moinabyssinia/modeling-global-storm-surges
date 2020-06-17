@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr 16 16:11:00 2020
+Created on Tue Jun 17 11:28:00 2020
 --------------------------------------------
 Load predictors for each TG and combine them
 --------------------------------------------
@@ -12,20 +12,15 @@ import os
 import pandas as pd
 
 #define directories
-dir_name = 'F:\\01_erainterim\\01_eraint_predictors\\eraint_D3'
-dir_in = 'E:\\03_20cr\\01_20cr_predictiors'
-dir_out = 'E:\\03_20cr\\02_20cr_combined_predictors'
+# dir_name = 'F:\\01_erainterim\\01_eraint_predictors\\eraint_D3'
+dir_in = 'G:\\04_merra\\merra_localized'
+dir_out = 'G:\\04_merra\\02_merra_combined_predictors'
 
 def combine():
-    #get name of tide gauges from another folder that has the full names
-    #checked 882 tgs in eraint folde; same ones in 20CR folder -> go ahead
-    os.chdir(dir_name)
+    os.chdir(dir_in)
     
     #get names
     tg_list_name = os.listdir()
-    
-    #cd to where the actual file is 
-    os.chdir(dir_in)
     
     
     for tg in tg_list_name:
@@ -35,6 +30,10 @@ def combine():
         
         #looping through each TG folder
         os.chdir(tg)
+        
+        #check for empty folders
+        if len(os.listdir()) == 0:
+            continue
         
         #defining the path for each predictor
         where = os.getcwd()
@@ -54,8 +53,9 @@ def combine():
             pred = pd.read_csv(csv_path[pr])
             
             #remove unwanted columns
-            pred.drop(['Unnamed: 0', 'Unnamed: 0.1'], axis = 1, inplace=True)
-            
+            pred.drop(['Unnamed: 0'], axis = 1, inplace=True)
+            #sort based on date as merra files are scrambled
+            pred.sort_values(by = 'date', inplace=True)
             
             #give predictor columns a name
             pred_col = list(pred.columns)
