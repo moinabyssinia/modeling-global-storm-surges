@@ -8,7 +8,7 @@ MERRA multiple scripts producer
 """
 import os
 
-os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction\\merra882TG')
+os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\01_netCDF_extraction\\merra882Combine')
 
 
 for ii in range(0, 882):
@@ -17,7 +17,7 @@ for ii in range(0, 882):
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \
     #                       str(years[jj]), '.nc'])
     save_name_py = ''.join([str(ii), '-tideGauge', '.py'])
-    f = open('b_merra_extract_data_original_v3.py', 'r')
+    f = open('b_merra_combined_predictors_v3STOKES.py', 'r')
     filedata = f.read()
     f.close()
     

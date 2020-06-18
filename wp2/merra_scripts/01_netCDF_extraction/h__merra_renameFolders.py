@@ -8,7 +8,7 @@ MERRA - Folder renaming script
 """
 import os
 
-os.chdir("G:\\04_merra\\merra_localized")
+# os.chdir("G:\\04_merra\\merra_localized")
 
 #rename a folder
 for file in os.listdir():

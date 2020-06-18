@@ -13,7 +13,7 @@ import pandas as pd
 
 #define directories
 # dir_name = 'F:\\01_erainterim\\01_eraint_predictors\\eraint_D3'
-dir_in = 'G:\\04_merra\\merra_localized'
+dir_in = "/lustre/fs0/home/mtadesse/merraLocalized"
 dir_out = 'G:\\04_merra\\02_merra_combined_predictors'
 
 def combine():
@@ -23,13 +23,14 @@ def combine():
     tg_list_name = os.listdir()
     
     
-    for tg in tg_list_name:
-        tg_name = tg
+    for tg in range(0, len(tg_list_name)):
+        os.chdir(dir_in)
+        tg_name = tg_list_name[tg]
         print(tg_name, '\n')
         
         
         #looping through each TG folder
-        os.chdir(tg)
+        os.chdir(tg_name)
         
         #check for empty folders
         if len(os.listdir()) == 0:
@@ -47,7 +48,7 @@ def combine():
         
         first = True   
         for pr in csv_path.keys():
-            print(tg, ' ', pr)
+            print(tg_name, ' ', pr)
               
             #read predictor
             pred = pd.read_csv(csv_path[pr])
@@ -74,7 +75,7 @@ def combine():
             
         #saving pred_combined
         os.chdir(dir_out)
-        pred_combined.to_csv('.'.join([tg, 'csv']))
+        pred_combined.to_csv('.'.join([tg_name, 'csv']))
         os.chdir(dir_in)
         print('\n')
 

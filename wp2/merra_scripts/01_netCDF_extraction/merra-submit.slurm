@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --ntasks=2
 #SBATCH --job-name=tideGauge
-#SBATCH --time=7-00:00:00
+#SBATCH --time=00-00:10:00
 #SBATCH --error=job.%J.err
 #SBATCH --output=job.%J.out
 
