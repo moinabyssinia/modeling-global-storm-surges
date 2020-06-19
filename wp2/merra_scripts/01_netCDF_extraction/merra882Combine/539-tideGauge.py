@@ -79,11 +79,12 @@ def combine():
             
         #saving pred_combined
         os.chdir(dir_out)
+        tg_name = str(tg)+"_"+tg_name;
         pred_combined.to_csv('.'.join([tg_name, 'csv']))
         os.chdir(dir_in)
         print('\n')
 
-#run sxript
+#run script
 combine()
 
 
