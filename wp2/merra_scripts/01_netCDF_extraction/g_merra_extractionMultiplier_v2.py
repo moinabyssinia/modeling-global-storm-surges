@@ -8,7 +8,7 @@ MERRA multiple scripts producer
 """
 import os
 
-os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\02_preprocessing\\merraLagScripts')
+os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\03_model_fitting\\merra882')
 
 
 for ii in range(0, 882):
@@ -17,7 +17,7 @@ for ii in range(0, 882):
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \
     #                       str(years[jj]), '.nc'])
     save_name_py = ''.join([str(ii), '-tideGauge', '.py'])
-    f = open('c_merra_lag_predictors_v3.py', 'r')
+    f = open('a_merra_model_validation_kFold_mlr.py', 'r')
     filedata = f.read()
     f.close()
     

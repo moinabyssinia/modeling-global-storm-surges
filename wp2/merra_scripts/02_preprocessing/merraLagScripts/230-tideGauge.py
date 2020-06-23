@@ -104,6 +104,9 @@ def lag():
         os.chdir(dir_out)
         pred_lagged.to_csv(tg_name)
         os.chdir(dir_in)
+        
+#run script
+lag()
 
     
     

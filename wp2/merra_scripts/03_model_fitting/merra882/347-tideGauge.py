@@ -24,20 +24,24 @@ def validate():
     run KFOLD method for regression 
     """
     #defining directories    
-    dir_in = 'E:\\03_20cr\\03_20cr_lagged_predictors'
-    dir_out = 'E:\\03_20cr\\04_20cr_model_validation'
-    surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
+    dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
+    dir_out = "/lustre/fs0/home/mtadesse/merraLRValidation"
+    surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 
     
     #cd to the lagged predictors directory
     os.chdir(dir_in)
+    
+    
+    x = 347
+    y = 348
     
     #empty dataframe for model validation
     df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'num_year', \
                                  'num_95pcs','corrn', 'rmse'])
     
     #looping through 
-    for tg in range(22,len(os.listdir())):
+    for tg in range(x,y):
         
         os.chdir(dir_in)
 
@@ -167,13 +171,14 @@ def validate():
         
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        df.to_csv('era20c_lrreg_kfold.csv')
+        df.to_csv(tg_name)
         
         #cd to dir_in
         os.chdir(dir_in)
         
         
-        
+#run script
+validate()
         
         
         
