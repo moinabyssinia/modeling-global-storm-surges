@@ -24,7 +24,7 @@ def lag():
     
     os.chdir(dir_in)
     #get names
-    tg_list_name = os.listdir()
+    tg_list_name = sorted(os.listdir())
     
     x = 726
     y = 727  

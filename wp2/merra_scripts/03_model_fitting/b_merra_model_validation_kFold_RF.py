@@ -29,25 +29,28 @@ def validateRF():
     """
     
     #defining directories    
-    dir_in = 'E:\\03_20cr\\03_20cr_lagged_predictors'
-    dir_out = 'E:\\03_20cr\\04_20cr_model_validation'
-    surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
+    dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
+    dir_out = "/lustre/fs0/home/mtadesse/merraRFValidation"
+    surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 
     
     #cd to the lagged predictors directory
     os.chdir(dir_in)
     
     
+    x = startVal
+    y = endVal
+    
     #empty dataframe for model validation
     df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'num_year', \
                                  'num_95pcs','corrn', 'rmse'])
     
     #looping through 
-    for tg in range(347,len(os.listdir())):
+    for tg in range(x,y):
         
         os.chdir(dir_in)
 
-        tg_name = os.listdir()[tg]
+        tg_name = sorted(os.listdir())[tg]
         print(tg_name)
         
         #load predictor
@@ -175,10 +178,12 @@ def validateRF():
         
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        df.to_csv('20cr_randForest_kfold.csv')
+        df.to_csv(tg_name)
         
-        #cd to dir_in
-        os.chdir(dir_in)
+        
+#run script
+validateRF()
+        
         
         
         
