@@ -26,7 +26,7 @@ def validate():
     #defining directories    
     dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
     dir_out = "/lustre/fs0/home/mtadesse/merraLRValidation"
-    surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
+    # surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 
     
     #cd to the lagged predictors directory

@@ -15,15 +15,10 @@ def reconstruct():
     """
     #import packages
     import os
-    import numpy as np
     import pandas as pd
-    from sklearn import metrics
-    from scipy import stats
     import statsmodels.api as sm
     from datetime import datetime
-    from sklearn.linear_model import LinearRegression
     from sklearn.decomposition import PCA
-    from sklearn.model_selection import KFold
     from sklearn.preprocessing import StandardScaler
     
     
@@ -234,9 +229,9 @@ def reconstruct():
         final_dat.to_csv(tg_name)
         
         #cd to dir_in
-        os.chdir(dir_in)
+        # os.chdir(dir_in)
         
-        
+reconstruct()
         
         
         

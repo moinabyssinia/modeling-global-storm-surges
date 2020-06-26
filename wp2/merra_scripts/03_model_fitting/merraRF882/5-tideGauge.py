@@ -30,7 +30,7 @@ def validateRF():
     """
     
     #defining directories    
-    dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
+    dir_in = "/lustre/fs0/home/mtadesse/merraLaggedLeftOvers"
     dir_out = "/lustre/fs0/home/mtadesse/merraRFValidation"
     surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 

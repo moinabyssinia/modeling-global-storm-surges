@@ -24,7 +24,7 @@ def validate():
     run KFOLD method for regression 
     """
     #defining directories    
-    dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
+    dir_in = "/lustre/fs0/home/mtadesse/merraLaggedLeftOvers_LR"
     dir_out = "/lustre/fs0/home/mtadesse/merraLRValidation"
     surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 

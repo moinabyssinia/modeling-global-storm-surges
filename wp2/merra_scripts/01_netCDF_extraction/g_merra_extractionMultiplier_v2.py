@@ -11,7 +11,7 @@ import os
 os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\03_model_fitting\\merraRF882')
 
 
-for ii in range(0, 882):
+for ii in range(0, 7):
     print(ii)
 
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \

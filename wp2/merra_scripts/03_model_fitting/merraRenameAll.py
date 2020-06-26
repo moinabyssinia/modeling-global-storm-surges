@@ -14,3 +14,4 @@ def renameFiles():
             newName = tg.replace(ii, "_")
         #now rename folder
         os.rename(tg, newName)
+    print("it is finished!")
