@@ -60,6 +60,19 @@ def validateRF():
         tg_name = sorted(tgNames)[tg]
         print(tg_name)
         
+        
+        ##########################################
+        #check if this tg is already taken care of
+        ##########################################
+        os.chdir(dir_out)
+        if os.path.isfile(tg_name):
+            print("this tide gauge is already taken care of")
+            return "file already analyzed!"
+        
+
+        os.chdir(dir_in)
+        
+        
         #load predictor
         pred = pd.read_csv(tg_name)
         pred.drop('Unnamed: 0', axis = 1, inplace = True)

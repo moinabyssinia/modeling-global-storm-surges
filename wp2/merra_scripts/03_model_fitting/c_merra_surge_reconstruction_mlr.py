@@ -3,7 +3,7 @@
 Created on Mon May  4 15:51:30 2020
 
 ----------------------------------------------------
-This program is designed to reconstruct 20thCR daily
+This program is designed to reconstruct merra daily
 maximum surge using MLR
 ----------------------------------------------------
 
@@ -28,17 +28,20 @@ def reconstruct():
     
     
    #defining directories    
-    dir_in = 'E:\\03_20cr\\03_20cr_lagged_predictors'
-    dir_out = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\mlr'
-    surge_path = 'F:\\01_erainterim\\05_dmax_surge_georef'
+    dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
+    dir_out = "/lustre/fs0/home/mtadesse/mlrReconstruction"
+    surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 
     
     #cd to the lagged predictors directory
     os.chdir(dir_in)
     
 
+    x = startVal
+    y = endVal
+
     #looping through 
-    for tg in range(16,len(os.listdir())):
+    for tg in range(x,y):
         
         os.chdir(dir_in)
 
