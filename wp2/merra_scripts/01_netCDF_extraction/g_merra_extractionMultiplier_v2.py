@@ -8,16 +8,16 @@ MERRA multiple scripts producer
 """
 import os
 
-os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\03_model_fitting\\merraRF882')
+os.chdir('D:\\data\\scripts\\modeling_storm_surge\\wp2\\merra_scripts\\03_model_fitting\\rfRecon')
 
 
-for ii in range(0, 7):
+for ii in range(0, 882):
     print(ii)
 
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \
     #                       str(years[jj]), '.nc'])
     save_name_py = ''.join([str(ii), '-tideGauge', '.py'])
-    f = open('b_merra_model_validation_kFold_RF_v2.py', 'r')
+    f = open('d_merra_surge_reconstruction_RFregres.py', 'r')
     filedata = f.read()
     f.close()
     

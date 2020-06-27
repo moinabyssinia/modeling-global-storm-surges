@@ -10,7 +10,7 @@ Concatenate MERRA validation csv files
 import pandas as pd
 import os
 
-dir_in = "G:\\04_merra\\04_merra_model_validation\\lrreg"
+dir_in = "G:\\04_merra\\04_merra_model_validation\\rf"
 dir_out = "G:\\04_merra\\04_merra_model_validation"
 
 #cd to csv folders
@@ -31,5 +31,5 @@ print("it is done!")
 
 os.chdir(dir_out)
 
-lrValidation.to_csv('merra_lrregValidation.csv')
+lrValidation.to_csv('merra_RFValidation.csv')
 

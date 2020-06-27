@@ -23,8 +23,8 @@ def reconstruct():
     
     
    #defining directories    
-    dir_in = "/lustre/fs0/home/mtadesse/merraLaggedLeftOvers"
-    dir_out = "/lustre/fs0/home/mtadesse/mlrReconstruction"
+    dir_in = "/lustre/fs0/home/mtadesse/merraAllLagged"
+    dir_out = "/lustre/fs0/home/mtadesse/rfReconstruction"
     surge_path = "/lustre/fs0/home/mtadesse/05_dmax_surge_georef"
 
     
