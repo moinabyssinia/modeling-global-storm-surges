@@ -15,18 +15,18 @@ def removeExtension():
     
     import os    
     
-    dir_in = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
-    dir_out = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\bestReconstruction\\new'
+    dir_in = 'G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
+    dir_out = 'G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\new'
 
 
     os.chdir(dir_in)
     
     tg_list = os.listdir()
-    extenstion = ['-glossdm-bodc', '-uhslc', '-jma', '-bodc', '-noaa',\
-                  '-med-refmar', '-pde', '-meds', '-noc', '-ieo', '-idromare',\
-                      '-eseas', 'france-refmar', '_noc', '-smhi', '-bsh',\
-                          '-fmi', '-rws', '-dmi', '-statkart', '-coastguard',\
-                              '-itt', '-comune_venezia', '-johnhunter', '-university_zagreb']
+    extenstion = ['_glossdm_bodc', '_uhslc', '_jma', '_bodc', '_noaa',\
+                  '_med_refmar', '_pde', '_meds', '_noc', '_ieo', '_idromare',\
+                      '_eseas', 'france_refmar', '_noc', '_smhi', '_bsh',\
+                          '_fmi', '_rws', '_dmi', '_statkart', '_coastguard',\
+                              '_itt', '_comune_venezia', '_johnhunter', '_university_zagreb']
     for tg in tg_list:
         
         source = os.path.join(os.path.abspath(os.getcwd()), tg)
