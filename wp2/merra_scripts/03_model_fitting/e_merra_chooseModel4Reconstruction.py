@@ -20,14 +20,14 @@ def chooseModel():
     import shutil
     
     #define directories
-    dir_in = 'F:\\02_era20C\\04_era20C_model_validation'
-    dir_out_surge = 'E:\\03_20cr\\08_20cr_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
+    dir_in = 'G:\\04_merra\\04_merra_model_validation'
+    dir_out_surge = 'G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
    #dir_out_metadata = 'F:\\08_eraint_surge_reconstruction\\bestReconstruction\\metaData'
     
     #read kfold validation csvs
     os.chdir(dir_in)
-    lr = pd.read_csv('era20c_lrreg_kfold.csv')
-    rf = pd.read_csv('era20c_randForest_kfold.csv')
+    lr = pd.read_csv('merra_lrregValidation.csv')
+    rf = pd.read_csv('merra_RFValidation.csv')
     
     #merge the two csvs
     comp = pd.merge(lr, rf, on = 'tg', how = 'right')
@@ -51,8 +51,8 @@ def chooseModel():
     #copy files to bestReconstruction based on RMSE value
     for ii in range(len(comp)):
         if comp['bestModel'][ii] == 'MLR':
-            print(comp['bestModel'][ii])
-            os.chdir('E:\\03_20cr\\08_20cr_surge_reconstruction\\mlr')
+            print(ii , " ", comp['bestModel'][ii])
+            os.chdir('G:\\04_merra\\08_merra_surge_reconstruction\\mlr')
             source = os.path.join(os.path.abspath(os.getcwd()), comp['tg'][ii])
             destination = os.path.join(dir_out_surge, comp['tg'][ii])
             
@@ -64,8 +64,9 @@ def chooseModel():
             except:
                 print("error occured while copying file")
         else:
+            print(ii , " ", comp['bestModel'][ii])
             comp['bestModel'][ii]
-            os.chdir('E:\\03_20cr\\08_20cr_surge_reconstruction\\rf')
+            os.chdir('G:\\04_merra\\08_merra_surge_reconstruction\\rf')
             source = os.path.join(os.path.abspath(os.getcwd()), comp['tg'][ii])
             destination = os.path.join(dir_out_surge, comp['tg'][ii])
             
