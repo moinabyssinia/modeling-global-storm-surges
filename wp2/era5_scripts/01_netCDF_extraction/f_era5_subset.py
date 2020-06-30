@@ -31,7 +31,7 @@ def subsetter(pred, ind_grids, time):
     for kk in range(len(ind_grids)):
         print(kk)
         pred_sub[kk] = pred[:, ind_grids[1][kk], ind_grids[0][kk]]
-    print("total features: ", pred_sub.shape[1])
+    # print("total features: ", pred_sub.shape[1])
     
    
     

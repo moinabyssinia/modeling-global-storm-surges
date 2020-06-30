@@ -6,6 +6,7 @@ Created on Tue Jun 23 14:45:47 2020
 """
 import os
 from functools import reduce
+import pandas as pd
 
 ###########################################
 #rename files or folders
@@ -20,6 +21,22 @@ def renameFiles():
         os.rename(tg, newName)
     print("it is finished!")
     
+    
+def pathChanger(data):
+    """
+    changes the extension of the files
+    specify the name of the reanalysis 
+    """
+    for tg in range(0, len(dat)):
+        if pd.isnull(dat['merraPath'][tg]):
+            continue
+        print(dat['merraPath'][tg])
+        strToRemove = ['csv']
+        
+        for ii in strToRemove:
+            newPath = dat['merraPath'][tg].replace(ii, "7z")
+        dat['merraPath'][tg] = newPath
+
 ###################################################
 #rename metadata csvs - when editing inside the csv 
 ###################################################
