@@ -11,7 +11,7 @@ import os
 import pandas as pd
 from d_define_grid import Coordinate, findPixels, findindx
 from c_read_netcdf import readnetcdf
-from f_era5_subset import subsetter
+from f_era5_subsetV2 import subsetter
 
 def extract_data(delta= 3):
     """
@@ -87,6 +87,7 @@ def extract_data(delta= 3):
                 #find closest grid points and their indices
                 close_grids = findPixels(tg_cord, delta, lon, lat)
                 ind_grids = findindx(close_grids, lon, lat)                
+                ind_grids.columns = ['lon', 'lat']
                 
                 
                 #loop through preds#

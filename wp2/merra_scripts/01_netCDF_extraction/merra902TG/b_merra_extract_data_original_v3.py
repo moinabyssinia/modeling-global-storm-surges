@@ -95,7 +95,7 @@ def extract_data(delta= 3):
                 #find closest grid points and their indices
                 close_grids = findPixels(tg_cord, delta, lon, lat)
                 ind_grids = findindx(close_grids, lon, lat)                
-                
+                ind_grids.columns = ['']
                 
                 #loop through preds#
                 #subset predictor on selected grid size
