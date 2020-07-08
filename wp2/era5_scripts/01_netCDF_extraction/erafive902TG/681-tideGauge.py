@@ -29,7 +29,7 @@ def extract_data(delta= 3):
            "wnd_u": "/lustre/fs0/home/mtadesse/era_five/wnd_u",\
            'wnd_v' : "/lustre/fs0/home/mtadesse/era_five/wnd_v"}
     surge_path = "/lustre/fs0/home/mtadesse/obs_surge"
-    csv_path = "/lustre/fs0/home/mtadesse/erafiveLocalized"
+    csv_path = "/lustre/fs0/home/mtadesse/erafive_localized"
     
     #cd to the obs_surge dir to get TG information
     os.chdir(surge_path)

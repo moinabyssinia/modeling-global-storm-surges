@@ -12,7 +12,7 @@ os.chdir("D:\\data\\scripts\\modeling_storm_surge\\wp2\\era5_scripts\\01_netCDF_
 import pandas as pd
 from d_define_grid import Coordinate, findPixels, findindx
 from c_read_netcdf import readnetcdf
-from f_era5_subset import subsetter
+from f_era5_subsetV2 import subsetter
 
 def extract_data(delta= 3):
     """
@@ -60,11 +60,12 @@ def extract_data(delta= 3):
                 nc_file[3]
             
             
-            x = startVal
-            y = endVal
+            # x = startVal
+            # y = endVal
             
             #looping through individual tide gauges
-            for t in range(x, y):
+            #run until dutch_harbour inclusive
+            for t in range(0, 200):
                 
                 #the name of the tide gauge - for saving purposes
                 # tg = tg_list[t].split('.mat.mat.csv')[0] 
