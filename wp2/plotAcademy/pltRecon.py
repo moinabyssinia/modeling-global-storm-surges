@@ -95,4 +95,5 @@ def plotIt(tg):
     plt.plot(surgeMerra['date'], surgeMerra['surge_reconsturcted'], 
              label = 'MERRA', color = 'magenta')
     
+    plt.title(tg.split('.csv')[0])
     plt.legend()
