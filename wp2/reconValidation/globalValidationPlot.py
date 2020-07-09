@@ -7,12 +7,13 @@ To plot validations for reanalysis datasets
 @author: Michael Tadesse
 """
 
-def plotIt(reanalysis):
+def plotIt(reanalysis, metric):
     """
     this function organizes validation files
     and plots them
 
-    data: {twcr, era20c, eraint, merra}
+    reanalysis: {twcr, era20c, eraint, merra}
+    metric: {corr, rmse}
     """
     #add libraries
     import os
@@ -29,6 +30,10 @@ def plotIt(reanalysis):
             'merra': ["merra_Validation.csv", "MERAA"]
             }
     
+    metrics = {'corr': ["corrn_lr", "Pearson's Correlation"],
+               'rmse': ["rmse_lr", "RMSE(m)"]
+               }
+    
     #cd to the validation directory
     os.chdir("D:\\data\\allReconstructions\\validation")
     
@@ -42,8 +47,45 @@ def plotIt(reanalysis):
     x,y = m(dat['lon'].tolist(), dat['lat'].tolist())
     m.drawcoastlines()
     m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
-    plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = dat['corrn_lr'], cmap = 'hot_r')
+    plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = dat[metrics[metric][0]], cmap = 'hot_r')
     cbar = m.colorbar(location = 'bottom')
-    plt.clim(0, 1)
-    plt.title(data[reanalysis][1])
+
+    if metric == "corr":
+        plt.clim(0, 1)
+        
+    title = data[reanalysis][1] + " - " + metrics[metric][1]
+    plt.title(title)
+    
+
+def scoreAggregate(dat):
+    """
+    aggregates correlation and rmse
+    scores of the reanalysis spatially
+    """
+    #set band column as nan to start
+    dat['band'] = 'nan'
+    
+    for ii in range(0, len(dat)):
+        if dat['lat'][ii] >= -90 and  dat['lat'][ii] <= -70:
+            dat['band'][ii] = -80
+        elif dat['lat'][ii] > -70 and  dat['lat'][ii] < -50:
+            dat['band'][ii] = -60
+        elif dat['lat'][ii] > -50 and  dat['lat'][ii] < -30:
+            dat['band'][ii] = -40
+        elif dat['lat'][ii] > -30 and  dat['lat'][ii] < -10:
+           dat['band'][ii] = -20
+        elif dat['lat'][ii] > -10 and  dat['lat'][ii] < 10:
+            dat['band'][ii] = 0
+        elif dat['lat'][ii] > 10 and  dat['lat'][ii] < 30:
+            dat['band'][ii] = 20
+        elif dat['lat'][ii] > 30 and  dat['lat'][ii] < 50:
+            dat['band'][ii] = 40
+        elif dat['lat'][ii] > 50 and  dat['lat'][ii] < 70:
+            dat['band'][ii] = 60
+        elif dat['lat'][ii] > 70 and  dat['lat'][ii] < 90:
+            dat['band'][ii] = 80
+
+    
+    
+
 
