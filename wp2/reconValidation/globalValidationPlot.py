@@ -41,14 +41,15 @@ def plotIt(reanalysis, metric):
     dat = pd.read_csv(data[reanalysis][0])
     
     #plotting
-    fig=plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(20, 10))
     m=Basemap(projection='cyl', lat_ts=10, llcrnrlon=-180, 
               urcrnrlon=180,llcrnrlat=-80,urcrnrlat=80, resolution='c')
     x,y = m(dat['lon'].tolist(), dat['lat'].tolist())
     m.drawcoastlines()
     m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
-    plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = dat[metrics[metric][0]], cmap = 'hot_r')
-    cbar = m.colorbar(location = 'bottom')
+    plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = 
+                dat[metrics[metric][0]], cmap = 'hot_r')
+    m.colorbar(location = 'bottom')
 
     if metric == "corr":
         plt.clim(0, 1)
@@ -68,21 +69,21 @@ def scoreAggregate(dat):
     for ii in range(0, len(dat)):
         if dat['lat'][ii] >= -90 and  dat['lat'][ii] <= -70:
             dat['band'][ii] = -80
-        elif dat['lat'][ii] > -70 and  dat['lat'][ii] < -50:
+        elif dat['lat'][ii] > -70 and  dat['lat'][ii] <= -50:
             dat['band'][ii] = -60
-        elif dat['lat'][ii] > -50 and  dat['lat'][ii] < -30:
+        elif dat['lat'][ii] > -50 and  dat['lat'][ii] <= -30:
             dat['band'][ii] = -40
-        elif dat['lat'][ii] > -30 and  dat['lat'][ii] < -10:
+        elif dat['lat'][ii] > -30 and  dat['lat'][ii] <= -10:
            dat['band'][ii] = -20
-        elif dat['lat'][ii] > -10 and  dat['lat'][ii] < 10:
+        elif dat['lat'][ii] > -10 and  dat['lat'][ii] <= 10:
             dat['band'][ii] = 0
-        elif dat['lat'][ii] > 10 and  dat['lat'][ii] < 30:
+        elif dat['lat'][ii] > 10 and  dat['lat'][ii] <= 30:
             dat['band'][ii] = 20
-        elif dat['lat'][ii] > 30 and  dat['lat'][ii] < 50:
+        elif dat['lat'][ii] > 30 and  dat['lat'][ii] <= 50:
             dat['band'][ii] = 40
-        elif dat['lat'][ii] > 50 and  dat['lat'][ii] < 70:
+        elif dat['lat'][ii] > 50 and  dat['lat'][ii] <= 70:
             dat['band'][ii] = 60
-        elif dat['lat'][ii] > 70 and  dat['lat'][ii] < 90:
+        elif dat['lat'][ii] > 70 and  dat['lat'][ii] <= 90:
             dat['band'][ii] = 80
 
     
