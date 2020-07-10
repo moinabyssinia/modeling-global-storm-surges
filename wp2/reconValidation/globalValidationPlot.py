@@ -7,6 +7,16 @@ To plot validations for reanalysis datasets
 @author: Michael Tadesse
 """
 
+#add libraries
+import os
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+#locate the file that basemap needs
+os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\basemap"
+from mpl_toolkits.basemap import Basemap
+
 def plotIt(reanalysis, metric):
     """
     this function organizes validation files
@@ -14,15 +24,15 @@ def plotIt(reanalysis, metric):
 
     reanalysis: {twcr, era20c, eraint, merra}
     metric: {corr, rmse}
+    
+    returns a plot of the validation and the 
+    aggregated dataframe based on latitude
+    
     """
-    #add libraries
-    import os
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    #locate the file that basemap needs
-    os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\basemap"
-    from mpl_toolkits.basemap import Basemap
-
+    
+    #increase plot font size
+    sns.set_context('notebook', font_scale = 1.5)
+    
     #dictionary for datasets
     data = {'twcr': ["20cr_Validation.csv", "20CR"],
             'era20c': ["era20c_Validation.csv", "ERA20C"],
@@ -42,10 +52,15 @@ def plotIt(reanalysis, metric):
     
     #plotting
     plt.figure(figsize=(20, 10))
-    m=Basemap(projection='cyl', lat_ts=10, llcrnrlon=-180, 
-              urcrnrlon=180,llcrnrlat=-80,urcrnrlat=80, resolution='c')
+    m=Basemap(projection='cyl', lat_ts=20, llcrnrlon=-180, 
+              urcrnrlon=180,llcrnrlat=-90,urcrnrlat=90, resolution='c')
     x,y = m(dat['lon'].tolist(), dat['lat'].tolist())
     m.drawcoastlines()
+    
+    #draw parallels and meridians 
+    parallels = np.arange(-80,81,20.)
+    m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
+    
     m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
     plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = 
                 dat[metrics[metric][0]], cmap = 'hot_r')
@@ -56,6 +71,13 @@ def plotIt(reanalysis, metric):
         
     title = data[reanalysis][1] + " - " + metrics[metric][1]
     plt.title(title)
+        
+    datAggregated = scoreAggregate(dat)
+    
+    #plot corresponding latitudinally aggregated figure
+    barPlotIt(datAggregated, metric)
+    
+    return datAggregated
     
 
 def scoreAggregate(dat):
@@ -85,8 +107,34 @@ def scoreAggregate(dat):
             dat['band'][ii] = 60
         elif dat['lat'][ii] > 70 and  dat['lat'][ii] <= 90:
             dat['band'][ii] = 80
+        
+    return dat
 
     
+def barPlotIt(dat, metric):
+    """
+    to plot the horizontal barplots for 
+    reanalysis datasets
     
+    metric: corr, rmse
+    
+    """
+    #increase plot font size
+    sns.set_context('notebook', font_scale = 1.5)
+    
+    bandGrouped = dat.groupby('band')
+    if metric == 'corr':
+        requestedMetric = bandGrouped.corrn_lr.mean()
+    else:
+        requestedMetric = bandGrouped.rmse_lr.mean()
+    
+    labels, counts  = np.unique(dat['band'], return_counts = True)
+    plt.figure()
+    sns.barplot(x = requestedMetric, y = labels, orient = 'h')
+    plt.xlim(reversed(plt.xlim()))
+    plt.gca().invert_xaxis()
+    #plt.xlim([0, 1])
+    #invert y axis
+    plt.gca().invert_yaxis() 
 
 
