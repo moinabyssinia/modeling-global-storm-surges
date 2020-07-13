@@ -125,16 +125,23 @@ def barPlotIt(dat, metric):
     bandGrouped = dat.groupby('band')
     if metric == 'corr':
         requestedMetric = bandGrouped.corrn_lr.mean()
+        title = "Pearson's Correlation"
+
     else:
         requestedMetric = bandGrouped.rmse_lr.mean()
+        title = "RMSE (m)"
     
     labels, counts  = np.unique(dat['band'], return_counts = True)
     plt.figure()
     sns.barplot(x = requestedMetric, y = labels, orient = 'h')
     plt.xlim(reversed(plt.xlim()))
     plt.gca().invert_xaxis()
-    #plt.xlim([0, 1])
+    plt.xlabel(title)
     #invert y axis
     plt.gca().invert_yaxis() 
+    if metric == 'corr':
+        plt.xlim([0,1])
+
+    
 
 
