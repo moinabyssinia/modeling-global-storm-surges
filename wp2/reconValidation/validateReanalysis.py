@@ -8,7 +8,11 @@ To validate reconstruction between 1980-2010
 """
 #import libraries
 import os 
+import numpy as np
 import pandas as pd 
+from scipy import stats
+from sklearn import metrics
+
 
 def getFiles(data):
     """
@@ -30,20 +34,32 @@ def getFiles(data):
 
     tg_list = os.listdir()    
 
-    for ii in range(0, 2):
+    for ii in range(1, 2):
         tg = tg_list[ii]
         print(tg, '\n')
         #get reconstruction
         os.chdir(reconPath[data])
         reconSurge = pd.read_csv(tg)
+        ##remove duplicated rows
+        reconSurge.drop(reconSurge[reconSurge['date'].duplicated()].index, axis = 0, inplace = True)
+        reconSurge.reset_index(inplace = True)
+        reconSurge.drop('index', axis = 1, inplace = True)
+
         #get surge time series
         os.chdir(surgePath)
         obsSurge = pd.read_csv(tg)
-    
-    # print(reconSurge.head())
-    # print(obsSurge.head())
+        ##remove duplicated rows
+        obsSurge.drop(obsSurge[obsSurge['date'].duplicated()].index, axis = 0, inplace = True)
+        obsSurge.reset_index(inplace = True)
+        obsSurge.drop('index', axis = 1, inplace = True)
+
         #implement subsetting
-        subsetFiles(reconSurge, obsSurge)
+        surgeSubset = subsetFiles(reconSurge, obsSurge)
+        #print(surgeSubset)
+        os.chdir("E:\\03_20cr\\07_sonstig")
+        #surgeSubset.to_csv("abashiriReconObs.csv")
+        #implement validation
+        getMetrics(surgeSubset)
 
 def subsetFiles(reconSurge, obsSurge):
     """
@@ -58,5 +74,29 @@ def subsetFiles(reconSurge, obsSurge):
     reconSurge = reconSurge[(reconSurge['ymd'] >= '1980-01-03') & (reconSurge['ymd'] <= '2011-01-01')]
     obsSurge = obsSurge[(obsSurge['ymd'] >= '1980-01-03') & (obsSurge['ymd'] <= '2011-01-01')]
     
-    print(reconSurge.head())
-    print(obsSurge.head())
+    #merge reconSurge and obsSurge on 'ymd'
+    surgeMerged = pd.merge(reconSurge, obsSurge, on='ymd', how='left')
+    
+    ##remove NANs
+    row_nan = surgeMerged[surgeMerged.isna().any(axis =1)]
+    surgeMerged.drop(row_nan.index, axis = 0, inplace = True)
+    surgeMerged.reset_index(inplace = True)
+    surgeMerged.drop('index', axis = 1, inplace = True)   
+
+    ##save subsetted timeseries in a new variable
+    surgeMerged = surgeMerged[['ymd', 'lon_x', 'lat_x', 'surge_reconsturcted', 'surge']]
+
+    # print(reconSurge.columns)
+    # print(obsSurge.columns)
+    return surgeMerged
+
+def getMetrics(surgeMerged):
+    """
+    this function calculates the correlation, RMSE
+    metrics for reconstructed and observed surge
+    """
+    metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])
+    metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
+
+    print(metricCorr, '\n')
+    print(metricRMSE, '\n')
