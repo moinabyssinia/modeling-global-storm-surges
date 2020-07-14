@@ -68,6 +68,8 @@ def plotIt(reanalysis, metric):
 
     if metric == "corr":
         plt.clim(0, 1)
+    else:
+        plt.clim(0,0.4)
         
     title = data[reanalysis][1] + " - " + metrics[metric][1]
     plt.title(title)
@@ -125,23 +127,23 @@ def barPlotIt(dat, metric):
     bandGrouped = dat.groupby('band')
     if metric == 'corr':
         requestedMetric = bandGrouped.corrn_lr.mean()
-        title = "Pearson's Correlation"
+        xLabel = "Pearson's Correlation"
 
     else:
         requestedMetric = bandGrouped.rmse_lr.mean()
-        title = "RMSE (m)"
+        xLabel = "RMSE (m)"
     
     labels, counts  = np.unique(dat['band'], return_counts = True)
-    plt.figure()
+    plt.figure(figsize=(10, 10))
     sns.barplot(x = requestedMetric, y = labels, orient = 'h')
     plt.xlim(reversed(plt.xlim()))
     plt.gca().invert_xaxis()
-    plt.xlabel(title)
+    plt.xlabel(xLabel)
     #invert y axis
     plt.gca().invert_yaxis() 
     if metric == 'corr':
         plt.xlim([0,1])
-
+    
     
 
 
