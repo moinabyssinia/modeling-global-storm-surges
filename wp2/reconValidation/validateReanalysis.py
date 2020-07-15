@@ -29,12 +29,16 @@ def getFiles(data):
         }
 
     surgePath = "D:\\data\\allReconstructions\\05_dmax_surge_georef"
+    outPath = "D:\\data\\allReconstructions\\validation\\commonPeriodValidation"
 
     os.chdir(reconPath[data])
 
     tg_list = os.listdir()    
 
-    for ii in range(419, 420):
+    #empty dataframe for model validation
+    df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse'])
+
+    for ii in range(0, 10):
         tg = tg_list[ii]
         print(tg, '\n')
         #get reconstruction
@@ -48,6 +52,8 @@ def getFiles(data):
         #get surge time series
         os.chdir(surgePath)
         obsSurge = pd.read_csv(tg)
+        longitude = obsSurge['lon'][0]
+        latitude = obsSurge['lat'][0]
         ##remove duplicated rows
         obsSurge.drop(obsSurge[obsSurge['date'].duplicated()].index, axis = 0, inplace = True)
         obsSurge.reset_index(inplace = True)
@@ -59,7 +65,17 @@ def getFiles(data):
         os.chdir("E:\\03_20cr\\07_sonstig")
         #surgeSubset.to_csv("abashiriReconObs.csv")
         #implement validation
-        getMetrics(surgeSubset)
+        corr, rmse = getMetrics(surgeSubset)[0], getMetrics(surgeSubset)[1]
+
+        new_df = pd.DataFrame([tg, longitude, latitude, data, corr, rmse]).T
+        new_df.columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse']
+
+        df = pd.concat([df, new_df], axis = 0)
+        #print(df)
+    
+    os.chdir(outPath)
+    saveName = data+"19802010Validation.csv"
+    df.to_csv(saveName)
 
 def subsetFiles(reconSurge, obsSurge):
     """
@@ -95,8 +111,7 @@ def getMetrics(surgeMerged):
     this function calculates the correlation, RMSE
     metrics for reconstructed and observed surge
     """
-    metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])
+    metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[0]
     metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
 
-    print(metricCorr, '\n')
-    print(metricRMSE, '\n')
+    return metricCorr, metricRMSE
