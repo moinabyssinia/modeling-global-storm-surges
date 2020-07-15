@@ -34,7 +34,7 @@ def getFiles(data):
 
     tg_list = os.listdir()    
 
-    for ii in range(2, 3):
+    for ii in range(419, 420):
         tg = tg_list[ii]
         print(tg, '\n')
         #get reconstruction
@@ -55,7 +55,7 @@ def getFiles(data):
 
         #implement subsetting
         surgeSubset = subsetFiles(reconSurge, obsSurge)
-        print(surgeSubset)
+        #print(surgeSubset)
         os.chdir("E:\\03_20cr\\07_sonstig")
         #surgeSubset.to_csv("abashiriReconObs.csv")
         #implement validation
