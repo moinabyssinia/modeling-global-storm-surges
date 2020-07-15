@@ -38,7 +38,7 @@ def getFiles(data):
     #empty dataframe for model validation
     df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse'])
 
-    for ii in range(0, 10):
+    for ii in range(0, len(tg_list)):
         tg = tg_list[ii]
         print(tg, '\n')
         #get reconstruction
@@ -87,8 +87,8 @@ def subsetFiles(reconSurge, obsSurge):
     reconSurge['ymd'] = pd.DataFrame(list(map(ymdMaker, reconSurge['date'])))
     obsSurge['ymd'] = pd.DataFrame(list(map(ymdMaker, obsSurge['date'])))
 
-    reconSurge = reconSurge[(reconSurge['ymd'] >= '1980-01-03') & (reconSurge['ymd'] <= '2011-01-01')]
-    obsSurge = obsSurge[(obsSurge['ymd'] >= '1980-01-03') & (obsSurge['ymd'] <= '2011-01-01')]
+    reconSurge = reconSurge[(reconSurge['ymd'] >= '1980-01-03') & (reconSurge['ymd'] < '2011-01-01')]
+    obsSurge = obsSurge[(obsSurge['ymd'] >= '1980-01-03') & (obsSurge['ymd'] < '2011-01-01')]
     
     #merge reconSurge and obsSurge on 'ymd'
     surgeMerged = pd.merge(reconSurge, obsSurge, on='ymd', how='left')
@@ -111,7 +111,14 @@ def getMetrics(surgeMerged):
     this function calculates the correlation, RMSE
     metrics for reconstructed and observed surge
     """
-    metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[0]
-    metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
+    #print(surgeMerged)
+
+    if surgeMerged.empty:
+        print("no common period")
+        metricCorr = 'nan'
+        metricRMSE = 'nan'
+    else:
+        metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[0]
+        metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
 
     return metricCorr, metricRMSE
