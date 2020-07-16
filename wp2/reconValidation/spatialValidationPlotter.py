@@ -8,12 +8,71 @@ spatially?
 @author: Michael Tadesse
 """
 import os 
+import numpy as np
 import pandas as pd 
-
+import seaborn as sns
+import matplotlib.pyplot as plt
+#locate the file that basemap needs
+os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\basemap"
+from mpl_toolkits.basemap import Basemap
 
 def starter():
     twcrDat, era20cDat, eraintDat, merraDat = loadData()
-    processData(twcrDat, era20cDat, eraintDat, merraDat)
+    allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat)[0]
+    allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[1]
+
+    return allCorr, allRMSE
+
+def plotGlobal(metric):
+    """
+    this function plots the chosen metric 
+    globallly using the basemap library
+
+    metric = {'corr', 'rmse'}
+
+    """
+    #call processData here
+    if metric == 'corr':
+        dat = starter()[0]
+        varToPlot = 'maxCorr'
+        title = 'Pearson\'s Correlation - 1980-2010'
+    else:
+        dat = starter()[1]
+        varToPlot = 'minRMSE'
+        title = 'RMSE(m) - 1980-2010'
+
+    #increase plot font size
+    sns.set_context('notebook', font_scale = 1.5)
+    
+    plt.figure(figsize=(20, 10))
+    m=Basemap(projection='cyl', lat_ts=20, llcrnrlon=-180, 
+              urcrnrlon=180,llcrnrlat=-90,urcrnrlat=90, resolution='c')
+    x,y = m(dat['lon'].tolist(), dat['lat'].tolist())
+    m.drawcoastlines()
+
+    #draw parallels and meridians 
+    parallels = np.arange(-80,81,20.)
+    m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
+
+    m.bluemarble(alpha = 0.8) #basemap , alpha = transparency
+    # plt.scatter(x, y, 70, marker = 'o', edgecolors = 'black', c = 
+    #             dat[varToPlot], hue = dat['reanalysis'])
+    
+    #define markers
+    markers = {"20CR": "X", "ERA-20C": "s", "ERA-Interim":'o', "MERRA":'^'}
+    
+    sns.scatterplot(x = x, y = y, s =80, markers = markers, style = 'reanalysis',\
+                    hue = 'reanalysis', data = dat)
+    # m.colorbar(location = 'bottom')
+
+    # if metric == "corr":
+    #     plt.clim(0, 1)
+    # else:
+    #     plt.clim(0,0.4)
+        
+    plt.title(title)
+
+
 
 def processData(twcrDat, era20cDat, eraintDat, merraDat):
     """
