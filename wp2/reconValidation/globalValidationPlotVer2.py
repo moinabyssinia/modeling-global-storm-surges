@@ -117,6 +117,8 @@ def barPlotIt(dat, metric, title):
         xLabel = "RMSE (m)"
     
     requestedMetric.reset_index(inplace = True)
+    #save as csv
+    requestedMetric.to_csv(title+".csv")
     plt.figure(figsize=(10, 10))
     plt.plot(requestedMetric[requestedMetric.columns[1]], requestedMetric['band'])
     plt.xlabel(xLabel)
