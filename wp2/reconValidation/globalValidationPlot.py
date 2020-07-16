@@ -34,18 +34,18 @@ def plotIt(reanalysis, metric):
     sns.set_context('notebook', font_scale = 1.5)
     
     #dictionary for datasets
-    data = {'twcr': ["20cr_Validation.csv", "20CR"],
-            'era20c': ["era20c_Validation.csv", "ERA20C"],
-            'eraint':["eraint_Validation.csv", "ERA-Interim"],
-            'merra': ["merra_Validation.csv", "MERAA"]
+    data = {'twcr': ["twcr19802010Validation.csv", "20CR"],
+            'era20c': ["era20c19802010Validation.csv", "ERA20C"],
+            'eraint':["eraint19802010Validation.csv", "ERA-Interim"],
+            'merra': ["merra19802010Validation.csv", "MERAA"]
             }
     
-    metrics = {'corr': ["corrn_lr", "Pearson's Correlation"],
-               'rmse': ["rmse_lr", "RMSE(m)"]
+    metrics = {'corr': ["corrn", "Pearson's Correlation"],
+               'rmse': ["rmse", "RMSE(m)"]
                }
     
     #cd to the validation directory
-    os.chdir("D:\\data\\allReconstructions\\validation")
+    os.chdir("D:\\data\\allReconstructions\\validation\\commonPeriodValidation")
     
     #load validation files
     dat = pd.read_csv(data[reanalysis][0])
@@ -77,7 +77,7 @@ def plotIt(reanalysis, metric):
     datAggregated = scoreAggregate(dat)
     
     #plot corresponding latitudinally aggregated figure
-    barPlotIt(datAggregated, metric)
+    barPlotIt(datAggregated, metric, title)
     
     return datAggregated
     
@@ -91,29 +91,49 @@ def scoreAggregate(dat):
     dat['band'] = 'nan'
     
     for ii in range(0, len(dat)):
-        if dat['lat'][ii] >= -90 and  dat['lat'][ii] <= -70:
-            dat['band'][ii] = -80
-        elif dat['lat'][ii] > -70 and  dat['lat'][ii] <= -50:
-            dat['band'][ii] = -60
-        elif dat['lat'][ii] > -50 and  dat['lat'][ii] <= -30:
+        if dat['lat'][ii] >= -90 and  dat['lat'][ii] <= -85:
+            dat['band'][ii] = -90
+        elif dat['lat'][ii] > -85 and  dat['lat'][ii] <= -75:
+            dat['band'][ii] = -80   
+        elif dat['lat'][ii] > -75 and  dat['lat'][ii] <= -65:
+            dat['band'][ii] = -70        
+        elif dat['lat'][ii] > -65 and  dat['lat'][ii] <= -55:
+            dat['band'][ii] = -60    
+        elif dat['lat'][ii] > -55 and  dat['lat'][ii] <= -45:
+            dat['band'][ii] = -50
+        elif dat['lat'][ii] > -45 and  dat['lat'][ii] <= -35:
             dat['band'][ii] = -40
-        elif dat['lat'][ii] > -30 and  dat['lat'][ii] <= -10:
-           dat['band'][ii] = -20
-        elif dat['lat'][ii] > -10 and  dat['lat'][ii] <= 10:
+        elif dat['lat'][ii] > -35 and  dat['lat'][ii] <= -25:
+            dat['band'][ii] = -30
+        elif dat['lat'][ii] > -25 and  dat['lat'][ii] <= -15:
+            dat['band'][ii] = -20
+        elif dat['lat'][ii] > -15 and  dat['lat'][ii] <= -5:
+           dat['band'][ii] = -10
+        elif dat['lat'][ii] > -5 and  dat['lat'][ii] <= 5:
             dat['band'][ii] = 0
-        elif dat['lat'][ii] > 10 and  dat['lat'][ii] <= 30:
+        elif dat['lat'][ii] > 5 and  dat['lat'][ii] <= 15:
+            dat['band'][ii] = 10
+        elif dat['lat'][ii] > 15 and  dat['lat'][ii] <= 25:
             dat['band'][ii] = 20
-        elif dat['lat'][ii] > 30 and  dat['lat'][ii] <= 50:
+        elif dat['lat'][ii] > 25 and  dat['lat'][ii] <= 35:
+            dat['band'][ii] = 30
+        elif dat['lat'][ii] > 35 and  dat['lat'][ii] <= 45:
             dat['band'][ii] = 40
-        elif dat['lat'][ii] > 50 and  dat['lat'][ii] <= 70:
+        elif dat['lat'][ii] > 45 and  dat['lat'][ii] <= 55:
+            dat['band'][ii] = 50
+        elif dat['lat'][ii] > 55 and  dat['lat'][ii] <= 65:
             dat['band'][ii] = 60
-        elif dat['lat'][ii] > 70 and  dat['lat'][ii] <= 90:
+        elif dat['lat'][ii] > 65 and  dat['lat'][ii] <= 75:
+            dat['band'][ii] = 70
+        elif dat['lat'][ii] > 75 and  dat['lat'][ii] <= 85:
             dat['band'][ii] = 80
+        elif dat['lat'][ii] > 85 and  dat['lat'][ii] <= 90:
+            dat['band'][ii] = 90
         
     return dat
 
     
-def barPlotIt(dat, metric):
+def barPlotIt(dat, metric, title):
     """
     to plot the horizontal barplots for 
     reanalysis datasets
@@ -126,11 +146,11 @@ def barPlotIt(dat, metric):
     
     bandGrouped = dat.groupby('band')
     if metric == 'corr':
-        requestedMetric = bandGrouped.corrn_lr.mean()
+        requestedMetric = bandGrouped.corrn.mean()
         xLabel = "Pearson's Correlation"
 
     else:
-        requestedMetric = bandGrouped.rmse_lr.mean()
+        requestedMetric = bandGrouped.rmse.mean()
         xLabel = "RMSE (m)"
     
     labels, counts  = np.unique(dat['band'], return_counts = True)
@@ -143,6 +163,9 @@ def barPlotIt(dat, metric):
     plt.gca().invert_yaxis() 
     if metric == 'corr':
         plt.xlim([0,1])
+    else:
+        plt.xlim([0,0.18])
+    plt.title(title)
     
     
 
