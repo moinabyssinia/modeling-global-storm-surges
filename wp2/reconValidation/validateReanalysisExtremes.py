@@ -120,14 +120,21 @@ def getMetrics(surgeMerged):
     this function calculates the correlation, RMSE
     metrics for reconstructed and observed surge
     """
-    #print(surgeMerged)
 
-    if surgeMerged.empty:
+    if (surgeMerged.empty):
         print("no common period")
         metricCorr = 'nan'
         metricRMSE = 'nan'
     else:
-        metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[0]
-        metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
+        pval = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[1]
+        print(pval)
+
+        if pval >= 0.05:
+            print("pval >= 0.05")
+            metricCorr = 'nan'
+            metricRMSE = 'nan'
+        else:
+            metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[0]
+            metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
 
     return metricCorr, metricRMSE
