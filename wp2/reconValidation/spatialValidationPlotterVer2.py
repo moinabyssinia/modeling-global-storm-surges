@@ -61,8 +61,8 @@ def plotGlobal(metric):
     #define markers
     markers = {"20CR": "o", "ERA-20C": "o", "ERA-Interim":'o', "MERRA":'o'}
     #define palette
-    color_dict = dict({'20CR':'green',
-                  'ERA-20C':'magenta',
+    color_dict = dict({'20CR':'magenta',
+                  'ERA-20C':'green',
                   'ERA-Interim': 'black',
                   'MERRA': 'red'
                   })
