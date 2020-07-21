@@ -20,15 +20,16 @@ def starter():
     twcrDat, era20cDat, eraintDat, merraDat = loadData()
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[1]
+    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[2]
 
-    return allCorr, allRMSE
+    return allCorr, allRMSE, allNSE
 
 def plotGlobal(metric):
     """
     this function plots the chosen metric 
     globallly using the basemap library
 
-    metric = {'corr', 'rmse'}
+    metric = {'corr', 'rmse', 'nse'}
 
     """
     #call processData here
@@ -36,6 +37,10 @@ def plotGlobal(metric):
         dat = starter()[0]
         varToPlot = 'maxCorr'
         title = 'Pearson\'s Correlation - 1980-2010'
+    elif metric == 'nse':
+        dat = starter()[2]
+        varToPlot = 'maxNSE'
+        title = 'NSE - 1980-2010' 
     else:
         dat = starter()[1]
         varToPlot = 'minRMSE'
@@ -90,6 +95,9 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat):
     allRMSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'rmseTwcr', 'rmseEra20c',\
          'rmseEraint',  'rmseMerra']]
     allRMSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
+    allNSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'nseTwcr', 'nseEra20c',\
+         'nseEraint',  'nseMerra']]
+    allNSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
     
     #get max corr values 
     allCorr['maxCorr'] = allCorr.iloc[:,4:].max(axis = 1)
@@ -99,11 +107,15 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat):
     allRMSE['minRMSE'] = allRMSE.iloc[:,4:8].min(axis = 1)
     allRMSE['reanalysis'] = allRMSE.iloc[:, 4:8].idxmin(axis = 1)
 
+    #get max nse values 
+    allNSE['maxNSE'] = allNSE.iloc[:,4:].max(axis = 1)
+    allNSE['reanalysis'] = allNSE.iloc[:, 4:8].idxmax(axis = 1)
+
 
     # allCorr.to_csv("allCorr.csv")
     # allRMSE.to_csv("allRMSE.csv")
     
-    return allCorr, allRMSE
+    return allCorr, allRMSE, allNSE
 
 def loadData():
     """
@@ -118,13 +130,13 @@ def loadData():
     os.chdir("D:\\data\\allReconstructions\\validation\\commonPeriodValidation")
 
     twcrDat = pd.read_csv(data['twcr'][0])
-    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 'corrTwcr', 'rmseTwcr']
+    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 'corrTwcr', 'rmseTwcr', 'nseTwcr']
     era20cDat = pd.read_csv(data['era20c'][0])
-    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEra20c', 'rmseEra20c']
+    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEra20c', 'rmseEra20c', 'nseEra20c']
     eraintDat = pd.read_csv(data['eraint'][0])
-    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEraint', 'rmseEraint']
+    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEraint', 'rmseEraint', 'nseEraint']
     merraDat = pd.read_csv(data['merra'][0])
-    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrMerra', 'rmseMerra']
+    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrMerra', 'rmseMerra', 'nseMerra']
 
 
     return twcrDat, era20cDat, eraintDat, merraDat

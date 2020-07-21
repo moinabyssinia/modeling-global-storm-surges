@@ -20,8 +20,9 @@ def starter():
     twcrDat, era20cDat, eraintDat, merraDat = loadData()
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[1]
+    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[2]
 
-    return allCorr, allRMSE
+    return allCorr, allRMSE, allNSE
 
 def plotGlobal(metric):
     """
@@ -37,6 +38,11 @@ def plotGlobal(metric):
         varToPlot = 'Correlation'
         title = 'Pearson\'s Correlation - 1980-2010'
         bubbleSizeMultiplier = 200
+    elif metric == 'nse':
+        dat = starter()[2]
+        varToPlot = 'NSE(%)'
+        title = 'NSE(%) - 1980-2010'  
+        bubbleSizeMultiplier = 3
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -94,20 +100,30 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat):
     allRMSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'rmseTwcr', 'rmseEra20c',\
          'rmseEraint',  'rmseMerra']]
     allRMSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
+    allNSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'nseTwcr', 'nseEra20c',\
+         'nseEraint',  'nseMerra']]
+    allNSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
     
     #get max corr values 
-    allCorr['Correlation'] = allCorr.iloc[:,4:].max(axis = 1)
-    allCorr['Reanalysis'] = allCorr.iloc[:, 4:8].idxmax(axis = 1)
+    allCorr['Correlation'] = allCorr.iloc[:,3:7].max(axis = 1)
+    allCorr['Reanalysis'] = allCorr.iloc[:, 3:7].idxmax(axis = 1)
 
     #get min rmse values - change to cms for visibility
-    allRMSE['RMSE(cm)'] = allRMSE.iloc[:,4:8].min(axis = 1)*100
-    allRMSE['Reanalysis'] = allRMSE.iloc[:, 4:8].idxmin(axis = 1)
+    allRMSE['RMSE(cm)'] = allRMSE.iloc[:,3:7].min(axis = 1)*100
+    allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:7].idxmin(axis = 1)
 
-
-    # allCorr.to_csv("allCorr.csv")
-    # allRMSE.to_csv("allRMSE.csv")
+    #get max nse values 
+    allNSE['NSE(%)'] = allNSE.iloc[:,3:7].max(axis = 1)*100
+    allNSE['Reanalysis'] = allNSE.iloc[:, 3:7].idxmax(axis = 1)
     
-    return allCorr, allRMSE
+    print(allCorr)
+    print(allRMSE)
+    print(allNSE)
+    print(allNSE.columns)
+    # allCorr.to_csv("allCorr.csv")
+    #allNSE.to_csv("allNSE.csv")
+    
+    return allCorr, allRMSE, allNSE
 
 def loadData():
     """
@@ -122,13 +138,13 @@ def loadData():
     os.chdir("D:\\data\\allReconstructions\\validation\\commonPeriodValidation")
 
     twcrDat = pd.read_csv(data['twcr'][0])
-    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'Reanalysis', 'corrTwcr', 'rmseTwcr']
+    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 'corrTwcr', 'rmseTwcr', 'nseTwcr']
     era20cDat = pd.read_csv(data['era20c'][0])
-    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'Reanalysis', 'corrEra20c', 'rmseEra20c']
+    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEra20c', 'rmseEra20c', 'nseEra20c']
     eraintDat = pd.read_csv(data['eraint'][0])
-    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'Reanalysis', 'corrEraint', 'rmseEraint']
+    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEraint', 'rmseEraint', 'nseEraint']
     merraDat = pd.read_csv(data['merra'][0])
-    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'Reanalysis', 'corrMerra', 'rmseMerra']
+    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrMerra', 'rmseMerra', 'nseMerra']
 
 
     return twcrDat, era20cDat, eraintDat, merraDat
