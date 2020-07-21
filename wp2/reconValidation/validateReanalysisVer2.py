@@ -3,6 +3,7 @@
 Created on Wed Jul 14 10:00:00 2020
 
 To validate reconstruction between 1980-2010
+Ver2: NSE metrics was added
 
 @author: Michael Tadesse
 """
@@ -36,7 +37,7 @@ def getFiles(data):
     tg_list = os.listdir()    
 
     #empty dataframe for model validation
-    df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse'])
+    df = pd.DataFrame(columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse', 'nse'])
 
     for ii in range(0, len(tg_list)):
         tg = tg_list[ii]
@@ -65,10 +66,10 @@ def getFiles(data):
         os.chdir("E:\\03_20cr\\07_sonstig")
         #surgeSubset.to_csv("abashiriReconObs.csv")
         #implement validation
-        corr, rmse = getMetrics(surgeSubset)[0], getMetrics(surgeSubset)[1]
+        corr, rmse, nse = getMetrics(surgeSubset)[0], getMetrics(surgeSubset)[1], getNSE(surgeSubset)
 
-        new_df = pd.DataFrame([tg, longitude, latitude, data, corr, rmse]).T
-        new_df.columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse']
+        new_df = pd.DataFrame([tg, longitude, latitude, data, corr, rmse, nse]).T
+        new_df.columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse', 'nse']
 
         df = pd.concat([df, new_df], axis = 0)
         #print(df)
@@ -122,3 +123,22 @@ def getMetrics(surgeMerged):
         metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
 
     return metricCorr, metricRMSE
+
+#added NSE metric computation
+def getNSE(surgeMerged):
+    """
+    this function computes the Nash-Sutcliffe
+    Efficiency (NSE)
+    """
+    if surgeMerged.empty:
+        print("no common period")
+        metricNSE = 'nan'
+    else:
+        numerator = sum((surgeMerged['surge_reconsturcted'] - surgeMerged['surge'])**2)
+        denominator = sum((surgeMerged['surge'] - surgeMerged['surge'].mean())**2)
+        metricNSE = 1 - (numerator/denominator)
+
+    return metricNSE
+    
+
+
