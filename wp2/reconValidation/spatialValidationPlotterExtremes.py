@@ -3,7 +3,7 @@
 Created on Wed Jul 16 15:00:00 2020
 
 where does each Reanalysis perform best
-spatially?
+spatially for extremes?
 
 @author: Michael Tadesse
 """
@@ -17,21 +17,21 @@ os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\bas
 from mpl_toolkits.basemap import Basemap
 
 def starter():
+    #load the files
     twcrDat, era20cDat, eraintDat, merraDat = loadData()
+    #get metrics for all reanalysis concatented by column
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[1]
-    
-    print(allCorr)
-    print(allRMSE)
+    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[2]
 
-    return allCorr, allRMSE
+    return allCorr, allRMSE, allNSE
 
 def plotExtremeGlobal(metric):
     """
     this function plots the chosen metric 
     globallly using the basemap library
 
-    metric = {'corr', 'rmse'}
+    metric = {'corr', 'rmse', 'nse'}
 
     """
     #call processData here
@@ -40,6 +40,11 @@ def plotExtremeGlobal(metric):
         varToPlot = 'Correlation'
         title = 'Pearson\'s Correlation - 1980-2010 - above 95%ile'
         bubbleSizeMultiplier = 250
+    elif metric == 'nse':
+        dat = starter()[2]
+        varToPlot = 'NSE(%)'
+        title = 'NSE(%) - 1980-2010'  
+        bubbleSizeMultiplier = 3
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -94,34 +99,43 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat):
     allCorr = twcr_era20c_eraint_merra[['tg', 'lon', 'lat', 'corrTwcr', 'corrEra20c', \
          'corrEraint', 'corrMerra']]
     allCorr.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
+    
     allRMSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'rmseTwcr', 'rmseEra20c',\
          'rmseEraint',  'rmseMerra']]
     allRMSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
     
+    allNSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'nseTwcr', 
+                                       'nseEra20c','nseEraint',  'nseMerra']]
+    allNSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 
+                      'MERRA']
     #get max corr values 
-    allCorr['Correlation'] = allCorr.iloc[:,4:].max(axis = 1)
-    allCorr['Reanalysis'] = allCorr.iloc[:, 4:8].idxmax(axis = 1)
+    allCorr['Correlation'] = allCorr.iloc[:,3:7].max(axis = 1)
+    allCorr['Reanalysis'] = allCorr.iloc[:, 3:7].idxmax(axis = 1)
     
+    #get min rmse values - change to cms for visibility
+    allRMSE['RMSE(cm)'] = allRMSE.iloc[:,3:7].min(axis = 1)*100
+    allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:7].idxmin(axis = 1)
+
+    #get max nse values 
+    allNSE['NSE(%)'] = allNSE.iloc[:,3:7].max(axis = 1)*100
+    allNSE['Reanalysis'] = allNSE.iloc[:, 3:7].idxmax(axis = 1)
+
     #filter out NAN rows
     allCorr = allCorr[~allCorr.isna().any(axis = 1)]
-
-    #get min rmse values - change to cms for visibility
-    allRMSE['RMSE(cm)'] = allRMSE.iloc[:,4:8].min(axis = 1)*100
-    allRMSE['Reanalysis'] = allRMSE.iloc[:, 4:8].idxmin(axis = 1)
-
-    #filter out NAN rows
     allRMSE = allRMSE[~allRMSE.isna().any(axis = 1)]
+    allNSE = allNSE[~allNSE.isna().any(axis = 1)]
 
     # allCorr.to_csv("allCorr.csv")
     # allRMSE.to_csv("allRMSE.csv")
+    allNSE.to_csv("allNSE.csv")
     
-    return allCorr, allRMSE
+    return allCorr, allRMSE, allNSE
 
 def loadData():
     """
     loads the relevant validation files
     """
-        #dictionary for datasets
+    #dictionary for datasets
     data = {'twcr': ["twcr19802010ValidationExtremes.csv", "20CR"],
             'era20c': ["era20c19802010ValidationExtremes.csv", "ERA20C"],
             'eraint':["eraint19802010ValidationExtremes.csv", "ERA-Interim"],
@@ -130,13 +144,17 @@ def loadData():
     os.chdir("D:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes")
 
     twcrDat = pd.read_csv(data['twcr'][0])
-    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'Reanalysis', 'corrTwcr', 'rmseTwcr']
+    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 
+                       'corrTwcr', 'rmseTwcr', 'nseTwcr']
     era20cDat = pd.read_csv(data['era20c'][0])
-    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'Reanalysis', 'corrEra20c', 'rmseEra20c']
+    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
+                         'corrEra20c', 'rmseEra20c', 'nseEra20c']
     eraintDat = pd.read_csv(data['eraint'][0])
-    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'Reanalysis', 'corrEraint', 'rmseEraint']
+    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
+                         'corrEraint', 'rmseEraint', 'nseEraint']
     merraDat = pd.read_csv(data['merra'][0])
-    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'Reanalysis', 'corrMerra', 'rmseMerra']
+    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
+                        'corrMerra', 'rmseMerra', 'nseMerra']
 
 
     return twcrDat, era20cDat, eraintDat, merraDat
