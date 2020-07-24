@@ -156,5 +156,5 @@ def loadData():
     merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
                         'corrMerra', 'rmseMerra', 'nseMerra']
 
-
+    print(twcrDat)
     return twcrDat, era20cDat, eraintDat, merraDat
