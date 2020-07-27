@@ -127,14 +127,24 @@ def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge):
     """
     plt.figure(figsize = (16,10))
     if len(obsSurge) != 0:
-        plt.scatter(obsSurge['date'], obsSurge['surge'], color = "blue", label = "observation")
+        plt.plot(obsSurge['date'], obsSurge['surge'], 'o', color = "blue", label = "observation", lw = 4)
     if len(surgeTwcr) != 0:
-        plt.plot(surgeTwcr['date'], surgeTwcr['surge_reconsturcted'], color = "green", label = "twcr")
+        plt.plot(surgeTwcr['date'], surgeTwcr['surge_reconsturcted'], color = "green", label = "twcr", lw = 3)
+        plt.fill_between(surgeTwcr['date'], surgeTwcr['pred_int_lower'], surgeTwcr['pred_int_upper'], color = 'lightgreen')
     if len(surgeEra20c) != 0:
         plt.plot(surgeEra20c['date'], surgeEra20c['surge_reconsturcted'], color = "magenta", label = "era20c")
+        plt.fill_between(surgeEra20c['date'], surgeEra20c['pred_int_lower'], surgeEra20c['pred_int_upper'], color = 'violet')
+        # plt.plot(surgeEra20c['date'], surgeEra20c['pred_int_lower'], color = "gray", lw = 0.5)
+        # plt.plot(surgeEra20c['date'], surgeEra20c['pred_int_upper'], color = "gray", lw = 0.5)
     if len(surgeEraint) != 0:
         plt.plot(surgeEraint['date'], surgeEraint['surge_reconsturcted'], color = "black", label = "eraint")
+        plt.fill_between(surgeEraint['date'], surgeEraint['pred_int_lower'], surgeEraint['pred_int_upper'], color = 'gray')
+        # plt.plot(surgeEraint['date'], surgeEraint['pred_int_lower'], color = "gray", lw = 0.5)
+        # plt.plot(surgeEraint['date'], surgeEraint['pred_int_upper'], color = "gray", lw = 0.5)
     if len(surgeMerra) != 0:
         plt.plot(surgeMerra['date'], surgeMerra['surge_reconsturcted'], color = "red", label = "merra")
+        plt.fill_between(surgeMerra['date'], surgeMerra['pred_int_lower'], surgeMerra['pred_int_upper'], color = 'lightsalmon')
+        # plt.plot(surgeMerra['date'], surgeMerra['pred_int_lower'], color = "gray", lw = 0.5)
+        # plt.plot(surgeMerra['date'], surgeMerra['pred_int_upper'], color = "gray", lw = 0.5)
     
     plt.legend()
