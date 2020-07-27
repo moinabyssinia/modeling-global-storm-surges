@@ -24,7 +24,7 @@ def plotMetricVariance(metric):
     """
     
     #directories for the common period validation
-    csvPath = "D:\\data\\allReconstructions\\validation\\commonPeriodValidation"
+    csvPath = "G:\\data\\allReconstructions\\validation\\commonPeriodValidation"
     os.chdir(csvPath)
     
     #define validation output files
@@ -35,12 +35,25 @@ def plotMetricVariance(metric):
     
     #read the validation file of choice
     dat = pd.read_csv(chosenMetric)
-    
     #compute standard deviation of metrics for all reanalysis
     metricColumns = dat[['20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']]
-    dat['metricStd'] = metricColumns.std(axis = 1, skipna = True)
-    
+    # metricColumns.to_csv('justMetrics.csv')
+    dat['metricStd'] = np.std(metricColumns, axis = 1)
+    print(dat.iloc[:, 4:9].head(25))
+    print(dat['metricStd'].head(25))
+
+
     #plotting
+    if metric == 'corr':
+        bubbleSize = 1000
+        title = 'Pearson\'s Correlation - Metric Variance'
+    elif metric == 'rmse':
+        bubbleSize = 10000 
+        title = 'RMSE - Metric Variance'
+    else:
+        bubbleSize = 600
+        title = 'NSE - Metric Variance'
+        
     sns.set_context('notebook', font_scale = 1.5)
     
     plt.figure(figsize=(20, 10))
@@ -54,10 +67,12 @@ def plotMetricVariance(metric):
     m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
     
     #define bubble sizes
-    minSize = min(dat['metricStd'])*5000
-    maxSize = max(dat['metricStd'])*5000
+    minSize = min(dat['metricStd'])*bubbleSize
+    maxSize = max(dat['metricStd'])*bubbleSize
     
     m.bluemarble(alpha = 0.8)
     sns.scatterplot(x = x, y = y, color = 'red', 
                     size = 'metricStd', hue = 'Reanalysis',
-                    sizes = (minSize, maxSize), data = dat)
+                    sizes = (minSize, maxSize), palette = ['magenta', 'black', 'red', 'green']
+                    ,data = dat)
+    plt.title(title)

@@ -18,6 +18,9 @@ def timeSeriesPlotter(tideGauge, data):
     """
     this function organizes five functions 
     to plot surge reconstruction
+    
+    tideGauge: name of the tide gauge with out .csv extension
+    data = ["twcr", "era20c", "eraint", "merra"]
     """
     getFiles(tideGauge, data)
 
@@ -31,13 +34,13 @@ def getFiles(tideGauge, data):
     data = ["twcr", "era20c", "eraint", "merra"]
     """
     reconPath = {
-        "twcr": "E:\\03_20cr\\08_20cr_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "era20c": "F:\\02_era20C\\08_era20C_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "eraint": "F:\\01_erainterim\\08_eraint_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "merra": "G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\surgeReconstructed"
+        "twcr": "G:\\data\\allReconstructions\\20cr",
+        "era20c": "G:\\data\\allReconstructions\\era20c",
+        "eraint": "G:\\data\\allReconstructions\\erainterim",
+        "merra": "G:\\data\\allReconstructions\\merra"
         }
 
-    surgePath = "D:\\data\\allReconstructions\\05_dmax_surge_georef"
+    surgePath = "G:\\data\\allReconstructions\\05_dmax_surge_georef"
 
     tg = tideGauge+".csv"
     print(tg, '\n')
@@ -124,14 +127,14 @@ def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge):
     """
     plt.figure(figsize = (16,10))
     if len(obsSurge) != 0:
-        plt.plot(obsSurge['date'], obsSurge['surge'], color = "blue", label = "observation")
+        plt.scatter(obsSurge['date'], obsSurge['surge'], color = "blue", label = "observation")
     if len(surgeTwcr) != 0:
-        plt.plot(surgeTwcr['date'], surgeTwcr['surge_reconsturcted'], color = "red", label = "twcr")
+        plt.plot(surgeTwcr['date'], surgeTwcr['surge_reconsturcted'], color = "green", label = "twcr")
     if len(surgeEra20c) != 0:
-        plt.plot(surgeEra20c['date'], surgeEra20c['surge_reconsturcted'], color = "green", label = "era20c")
+        plt.plot(surgeEra20c['date'], surgeEra20c['surge_reconsturcted'], color = "magenta", label = "era20c")
     if len(surgeEraint) != 0:
         plt.plot(surgeEraint['date'], surgeEraint['surge_reconsturcted'], color = "black", label = "eraint")
     if len(surgeMerra) != 0:
-        plt.plot(surgeMerra['date'], surgeMerra['surge_reconsturcted'], color = "cyan", label = "merra")
+        plt.plot(surgeMerra['date'], surgeMerra['surge_reconsturcted'], color = "red", label = "merra")
     
     plt.legend()
