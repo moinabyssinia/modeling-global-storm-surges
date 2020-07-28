@@ -16,6 +16,7 @@ from datetime import datetime
 
 # #define a plot object that can be manipulated 
 fig, ax = plt.subplots(6, 1, figsize=(16, 10))
+fig.tight_layout(pad = 0.8)
 
 def timeSeriesPlotter(tideGauge, data, row):
     """
@@ -76,7 +77,8 @@ def getFiles(tideGauge, data, row):
     obsSurge = getObsSurge(tg)
 
     #print(obsSurge)
-    getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row)
+    getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, 
+                 row, tideGauge)
 
 def getReconSurge(tg):
     """
@@ -85,7 +87,8 @@ def getReconSurge(tg):
     #get reconstruction
     reconSurge = pd.read_csv(tg)
     ##remove duplicated rows
-    reconSurge.drop(reconSurge[reconSurge['date'].duplicated()].index, axis = 0, inplace = True)
+    reconSurge.drop(reconSurge[reconSurge['date'].duplicated()].index, 
+                    axis = 0, inplace = True)
     reconSurge.reset_index(inplace = True)
     reconSurge.drop('index', axis = 1, inplace = True)
 
@@ -98,13 +101,15 @@ def getObsSurge(tg):
     #get surge time series
     obsSurge = pd.read_csv(tg)
     ##remove duplicated rows
-    obsSurge.drop(obsSurge[obsSurge['date'].duplicated()].index, axis = 0, inplace = True)
+    obsSurge.drop(obsSurge[obsSurge['date'].duplicated()].index, axis = 0, 
+                  inplace = True)
     obsSurge.reset_index(inplace = True)
     obsSurge.drop('index', axis = 1, inplace = True)
 
     return obsSurge
 
-def getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row):
+def getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row, 
+                 tideGauge):
     """
     this function prepares the time column of the time series
     to make it easy to plot
@@ -115,22 +120,29 @@ def getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row)
     time_stamp_surge = lambda x: (datetime.strptime(x, '%Y-%m-%d'))
 
     if len(surgeTwcr) != 0:
-        surgeTwcr['date'] = pd.DataFrame(list(map(time_stamp, surgeTwcr['date'])), columns = ['date'])
+        surgeTwcr['date'] = pd.DataFrame(list(map(time_stamp, surgeTwcr['date'])), 
+                                         columns = ['date'])
     if len(surgeEra20c) != 0:
-        surgeEra20c['date'] = pd.DataFrame(list(map(time_stamp, surgeEra20c['date'])), columns = ['date'])
+        surgeEra20c['date'] = pd.DataFrame(list(map(time_stamp, surgeEra20c['date'])), 
+                                           columns = ['date'])
     if len(surgeEraint) != 0:
-        surgeEraint['date'] = pd.DataFrame(list(map(time_stamp, surgeEraint['date'])), columns = ['date'])
+        surgeEraint['date'] = pd.DataFrame(list(map(time_stamp, surgeEraint['date'])), 
+                                           columns = ['date'])
     if len(surgeMerra) != 0 :
-        surgeMerra['date'] = pd.DataFrame(list(map(time_stamp, surgeMerra['date'])), columns = ['date'])
+        surgeMerra['date'] = pd.DataFrame(list(map(time_stamp, surgeMerra['date'])), 
+                                          columns = ['date'])
     if len(obsSurge) != 0:
-        obsSurge['date'] = pd.DataFrame(list(map(time_stamp_surge, obsSurge['ymd'])), columns = ['date'])
+        obsSurge['date'] = pd.DataFrame(list(map(time_stamp_surge, obsSurge['ymd'])), 
+                                        columns = ['date'])
 
     
     #calling the plotter function
-    plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row)
+    plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, 
+                   obsSurge, row, tideGauge)
     
 
-def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row):
+def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, 
+                   obsSurge, row, tideGauge):
     """
     this function plots a time series making use of 
     all reconstructed surge data from reanalyses
@@ -142,33 +154,49 @@ def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, ro
         ax[row].plot(surgeTwcr['date'], surgeTwcr['surge_reconsturcted'], 
                    color = "green", label = "twcr", lw = 3)
         ax[row].fill_between(surgeTwcr['date'], surgeTwcr['pred_int_lower'], 
-                           surgeTwcr['pred_int_upper'], color = 'lightgreen', alpha = 0.4)
+                           surgeTwcr['pred_int_upper'], color = 'lightgreen', 
+                           alpha = 0.4)
     if len(surgeEra20c) != 0:
         ax[row].plot(surgeEra20c['date'], surgeEra20c['surge_reconsturcted'], 
                    color = "magenta", label = "era20c")
         ax[row].fill_between(surgeEra20c['date'], surgeEra20c['pred_int_lower'], 
-                           surgeEra20c['pred_int_upper'], color = 'violet', alpha = 0.4)
-        # plt.plot(surgeEra20c['date'], surgeEra20c['pred_int_lower'], color = "gray", lw = 0.5)
-        # plt.plot(surgeEra20c['date'], surgeEra20c['pred_int_upper'], color = "gray", lw = 0.5)
+                           surgeEra20c['pred_int_upper'], color = 'violet', 
+                           alpha = 0.4)
+        # plt.plot(surgeEra20c['date'], surgeEra20c['pred_int_lower'], 
+        #color = "gray", lw = 0.5)
+        # plt.plot(surgeEra20c['date'], surgeEra20c['pred_int_upper'], 
+    # color = "gray", lw = 0.5)
     if len(surgeEraint) != 0:
         ax[row].plot(surgeEraint['date'], surgeEraint['surge_reconsturcted'], 
                    color = "black", label = "eraint")
         ax[row].fill_between(surgeEraint['date'], surgeEraint['pred_int_lower'],
-                           surgeEraint['pred_int_upper'], color = 'gray', alpha = 0.4)
-        # plt.plot(surgeEraint['date'], surgeEraint['pred_int_lower'], color = "gray", lw = 0.5)
-        # plt.plot(surgeEraint['date'], surgeEraint['pred_int_upper'], color = "gray", lw = 0.5)
+                           surgeEraint['pred_int_upper'], color = 'gray', 
+                           alpha = 0.4)
+        # plt.plot(surgeEraint['date'], surgeEraint['pred_int_lower'], 
+        # color = "gray", lw = 0.5)
+        # plt.plot(surgeEraint['date'], surgeEraint['pred_int_upper'], 
+    # color = "gray", lw = 0.5)
     if len(surgeMerra) != 0:
         ax[row].plot(surgeMerra['date'], surgeMerra['surge_reconsturcted'], 
                    color = "red", label = "merra")
         ax[row].fill_between(surgeMerra['date'], surgeMerra['pred_int_lower'], 
-                           surgeMerra['pred_int_upper'], color = 'lightsalmon', alpha = 0.4)
-        # plt.plot(surgeMerra['date'], surgeMerra['pred_int_lower'], color = "gray", lw = 0.5)
-        # plt.plot(surgeMerra['date'], surgeMerra['pred_int_upper'], color = "gray", lw = 0.5)
+                           surgeMerra['pred_int_upper'], color = 'lightsalmon', 
+                           alpha = 0.4)
+        # plt.plot(surgeMerra['date'], surgeMerra['pred_int_lower'], 
+        
+        #color = "gray", lw = 0.5)
+        # plt.plot(surgeMerra['date'], surgeMerra['pred_int_upper'], 
+    #color = "gray", lw = 0.5)
+    
+    #define title location
+    ax[row].set_title(tideGauge, loc ='left')
+    
     
     #set legend
     if row == 0:
         handles, labels = ax[row].get_legend_handles_labels()
-        pi_patch = mpatches.Patch(color='darkseagreen', label='95% Prediction Interval')
+        pi_patch = mpatches.Patch(color='darkseagreen', 
+                                  label='95% Prediction Interval')
         handles.append(pi_patch)
         plt.legend(handles = handles, ncol = 6)
     
