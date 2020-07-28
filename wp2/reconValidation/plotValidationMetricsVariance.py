@@ -39,8 +39,7 @@ def plotMetricVariance(metric):
     metricColumns = dat[['20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']]
     # metricColumns.to_csv('justMetrics.csv')
     dat['metricStd'] = np.std(metricColumns, axis = 1)
-    print(dat.iloc[:, 4:9].head(25))
-    print(dat['metricStd'].head(25))
+    # dat.to_csv("metricSTDNse.csv")
 
 
     #plotting
