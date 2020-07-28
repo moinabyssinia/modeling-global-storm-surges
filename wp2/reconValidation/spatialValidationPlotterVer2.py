@@ -138,7 +138,7 @@ def loadData():
             'eraint':["eraint19802010Validation.csv", "ERA-Interim"],
             'merra': ["merra19802010Validation.csv", "MERAA"]
             }
-    os.chdir("D:\\data\\allReconstructions\\validation\\commonPeriodValidation")
+    os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidation")
 
     twcrDat = pd.read_csv(data['twcr'][0])
     twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 
