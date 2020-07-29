@@ -63,8 +63,11 @@ def plotGlobal(metric):
     m.drawcoastlines()
 
     #get degree signs 
-    parallels = np.arange(-80,81,20.)
-    m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
+    parallels = np.arange(-80,81,10.)
+    meridians = np.arange(-180.,180.,20.)
+    #labels = [left,right,top,bottom]
+    m.drawparallels(parallels,labels=[True,True,False,False], linewidth = 0.5)
+    m.drawmeridians(meridians,labels=[False,False,False,True], linewidth = 0.5)
 
     m.bluemarble(alpha = 0.8) 
     
