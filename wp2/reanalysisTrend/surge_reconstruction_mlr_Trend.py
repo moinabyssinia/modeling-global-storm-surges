@@ -78,12 +78,12 @@ def reconstruct():
         os.chdir(surge_path)
            
         #get predictor file name
-        import glob
         for file in glob.glob("*_surge.csv"):
             surgeFile = [file]
         
         surge = pd.read_csv(surgeFile[0])
-        surge = surge[surge['ymd'] > '1979-12-31']
+        ##use only common period (1980-2010) for training
+        surge = surge[(surge['ymd'] > '1979-12-31') & (surge['ymd'] < '2011-01-01')]
         surge.drop('Unnamed: 0', axis = 1, inplace = True)
         
         #remove duplicated surge rows

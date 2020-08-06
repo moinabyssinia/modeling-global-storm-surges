@@ -61,8 +61,14 @@ for year in years:
     metric.loc[len(metric)] = currentMetric
     
     
-    
-    
+#to get moving average 
+twcrBrest['ma10Corr'] = twcrBrest['corr'].rolling(10).mean()
+
+sns.set_context('notebook', font_scale = 1.5)
+
+plt.figure()
+plt.plot(twcrBrest['year'], twcrBrest['ma10Rmse'])
+plt.title('Brest - 10 year moving average - RMSE')
 
 
 def getNSE(surgeMerged):
