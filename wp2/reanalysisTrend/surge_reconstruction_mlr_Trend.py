@@ -3,7 +3,7 @@
 Created on Mon Jul 30 12:47:00 2020
 
 ----------------------------------------------------
-reconstruct 20CR surges for understanding trends
+reconstruct 20CR/ERA20C surges for understanding trends
 
 change the predictor file directories
 change predictor file name - twcr or erea20c
@@ -33,9 +33,9 @@ def reconstruct():
     
     
    #defining directories    
-    dir_in = 'G:\\data\\reanalysisTrendFiles\\victoria'
-    dir_out = 'G:\\data\\reanalysisTrendFiles\\victoria'
-    surge_path = 'G:\\data\\reanalysisTrendFiles\\victoria'
+    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\victoria'
+    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\victoria'
+    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\victoria'
 
     
     #cd to the lagged predictors directory
