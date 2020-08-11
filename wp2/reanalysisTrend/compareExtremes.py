@@ -22,7 +22,7 @@ def getExtremes(timeSeries, percentile):
                                        'meanPercRecon', 'stdPercRecon'])
     for ii in range(0, len(years)):
         currentYear = timeSeries[timeSeries['year'] == years[ii]]
-        currentExtremes = currentYear[currentYear['surge'] >= currentYear['surge'].quantile(0.999)]
+        currentExtremes = currentYear[currentYear['surge'] >= currentYear['surge'].quantile(0.01*percentile)]
         currentData = pd.DataFrame([years[ii], currentExtremes['surge'].mean(),
                                     currentExtremes['surge'].std(),
                                     currentExtremes['surge_reconsturcted'].mean(),
@@ -45,5 +45,5 @@ def loadTimeSeries(tideGauge, reanalysis):
     """
     os.chdir("G:\\data\\reanalysisTrendFiles\\reconSurgeFiles")
     dat = pd.read_csv(tideGauge+reanalysis+"Merged.csv")
-    dat.drop(['Unnamed: 0', 'index', 'Unnamed: 0.1'], axis = 1, inplace = True)
+    # dat.drop(['Unnamed: 0', 'index', 'Unnamed: 0.1'], axis = 1, inplace = True)
     return dat
