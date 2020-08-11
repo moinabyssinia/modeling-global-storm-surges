@@ -132,51 +132,51 @@ def reconstruct():
         pca.fit(X)
         X_pca = pca.transform(X)
         
-        {
-            # #apply 10 fold cross validation
-        # kf = KFold(n_splits=10, random_state=29)
         
-        # metric_corr = []; metric_rmse = []; #combo = pd.DataFrame(columns = ['pred', 'obs'])
-        # for train_index, test_index in kf.split(X):
-        #     X_train, X_test = X_pca[train_index], X_pca[test_index]
-        #     y_train, y_test = y['surge'][train_index], y['surge'][test_index]
+        #apply 10 fold cross validation
+        kf = KFold(n_splits=10, random_state=29)
+        
+        metric_corr = []; metric_rmse = []; #combo = pd.DataFrame(columns = ['pred', 'obs'])
+        for train_index, test_index in kf.split(X):
+            X_train, X_test = X_pca[train_index], X_pca[test_index]
+            y_train, y_test = y['surge'][train_index], y['surge'][test_index]
             
-        #     #train regression model
-        #     lm = LinearRegression()
-        #     lm.fit(X_train, y_train)
+            #train regression model
+            lm = LinearRegression()
+            lm.fit(X_train, y_train)
             
-        #     #predictions
-        #     predictions = lm.predict(X_test)
-        #     # pred_obs = pd.concat([pd.DataFrame(np.array(predictions)), \
-        #     #                       pd.DataFrame(np.array(y_test))], \
-        #     #                      axis = 1)
-        #     # pred_obs.columns = ['pred', 'obs']
-        #     # combo = pd.concat([combo, pred_obs], axis = 0)    
+            #predictions
+            predictions = lm.predict(X_test)
+            # pred_obs = pd.concat([pd.DataFrame(np.array(predictions)), \
+            #                       pd.DataFrame(np.array(y_test))], \
+            #                      axis = 1)
+            # pred_obs.columns = ['pred', 'obs']
+            # combo = pd.concat([combo, pred_obs], axis = 0)    
             
-        #     #evaluation matrix - check p value
-        #     if stats.pearsonr(y_test, predictions)[1] >= 0.05:
-        #         print("insignificant correlation!")
-        #         continue
-        #     else:
-        #         #print(stats.pearsonr(y_test, predictions))
-        #         metric_corr.append(stats.pearsonr(y_test, predictions)[0])
-        #         #print(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
-        #         metric_rmse.append(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+            #evaluation matrix - check p value
+            if stats.pearsonr(y_test, predictions)[1] >= 0.05:
+                print("insignificant correlation!")
+                continue
+            else:
+                print(stats.pearsonr(y_test, predictions))
+                metric_corr.append(stats.pearsonr(y_test, predictions)[0])
+                print(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+                metric_rmse.append(np.sqrt(metrics.mean_squared_error(y_test, predictions)))
             
         
-        # # #number of years used to train/test model
-        # num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
-        #                       pred_surge['date'][0]).days/365)
-        # longitude = surge['lon'][0]
-        # latitude = surge['lat'][0]
-        # num_pc = X_pca.shape[1] #number of principal components
-        # corr = np.mean(metric_corr)
-        # rmse = np.mean(metric_rmse)
+        # #number of years used to train/test model
+        num_years = np.ceil((pred_surge['date'][pred_surge.shape[0]-1] -\
+                              pred_surge['date'][0]).days/365)
+        longitude = surge['lon'][0]
+        latitude = surge['lat'][0]
+        num_pc = X_pca.shape[1] #number of principal components
+        corr = np.mean(metric_corr)
+        rmse = np.mean(metric_rmse)
         
-        # print('num_year = ', num_years, ' num_pc = ', num_pc ,'avg_corr = ',\
-        #       np.mean(metric_corr), ' -  avg_rmse (m) = ', \
-        #       np.mean(metric_rmse), '\n')
-            }
+        print('num_year = ', num_years, ' num_pc = ', num_pc ,'avg_corr = ',\
+              np.mean(metric_corr), ' -  avg_rmse (m) = ', \
+              np.mean(metric_rmse), '\n')
+
         
         num_pc = X_pca.shape[1] #number of principal components
         longitude = surge['lon'][0]
