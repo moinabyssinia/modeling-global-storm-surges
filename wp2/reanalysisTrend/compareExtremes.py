@@ -17,10 +17,25 @@ def getExtremes(timeSeries, percentile):
     observation and their corresponding
     reconstructed values
     """
-    
+    years = timeSeries['year'].unique()
+    extremes = pd.DataFrame(columns = ['year','meanPercObs', 'stdPercObs', 
+                                       'meanPercRecon', 'stdPercRecon'])
+    for ii in range(0, len(years)):
+        currentYear = timeSeries[timeSeries['year'] == years[ii]]
+        currentExtremes = currentYear[currentYear['surge'] >= currentYear['surge'].quantile(0.999)]
+        currentData = pd.DataFrame([years[ii], currentExtremes['surge'].mean(),
+                                    currentExtremes['surge'].std(),
+                                    currentExtremes['surge_reconsturcted'].mean(),
+                                    currentExtremes['surge_reconsturcted'].std()]).T
+        currentData.columns = ['year','meanPercObs', 'stdPercObs', 
+                                       'meanPercRecon', 'stdPercRecon']
+        extremes = pd.concat([extremes, currentData], axis = 0)
+    return extremes
+        
+        
     
 
-def loadTimesSeries(tideGauge, reanalysis):
+def loadTimeSeries(tideGauge, reanalysis):
     """
     this function loads a time series
     for the chosen tide gauge
