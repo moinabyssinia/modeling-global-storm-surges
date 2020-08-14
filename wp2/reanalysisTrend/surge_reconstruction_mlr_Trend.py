@@ -33,9 +33,9 @@ def reconstruct():
     
     
    #defining directories    
-    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\victoria'
-    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\victoria'
-    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\victoria'
+    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\cuxhaven'
+    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\cuxhaven'
+    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\cuxhaven'
 
     
     #cd to the lagged predictors directory
@@ -43,7 +43,7 @@ def reconstruct():
     
     #get predictor file name
     import glob
-    for file in glob.glob("*_era20c.csv"):
+    for file in glob.glob("*_twcr.csv"):
         predictor = [file]
 
     #looping through 
@@ -83,7 +83,7 @@ def reconstruct():
         
         surge = pd.read_csv(surgeFile[0])
         ##use only common period (1980-2010) for training
-        surge = surge[(surge['ymd'] > '1979-12-31') & (surge['ymd'] < '2011-01-01')]
+        surge = surge[(surge['ymd'] > '1949-12-31') & (surge['ymd'] < '2012-01-01')]
         surge.drop('Unnamed: 0', axis = 1, inplace = True)
         
         #remove duplicated surge rows
