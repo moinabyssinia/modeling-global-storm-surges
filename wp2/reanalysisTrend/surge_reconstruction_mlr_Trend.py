@@ -33,9 +33,9 @@ def reconstruct():
     
     
    #defining directories    
-    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\cuxhaven'
-    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\cuxhaven'
-    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\cuxhaven'
+    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\atlanticCity'
+    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\atlanticCity'
+    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\atlanticCity'
 
     
     #cd to the lagged predictors directory
@@ -43,7 +43,7 @@ def reconstruct():
     
     #get predictor file name
     import glob
-    for file in glob.glob("*_twcr.csv"):
+    for file in glob.glob("*twcr.csv"):
         predictor = [file]
 
     #looping through 
@@ -244,7 +244,7 @@ def reconstruct():
 
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        saveName = tg_name.split('.csv')[0] + 'Recon.csv'
+        saveName = tg_name.split('.csv')[0] + 'Trained19502011_Recon.csv'
         final_dat.to_csv(saveName)
         
         #cd to dir_in

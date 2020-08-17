@@ -16,20 +16,22 @@ import datetime as dt #used for timedelta
 from datetime import datetime
 
 #define directories
-dir_name = 'G:\\05_era5\\02_era5_combined_predictors'
-dir_in = 'G:\\05_era5\\02_era5_combined_predictors'
-dir_out = 'G:\\05_era5\\03_era5_lagged_predictors'
+dir_in = '/lustre/fs0/home/mtadesse/ereaFiveCombine'
+dir_out = '/lustre/fs0/home/mtadesse/eraFiveLag'
 
 def lag():
-    #get name of tide gauges from another folder that has the full names
-    #checked 882 tgs in eraint folde; same ones in 20CR folder -> go ahead
-    os.chdir(dir_name)
+
+    os.chdir(dir_in)
     
     #get names
     tg_list_name = os.listdir()
     
-    for tg in tg_list_name:
-        tg_name = tg
+    x = 72
+    y = 73 
+    
+    
+    for t in range(x, y):
+        tg_name = tg_list_name[t]
         print(tg_name, '\n')
         
         # #check if the file exists
@@ -42,9 +44,7 @@ def lag():
         os.chdir(dir_in)
         
         pred = pd.read_csv(tg_name)
-        pred.sort_values(by = 'date', inplace=True)
-        pred.reset_index(inplace = True)
-        pred.drop('index', axis = 1, inplace = True)
+    
     
         #create a daily time series - date_range
         #get only the ymd of the start and end times
@@ -111,45 +111,5 @@ def lag():
         pred_lagged.to_csv(tg_name)
         os.chdir(dir_in)
 
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#run script
+lag()

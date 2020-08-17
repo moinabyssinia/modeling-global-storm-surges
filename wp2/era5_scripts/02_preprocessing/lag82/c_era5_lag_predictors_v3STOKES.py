@@ -44,6 +44,8 @@ def lag():
         os.chdir(dir_in)
         
         pred = pd.read_csv(tg_name)
+        pred.sort_values(by = 'date', inplace=True)
+
     
     
         #create a daily time series - date_range
@@ -72,7 +74,7 @@ def lag():
         #note here that since ERA20C has 3hrly data
         #the lag_hrs is increased from 6(eraint) to 11 (era20C)
         time_lagged = pd.DataFrame()
-        lag_hrs = [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+        lag_hrs = [0, 6, 12, 18, 24, 30]
         for lag in lag_hrs:
             lag_name = 'lag'+str(lag)
             lam_delta = lambda x: str(x - dt.timedelta(hours = lag))
@@ -111,45 +113,5 @@ def lag():
         pred_lagged.to_csv(tg_name)
         os.chdir(dir_in)
 
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#run script
+lag()

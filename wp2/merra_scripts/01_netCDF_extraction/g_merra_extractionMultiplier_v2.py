@@ -8,7 +8,7 @@ MERRA multiple scripts producer
 """
 import os
 
-os.chdir('G:\\modeling_storm_surge\\wp2\\era5_scripts\\02_preprocessing\\combine82')
+os.chdir('G:\\modeling_storm_surge\\wp2\\era5_scripts\\02_preprocessing\\lag82')
 
 
 for ii in range(0, 82):
@@ -17,7 +17,7 @@ for ii in range(0, 82):
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \
     #                       str(years[jj]), '.nc'])
     save_name_py = ''.join([str(ii), '-tideGauge', '.py'])
-    f = open('b_era5_combined_predictors_v3STOKES.py', 'r')
+    f = open('c_era5_lag_predictors_v3STOKES.py', 'r')
     filedata = f.read()
     f.close()
     
