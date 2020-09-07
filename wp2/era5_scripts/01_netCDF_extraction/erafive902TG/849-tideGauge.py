@@ -26,8 +26,10 @@ def extract_data(delta= 3):
     
     #defining the folders for predictors
     nc_path = {'slp' : "/lustre/fs0/home/mtadesse/era_five/slp",\
-           "wnd_u": "/lustre/fs0/home/mtadesse/era_five/wnd_u",\
-           'wnd_v' : "/lustre/fs0/home/mtadesse/era_five/wnd_v"}
+            "wnd_u": "/lustre/fs0/home/mtadesse/era_five/wnd_u",\
+            'wnd_v' : "/lustre/fs0/home/mtadesse/era_five/wnd_v"}
+    
+        
     surge_path = "/lustre/fs0/home/mtadesse/obs_surge"
     csv_path = "/lustre/fs0/home/mtadesse/erafive_localized"
     
@@ -121,7 +123,7 @@ def extract_data(delta= 3):
                     
                 #time for saving file
                 print("saving as csv")
-                yr_name = py.split('_')[3]
+                yr_name = py.split('_')[-1]
                 save_name = '_'.join([tg_name, pred_name, yr_name])\
                     + ".csv"
                 pred_new.to_csv(save_name)

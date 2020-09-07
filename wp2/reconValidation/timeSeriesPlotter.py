@@ -15,7 +15,7 @@ import matplotlib.patches as mpatches
 from datetime import datetime
 
 # #define a plot object that can be manipulated 
-fig, ax = plt.subplots(6, 1, figsize=(16, 10))
+fig, ax = plt.subplots(2, 1, figsize=(16, 10))
 fig.tight_layout(pad = 0.8)
 
 def timeSeriesPlotter(tideGauge, data, row):

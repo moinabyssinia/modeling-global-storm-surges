@@ -11,7 +11,7 @@ import os
 os.chdir('G:\\modeling_storm_surge\\wp2\\era5_scripts\\02_preprocessing\\lag82')
 
 
-for ii in range(0, 82):
+for ii in range(0, 902):
     print(ii)
 
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \

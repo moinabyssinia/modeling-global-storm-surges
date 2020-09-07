@@ -19,8 +19,8 @@ import os
 import pandas as pd
 
 #%% define directories
-home = 'E:\\03_20cr\\20cr_localized'
-out_path = 'E:\\03_20cr\\01_20cr_predictiors'
+home = 'G:\\05_era5\\eraFiveLocalized'
+out_path = 'G:\\05_era5\\01_era5_predictors'
 
 
 #cd to the home dir to get TG information
@@ -42,11 +42,11 @@ for tg in tg_list:
     where = os.getcwd()
     
     #run slp until wnd_u and wnd_v are prepared
-    csv_path = {'wnd_v' : os.path.join(where, 'wnd_v')}
+    # csv_path = {'wnd_v' : os.path.join(where, 'wnd_v')}
     
-    # csv_path = {'slp' : os.path.join(where, 'slp'),\
-    #            "wnd_u": os.path.join(where, 'wnd_u'),\
-    #            'wnd_v' : os.path.join(where, 'wnd_v')}
+    csv_path = {'slp' : os.path.join(where, 'slp'),\
+                "wnd_u": os.path.join(where, 'wnd_u'),\
+                'wnd_v' : os.path.join(where, 'wnd_v')}
     
     #%%looping through predictors
     for pred in csv_path.keys():

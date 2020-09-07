@@ -19,7 +19,6 @@ data = pd.DataFrame(columns = ['year','maCorr', 'maRmse'])
 window = 30
 for yr in years:
     currentStartYear = yr - window + 1
-    print(currentStartYear)
     currentData = dat[(dat['year'] >= currentStartYear) & (dat['year'] <= yr)]
     corr = stats.pearsonr(currentData['surge_reconsturcted'], currentData['surge'])[0]
     rmse = np.sqrt(metrics.mean_squared_error(currentData['surge_reconsturcted'], currentData['surge']))

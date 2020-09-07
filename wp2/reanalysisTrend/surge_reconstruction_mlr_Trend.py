@@ -33,9 +33,9 @@ def reconstruct():
     
     
    #defining directories    
-    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\atlanticCity'
-    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\atlanticCity'
-    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\atlanticCity'
+    dir_in = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\hornbaek'
+    dir_out = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\hornbaek'
+    surge_path = 'G:\\data\\reanalysisTrendFiles\\modelFiles\\hornbaek'
 
     
     #cd to the lagged predictors directory

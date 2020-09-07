@@ -44,6 +44,9 @@ def lag():
         os.chdir(dir_in)
         
         pred = pd.read_csv(tg_name)
+        pred.sort_values(by = 'date', inplace=True)
+        pred.reset_index(inplace = True)
+        pred.drop('index', axis = 1, inplace = True)
     
     
         #create a daily time series - date_range
