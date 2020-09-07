@@ -26,11 +26,12 @@ def getFiles(data):
         "twcr": "E:\\03_20cr\\08_20cr_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
         "era20c": "F:\\02_era20C\\08_era20C_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
         "eraint": "F:\\01_erainterim\\08_eraint_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "merra": "G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\surgeReconstructed"
+        "merra": "G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
+        "erafive": "G:\\05_era5\\08_era5_surge_reconstruction\\bestReconstruction\\surgeReconstructed"
         }
 
-    surgePath = "D:\\data\\allReconstructions\\05_dmax_surge_georef"
-    outPath = "D:\\data\\allReconstructions\\validation\\commonPeriodValidation"
+    surgePath = "G:\\data\\allReconstructions\\05_dmax_surge_georef"
+    outPath = "G:\\data\\allReconstructions\\validation\\commonPeriodValidation"
 
     os.chdir(reconPath[data])
 
@@ -63,7 +64,7 @@ def getFiles(data):
         #implement subsetting
         surgeSubset = subsetFiles(reconSurge, obsSurge)
         #print(surgeSubset)
-        os.chdir("E:\\03_20cr\\07_sonstig")
+        # os.chdir("E:\\03_20cr\\07_sonstig")
         #surgeSubset.to_csv("abashiriReconObs.csv")
         #implement validation
         corr, rmse, nse = getMetrics(surgeSubset)[0], getMetrics(surgeSubset)[1], getNSE(surgeSubset)
