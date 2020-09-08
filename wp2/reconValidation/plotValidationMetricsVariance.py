@@ -28,26 +28,26 @@ def plotMetricVariance(metric):
     os.chdir(csvPath)
     
     #define validation output files
-    validationFiles = {'corr' : 'allCorr.csv', 'rmse' : 'allRMSE.csv',
-                       'nse' : 'allNSE.csv'}
+    validationFiles = {'corr' : 'allCorrelationMetricVariance.csv', 'rmse' : 'allRMSEMetricVariance.csv',
+                       'nse' : 'allNSEMetricVariance.csv'}
     
     chosenMetric = validationFiles[metric]
     
     #read the validation file of choice
     dat = pd.read_csv(chosenMetric)
     #compute standard deviation of metrics for all reanalysis
-    metricColumns = dat[['20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']]
+    metricColumns = dat[['20CR', 'ERA-20c', 'ERA-Interim', 'MERRA', 'ERA-FIVE']]
     # metricColumns.to_csv('justMetrics.csv')
-    dat['metricStd'] = np.std(metricColumns, axis = 1)
+    #dat['metricStd'] = np.std(metricColumns, axis = 1)
     # dat.to_csv("metricSTDNse.csv")
 
 
     #plotting
     if metric == 'corr':
-        bubbleSize = 1000
+        bubbleSize = 2000
         title = 'Pearson\'s Correlation - Metric Variance'
     elif metric == 'rmse':
-        bubbleSize = 10000 
+        bubbleSize = 200000 
         title = 'RMSE - Metric Variance'
     else:
         bubbleSize = 600
@@ -66,12 +66,12 @@ def plotMetricVariance(metric):
     m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
     
     #define bubble sizes
-    minSize = min(dat['metricStd'])*bubbleSize
-    maxSize = max(dat['metricStd'])*bubbleSize
+    minSize = min(dat['Metric Variance'])*bubbleSize
+    maxSize = max(dat['Metric Variance'])*bubbleSize
     
     m.bluemarble(alpha = 0.8)
     sns.scatterplot(x = x, y = y, color = 'red', 
-                    size = 'metricStd', hue = 'Reanalysis',
-                    sizes = (minSize, maxSize), palette = ['magenta', 'black', 'red', 'green']
+                    size = 'Metric Variance', hue = 'Reanalysis',
+                    sizes = (minSize, maxSize), palette = ['magenta', 'black', 'red', 'green', 'blue']
                     ,data = dat)
     plt.title(title)
