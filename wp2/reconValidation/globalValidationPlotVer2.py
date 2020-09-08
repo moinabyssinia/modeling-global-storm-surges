@@ -37,7 +37,8 @@ def plotIt(reanalysis, metric):
     data = {'twcr': ["twcr19802010Validation.csv", "20CR"],
             'era20c': ["era20c19802010Validation.csv", "ERA20C"],
             'eraint':["eraint19802010Validation.csv", "ERA-Interim"],
-            'merra': ["merra19802010Validation.csv", "MERAA"]
+            'merra': ["merra19802010Validation.csv", "MERAA"],
+            'erafive': ["erafive19802010Validation.csv", "ERA-FIVE"]
             }
     
     metrics = {'corr': ["corrn", "Pearson's Correlation"],
@@ -45,7 +46,7 @@ def plotIt(reanalysis, metric):
                }
     
     #cd to the validation directory
-    os.chdir("D:\\data\\allReconstructions\\validation\\commonPeriodValidation")
+    os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidation")
     
     #load validation files
     dat = pd.read_csv(data[reanalysis][0])

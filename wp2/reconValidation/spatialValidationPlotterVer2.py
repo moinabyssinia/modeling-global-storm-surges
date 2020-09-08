@@ -20,11 +20,12 @@ from mpl_toolkits.basemap import Basemap
 
 def starter():
     #load the files
-    twcrDat, era20cDat, eraintDat, merraDat = loadData()
+    twcrDat, era20cDat, eraintDat, merraDat, erafiveDat = loadData()
     #get metrics for all reanalysis concatented by column
-    allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat)[0]
-    allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[1]
-    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat)[2]
+    allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[0]
+    allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[1]
+    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
+
 
     return allCorr, allRMSE, allNSE
 
@@ -63,8 +64,8 @@ def plotGlobal(metric):
     m.drawcoastlines()
 
     #get degree signs 
-    parallels = np.arange(-80,81,10.)
-    meridians = np.arange(-180.,180.,20.)
+    parallels = np.arange(-80,81,20.)
+    meridians = np.arange(-180.,180.,40.)
     #labels = [left,right,top,bottom]
     m.drawparallels(parallels,labels=[True,True,False,False], linewidth = 0.5)
     m.drawmeridians(meridians,labels=[False,False,False,True], linewidth = 0.5)
@@ -72,12 +73,13 @@ def plotGlobal(metric):
     m.bluemarble(alpha = 0.8) 
     
     #define markers -use same for all for now
-    markers = {"20CR": "o", "ERA-20C": "o", "ERA-Interim":'o', "MERRA":'o'}
+    markers = {"20CR": "o", "ERA-20C": "o", "ERA-Interim":'o', "MERRA":'o', "ERA-FIVE":'o'}
     #define palette
     color_dict = dict({'20CR':'green',
                   'ERA-20C':'magenta',
                   'ERA-Interim': 'black',
-                  'MERRA': 'red'
+                  'MERRA': 'red',
+                  'ERA-FIVE':'aqua'
                   })
     #define bubble sizes
     minSize = min(dat[varToPlot])*bubbleSizeMultiplier
@@ -89,7 +91,7 @@ def plotGlobal(metric):
     plt.legend(loc = 'lower left')
     plt.title(title)
 
-def processData(twcrDat, era20cDat, eraintDat, merraDat):
+def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     """
     this function cleans and prepares
     the data for plotting
@@ -97,32 +99,33 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat):
     #merge everything
     twcr_era20c = pd.merge(twcrDat, era20cDat, on='tg', how='left')
     twcr_era20c_eraint = pd.merge(twcr_era20c, eraintDat, on='tg', how='left')
-    twcr_era20c_eraint_merra = pd.merge(twcr_era20c_eraint, merraDat, on='tg', 
-                                        how='left')
+    twcr_era20c_eraint_merra = pd.merge(twcr_era20c_eraint, merraDat, on='tg', how='left')
+    twcr_era20c_eraint_merra_erafive = pd.merge(twcr_era20c_eraint_merra, erafiveDat, on='tg', how='left')
+
     
-    allCorr = twcr_era20c_eraint_merra[['tg', 'lon', 'lat', 'corrTwcr', 
-    'corrEra20c', 'corrEraint', 'corrMerra']]
-    allCorr.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 
-                       'MERRA']
-    allRMSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'rmseTwcr', 
-                                        'rmseEra20c','rmseEraint',  'rmseMerra']]
-    allRMSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA']
-    allNSE = twcr_era20c_eraint_merra[['tg', 'lon', 'lat',  'nseTwcr', 
-                                       'nseEra20c','nseEraint',  'nseMerra']]
-    allNSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 
-                      'MERRA']
+
+    allCorr = twcr_era20c_eraint_merra_erafive[['tg', 'lon', 'lat', 'corrTwcr', 'corrEra20c', \
+         'corrEraint', 'corrMerra', 'corrErafive']]
+    allCorr.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA', 'ERA-FIVE']
+    allRMSE = twcr_era20c_eraint_merra_erafive[['tg', 'lon', 'lat',  'rmseTwcr', 'rmseEra20c',\
+         'rmseEraint',  'rmseMerra', 'rmseErafive']]
+    allRMSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA', 'ERA-FIVE']
+    allNSE = twcr_era20c_eraint_merra_erafive[['tg', 'lon', 'lat',  'nseTwcr', 'nseEra20c',\
+         'nseEraint',  'nseMerra', 'nseErafive']]
+    allNSE.columns = ['tg', 'lon', 'lat', '20CR', 'ERA-20C', 'ERA-Interim', 'MERRA', 'ERA-FIVE']
+    
     
     #get max corr values 
-    allCorr['Correlation'] = allCorr.iloc[:,3:7].max(axis = 1)
-    allCorr['Reanalysis'] = allCorr.iloc[:, 3:7].idxmax(axis = 1)
+    allCorr['Correlation'] = allCorr.iloc[:,3:8].max(axis = 1)
+    allCorr['Reanalysis'] = allCorr.iloc[:, 3:8].idxmax(axis = 1)
 
     #get min rmse values - change to cms for visibility
-    allRMSE['RMSE(cm)'] = allRMSE.iloc[:,3:7].min(axis = 1)*100
-    allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:7].idxmin(axis = 1)
+    allRMSE['RMSE(cm)'] = allRMSE.iloc[:,3:8].min(axis = 1)*100
+    allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:8].idxmin(axis = 1)
 
     #get max nse values 
-    allNSE['NSE(%)'] = allNSE.iloc[:,3:7].max(axis = 1)*100
-    allNSE['Reanalysis'] = allNSE.iloc[:, 3:7].idxmax(axis = 1)
+    allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)*100
+    allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
     
     # #save metrics results 
     # allCorr.to_csv("allCorr.csv")
@@ -135,26 +138,25 @@ def loadData():
     """
     loads the relevant validation files
     """
-    #dictionary for datasets
+        #dictionary for datasets
     data = {'twcr': ["twcr19802010Validation.csv", "20CR"],
             'era20c': ["era20c19802010Validation.csv", "ERA20C"],
             'eraint':["eraint19802010Validation.csv", "ERA-Interim"],
-            'merra': ["merra19802010Validation.csv", "MERAA"]
+            'merra': ["merra19802010Validation.csv", "MERAA"],
+            'erafive': ["erafive19802010Validation.csv", "ERA-FIVE"]
             }
     os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidation")
 
     twcrDat = pd.read_csv(data['twcr'][0])
-    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 
-                       'corrTwcr', 'rmseTwcr', 'nseTwcr']
+    twcrDat.columns = ['deleteIt','tg', 'lon', 'lat', 'reanalysis', 'corrTwcr', 'rmseTwcr', 'nseTwcr']
     era20cDat = pd.read_csv(data['era20c'][0])
-    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
-                         'corrEra20c', 'rmseEra20c', 'nseEra20c']
+    era20cDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEra20c', 'rmseEra20c', 'nseEra20c']
     eraintDat = pd.read_csv(data['eraint'][0])
-    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
-                         'corrEraint', 'rmseEraint', 'nseEraint']
+    eraintDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrEraint', 'rmseEraint', 'nseEraint']
     merraDat = pd.read_csv(data['merra'][0])
-    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 
-                        'corrMerra', 'rmseMerra', 'nseMerra']
+    merraDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrMerra', 'rmseMerra', 'nseMerra']
+    erafiveDat = pd.read_csv(data['erafive'][0])
+    erafiveDat.columns = ['deleteIt','tg', 'long', 'latt', 'reanalysis', 'corrErafive', 'rmseErafive', 'nseErafive']
 
 
-    return twcrDat, era20cDat, eraintDat, merraDat
+    return twcrDat, era20cDat, eraintDat, merraDat, erafiveDat
