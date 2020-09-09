@@ -90,6 +90,9 @@ def plotGlobal(metric):
                         hue = 'Reanalysis',  palette = color_dict, data = dat)
     plt.legend(loc = 'lower left')
     plt.title(title)
+    os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
+    saveName = 'allReanalyses'+metric+'.svg'
+    plt.savefig(saveName, dpi = 400)
 
 def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     """

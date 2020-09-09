@@ -35,6 +35,7 @@ def plotMetricVariance(metric):
     
     #read the validation file of choice
     dat = pd.read_csv(chosenMetric)
+    dat['Metric STD'] = 100*dat['Metric Variance']**0.5
     #compute standard deviation of metrics for all reanalysis
     metricColumns = dat[['20CR', 'ERA-20c', 'ERA-Interim', 'MERRA', 'ERA-FIVE']]
     # metricColumns.to_csv('justMetrics.csv')
@@ -45,13 +46,13 @@ def plotMetricVariance(metric):
     #plotting
     if metric == 'corr':
         bubbleSize = 2000
-        title = 'Pearson\'s Correlation - Metric Variance'
+        title = 'Pearson\'s Correlation - Variation of Model Accuracy among Reanalyses'
     elif metric == 'rmse':
-        bubbleSize = 200000 
-        title = 'RMSE - Metric Variance'
+        bubbleSize = 90 
+        title = 'RMSE - Metric Variation of Model Accuracy among Reanalyses (cm)'
     else:
         bubbleSize = 600
-        title = 'NSE - Metric Variance'
+        title = 'NSE - Variation of Model Accuracy among Reanalyses'
         
     sns.set_context('notebook', font_scale = 1.5)
     
@@ -66,12 +67,12 @@ def plotMetricVariance(metric):
     m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
     
     #define bubble sizes
-    minSize = min(dat['Metric Variance'])*bubbleSize
-    maxSize = max(dat['Metric Variance'])*bubbleSize
+    minSize = min(dat['Metric STD'])*bubbleSize
+    maxSize = max(dat['Metric STD'])*bubbleSize
     
     m.bluemarble(alpha = 0.8)
     sns.scatterplot(x = x, y = y, color = 'red', 
-                    size = 'Metric Variance', hue = 'Reanalysis',
-                    sizes = (minSize, maxSize), palette = ['magenta', 'black', 'red', 'green', 'blue']
+                    size = 'Metric STD', hue = 'Reanalysis',
+                    sizes = (minSize, maxSize), palette = ['cyan', 'black', 'red', 'green', 'magenta']
                     ,data = dat)
     plt.title(title)

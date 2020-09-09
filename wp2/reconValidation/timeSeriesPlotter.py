@@ -14,7 +14,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from datetime import datetime
 
-# #define a plot object that can be manipulated 
+# #define a plot object that can be manipulated
+#update the rows of the subplot here 
 fig, ax = plt.subplots(2, 1, figsize=(16, 10))
 fig.tight_layout(pad = 0.8)
 
