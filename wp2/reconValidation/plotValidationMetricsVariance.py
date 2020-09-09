@@ -35,7 +35,6 @@ def plotMetricVariance(metric):
     
     #read the validation file of choice
     dat = pd.read_csv(chosenMetric)
-    dat['Metric STD'] = 100*dat['Metric Variance']**0.5
     #compute standard deviation of metrics for all reanalysis
     metricColumns = dat[['20CR', 'ERA-20c', 'ERA-Interim', 'MERRA', 'ERA-FIVE']]
     # metricColumns.to_csv('justMetrics.csv')
@@ -45,13 +44,17 @@ def plotMetricVariance(metric):
 
     #plotting
     if metric == 'corr':
-        bubbleSize = 2000
+        dat['Metric STD'] = dat['Metric Variance']**0.5
+        bubbleSize = 500
         title = 'Pearson\'s Correlation - Variation of Model Accuracy among Reanalyses'
     elif metric == 'rmse':
-        bubbleSize = 90 
+        #multiply by 100 to get values in cms
+        dat['Metric STD'] = 100*dat['Metric Variance']**0.5
+        bubbleSize = 60 
         title = 'RMSE - Metric Variation of Model Accuracy among Reanalyses (cm)'
     else:
-        bubbleSize = 600
+        dat['Metric STD'] = dat['Metric Variance']**0.5
+        bubbleSize = 350
         title = 'NSE - Variation of Model Accuracy among Reanalyses'
         
     sns.set_context('notebook', font_scale = 1.5)
@@ -76,3 +79,6 @@ def plotMetricVariance(metric):
                     sizes = (minSize, maxSize), palette = ['cyan', 'black', 'red', 'green', 'magenta']
                     ,data = dat)
     plt.title(title)
+    os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
+    saveName = 'allReanalyses'+metric+'STD.svg'
+    plt.savefig(saveName, dpi = 400)
