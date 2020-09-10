@@ -4,6 +4,7 @@ Created on Wed Jul 21 15:00:00 2020
 
 where does each Reanalysis perform best
 spatially?
+But plot individual reanalysis metrics
 
 Added NSE metric
 
@@ -57,7 +58,7 @@ def plotGlobal(metric):
     ###################################
     #pick here what you want to display
     ###################################
-    dat = dat[dat['Reanalysis'] == 'MERRA']
+    dat = dat[dat['Reanalysis'] == 'ERA-FIVE']
 
 
     #increase plot font size
