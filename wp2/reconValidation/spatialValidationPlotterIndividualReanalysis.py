@@ -54,6 +54,12 @@ def plotGlobal(metric):
         title = 'RMSE(cm) - 1980-2010'
         bubbleSizeMultiplier = 10
 
+    ###################################
+    #pick here what you want to display
+    ###################################
+    dat = dat[dat['Reanalysis'] == 'MERRA']
+
+
     #increase plot font size
     sns.set_context('notebook', font_scale = 1.5)
     
@@ -82,8 +88,12 @@ def plotGlobal(metric):
                   'ERA-FIVE':'aqua'
                   })
     #define bubble sizes
-    minSize = abs(min(dat[varToPlot]))*bubbleSizeMultiplier
+    minSize = min(dat[varToPlot])*bubbleSizeMultiplier
+    if minSize < 0:
+        minSize = 0
     maxSize = max(dat[varToPlot])*bubbleSizeMultiplier
+    
+
     
     sns.scatterplot(x = x, y = y, markers = markers, style = 'Reanalysis',\
                     size = varToPlot, sizes=(minSize, maxSize),\
