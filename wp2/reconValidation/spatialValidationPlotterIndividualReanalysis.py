@@ -3,8 +3,7 @@
 Created on Wed Jul 21 15:00:00 2020
 
 where does each Reanalysis perform best
-spatially?
-But plot individual reanalysis metrics
+spatially? But plot individual reanalysis metrics
 
 Added NSE metric
 
