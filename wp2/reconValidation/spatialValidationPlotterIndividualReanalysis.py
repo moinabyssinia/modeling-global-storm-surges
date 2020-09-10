@@ -55,7 +55,7 @@ def plotGlobal(metric):
         bubbleSizeMultiplier = 10
 
     ###################################
-    #pick here what you want to display
+    #pick reanalysis you want to display
     ###################################
     dat = dat[dat['Reanalysis'] == 'ERA-FIVE']
 
