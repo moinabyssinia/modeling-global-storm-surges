@@ -82,7 +82,7 @@ def plotGlobal(metric):
                   'ERA-FIVE':'aqua'
                   })
     #define bubble sizes
-    minSize = min(dat[varToPlot])*bubbleSizeMultiplier
+    minSize = abs(min(dat[varToPlot]))*bubbleSizeMultiplier
     maxSize = max(dat[varToPlot])*bubbleSizeMultiplier
     
     sns.scatterplot(x = x, y = y, markers = markers, style = 'Reanalysis',\
@@ -90,9 +90,9 @@ def plotGlobal(metric):
                         hue = 'Reanalysis',  palette = color_dict, data = dat)
     plt.legend(loc = 'lower left')
     plt.title(title)
-    os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
-    saveName = 'allReanalyses'+metric+'.svg'
-    plt.savefig(saveName, dpi = 400)
+    # os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
+    # saveName = 'allReanalyses'+metric+'.svg'
+    # plt.savefig(saveName, dpi = 400)
 
 def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     """
