@@ -25,7 +25,7 @@ def timeSeriesPlotter(tideGauge, data, row):
     to plot surge reconstruction
     
     tideGauge: name of the tide gauge with out .csv extension
-    data = ["twcr", "era20c", "eraint", "merra"]
+    data = ["twcr", "era20c", "eraint", "merra", "erafive"]
     row: where to place the time series on the subplot
     
     the subplot object is defined above - manually add
@@ -44,18 +44,19 @@ def getFiles(tideGauge, data, row):
     data = ["twcr", "era20c", "eraint", "merra"]
     """
     reconPath = {
-        "twcr": "G:\\data\\allReconstructions\\20cr",
-        "era20c": "G:\\data\\allReconstructions\\era20c",
-        "eraint": "G:\\data\\allReconstructions\\erainterim",
-        "merra": "G:\\data\\allReconstructions\\merra"
+        "twcr": "G:\\data\\allReconstructions\\01_20cr",
+        "era20c": "G:\\data\\allReconstructions\\02_era20c",
+        "eraint": "G:\\data\\allReconstructions\\03_erainterim",
+        "merra": "G:\\data\\allReconstructions\\04_merra",
+        "erafive": "G:\\data\\allReconstructions\\05_era5"
         }
 
-    surgePath = "G:\\data\\allReconstructions\\05_dmax_surge_georef"
+    surgePath = "G:\\data\\allReconstructions\\06_dmax_surge_georef"
 
     tg = tideGauge+".csv"
     print(tg, '\n')
 
-    surgeTwcr, surgeEra20c, surgeEraint, surgeMerra = [],[],[],[]
+    surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5 = [],[],[],[],[]
     #get reconstructed surge
     for ii in data:
         if ii == 'twcr':
@@ -70,6 +71,9 @@ def getFiles(tideGauge, data, row):
         elif ii == 'merra':
             os.chdir(reconPath[ii])
             surgeMerra = getReconSurge(tg)
+        elif ii == 'erafive':
+            os.chdir(reconPath[ii])
+            surgeEra5 = getReconSurge(tg)
         else:
             "there is a problem!"
 
@@ -78,7 +82,7 @@ def getFiles(tideGauge, data, row):
     obsSurge = getObsSurge(tg)
 
     #print(obsSurge)
-    getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, 
+    getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5, obsSurge, 
                  row, tideGauge)
 
 def getReconSurge(tg):
@@ -109,7 +113,7 @@ def getObsSurge(tg):
 
     return obsSurge
 
-def getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row, 
+def getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5, obsSurge, row, 
                  tideGauge):
     """
     this function prepares the time column of the time series
@@ -132,17 +136,20 @@ def getTimeStamp(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, obsSurge, row,
     if len(surgeMerra) != 0 :
         surgeMerra['date'] = pd.DataFrame(list(map(time_stamp, surgeMerra['date'])), 
                                           columns = ['date'])
+    if len(surgeEra5) != 0 :
+        surgeEra5['date'] = pd.DataFrame(list(map(time_stamp, surgeEra5['date'])), 
+                                          columns = ['date'])
     if len(obsSurge) != 0:
         obsSurge['date'] = pd.DataFrame(list(map(time_stamp_surge, obsSurge['ymd'])), 
                                         columns = ['date'])
 
     
     #calling the plotter function
-    plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, 
+    plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5,
                    obsSurge, row, tideGauge)
     
 
-def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, 
+def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5,
                    obsSurge, row, tideGauge):
     """
     this function plots a time series making use of 
@@ -182,6 +189,12 @@ def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra,
                    color = "red", label = "merra")
         ax[row].fill_between(surgeMerra['date'], surgeMerra['pred_int_lower'], 
                            surgeMerra['pred_int_upper'], color = 'lightsalmon', 
+                           alpha = 0.4)
+    if len(surgeEra5) != 0:
+        ax[row].plot(surgeEra5['date'], surgeEra5['surge_reconsturcted'], 
+                   color = "cyan", label = "erafive")
+        ax[row].fill_between(surgeEra5['date'], surgeEra5['pred_int_lower'], 
+                           surgeEra5['pred_int_upper'], color = 'paleturquoise', 
                            alpha = 0.4)
         # plt.plot(surgeMerra['date'], surgeMerra['pred_int_lower'], 
         

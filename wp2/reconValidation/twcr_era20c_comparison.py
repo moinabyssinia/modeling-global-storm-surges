@@ -19,7 +19,7 @@ from mpl_toolkits.basemap import Basemap
 #load file
 os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidation")
 dat = pd.read_csv('twcr_era20cRMSEComparison.csv')
-dat.drop(['Unnamed: 0', 'Unnamed: 0.1'], axis = 1, inplace = True)
+dat.drop('Unnamed: 0', axis = 1, inplace = True)
 
 #plot
 #increase plot font size
@@ -59,7 +59,7 @@ maxSize = max(dat['percIncrease'])*4
 
 
 sns.scatterplot(x = x, y = y, markers = markers, style = 'bestLongTerm',\
-                size = 'percIncrease', sizes=(minSize, maxSize),\
+                size = 'bestLTMagnitude', sizes=(minSize, maxSize),\
                     hue = 'bestLongTerm',  palette = color_dict, data = dat)
 plt.legend(loc = 'lower left')
 plt.title('RMSE(m) - Common Perdiod (1980-2010) Validation for 20CR and ERA-20C')
