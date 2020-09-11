@@ -50,15 +50,16 @@ color_dict = dict({'20CR':'green',
               'ERA-FIVE':'aqua'
               })
 #define bubble sizes
-minSize = min(dat['bestLTMagnitude'])*600
+#use 600 for rmse - X for percentIncrease
+minSize = min(dat['percIncrease'])*4
 if minSize < 0:
     minSize = 0
-maxSize = max(dat['bestLTMagnitude'])*600
+maxSize = max(dat['percIncrease'])*4
 
 
 
 sns.scatterplot(x = x, y = y, markers = markers, style = 'bestLongTerm',\
-                size = 'bestLTMagnitude', sizes=(minSize, maxSize),\
+                size = 'percIncrease', sizes=(minSize, maxSize),\
                     hue = 'bestLongTerm',  palette = color_dict, data = dat)
 plt.legend(loc = 'lower left')
 plt.title('RMSE(m) - Common Perdiod (1980-2010) Validation for 20CR and ERA-20C')
