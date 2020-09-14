@@ -19,17 +19,18 @@ def getFiles(data):
     this function gets the reconstruction time
     series and the observed surge time series
 
-    data = ["twcr", "era20c", "eraint", "merra"]
+    data = ["twcr", "era20c", "eraint", "merra", "erafive"]
     """
     reconPath = {
-        "twcr": "E:\\03_20cr\\08_20cr_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "era20c": "F:\\02_era20C\\08_era20C_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "eraint": "F:\\01_erainterim\\08_eraint_surge_reconstruction\\bestReconstruction\\surgeReconstructed",
-        "merra": "G:\\04_merra\\08_merra_surge_reconstruction\\bestReconstruction\\surgeReconstructed"
+        "twcr": "G:\\data\\allReconstructions\\01_20cr",
+        "era20c": "G:\\data\\allReconstructions\\02_era20c",
+        "eraint": "G:\\data\\allReconstructions\\03_erainterim",
+        "merra": "G:\\data\\allReconstructions\\04_merra",
+        "erafive": "G:\\data\\allReconstructions\\05_era5"
         }
 
-    surgePath = "D:\\data\\allReconstructions\\05_dmax_surge_georef"
-    outPath = "D:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes"
+    surgePath = "G:\\data\\allReconstructions\\06_dmax_surge_georef"
+    outPath = "G:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes\\percentile"
 
     os.chdir(reconPath[data])
 
@@ -75,7 +76,7 @@ def getFiles(data):
         #print(df)
     
     os.chdir(outPath)
-    saveName = data+"19802010ValidationExtremes.csv"
+    saveName = data+"19802010ValidationExtremes95ile.csv"
     df.to_csv(saveName)
 
 def subsetFiles(reconSurge, obsSurge):
@@ -122,15 +123,15 @@ def getMetrics(surgeMerged):
     """
 
     if (surgeMerged.empty):
-        print("no common period")
+        # print("no common period")
         metricCorr = 'nan'
         metricRMSE = 'nan'
     else:
         pval = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[1]
-        print(pval)
+        # print(pval)
 
         if pval >= 0.05:
-            print("pval >= 0.05")
+            # print("pval >= 0.05")
             metricCorr = 'nan'
             metricRMSE = 'nan'
         else:
@@ -146,7 +147,7 @@ def getNSE(surgeMerged):
     Efficiency (NSE)
     """
     if surgeMerged.empty:
-        print("no common period")
+        # print("no common period")
         metricNSE = 'nan'
     else:
         numerator = sum((surgeMerged['surge_reconsturcted'] - surgeMerged['surge'])**2)
