@@ -67,7 +67,7 @@ def getFiles(data):
         surgeExtremes = getExtremes(surgeSubset, 0.95)
 
         #implement validation
-        corr, rmse, nse = getMetrics(surgeExtremes)[0], getMetrics(surgeExtremes)[1], getNSE(surgeExtremes)
+        corr, rmse, nse = getMetrics(surgeExtremes)[0], getMetrics(surgeExtremes)[1], getMetrics(surgeExtremes)[2]
 
         new_df = pd.DataFrame([tg, longitude, latitude, data, corr, rmse, nse]).T
         new_df.columns = ['tg', 'lon', 'lat', 'reanalysis','corrn', 'rmse', 'nse']
@@ -126,6 +126,7 @@ def getMetrics(surgeMerged):
         # print("no common period")
         metricCorr = 'nan'
         metricRMSE = 'nan'
+        metricNSE = 'nan'
     else:
         pval = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[1]
         # print(pval)
@@ -134,11 +135,12 @@ def getMetrics(surgeMerged):
             # print("pval >= 0.05")
             metricCorr = 'nan'
             metricRMSE = 'nan'
+            metricNSE = 'nan'
         else:
             metricCorr = stats.pearsonr(surgeMerged['surge_reconsturcted'], surgeMerged['surge'])[0]
             metricRMSE = np.sqrt(metrics.mean_squared_error(surgeMerged['surge_reconsturcted'], surgeMerged['surge']))
-
-    return metricCorr, metricRMSE
+            metricNSE = getNSE(surgeMerged)
+    return metricCorr, metricRMSE, metricNSE
 
 #added NSE metric computation
 def getNSE(surgeMerged):

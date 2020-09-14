@@ -127,13 +127,14 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
 
     #filter out NAN rows
-    allCorr = allCorr[~allCorr.isna().any(axis = 1)]
-    allRMSE = allRMSE[~allRMSE.isna().any(axis = 1)]
-    allNSE = allNSE[~allNSE.isna().any(axis = 1)]
+    ##remove rows where all reanalysis are nan
+    allCorr = allCorr[~allCorr['Correlation'].isna()]
+    allRMSE = allRMSE[~allRMSE['RMSE(cm)'].isna()]
+    allNSE = allNSE[~allNSE['NSE(%)'].isna()]
 
-    # allCorr.to_csv("allCorr.csv")
-    # allRMSE.to_csv("allRMSE.csv")
-    # allNSE.to_csv("allNSE.csv")
+    allCorr.to_csv("allCorr.csv")
+    allRMSE.to_csv("allRMSE.csv")
+    allNSE.to_csv("allNSE.csv")
     
     return allCorr, allRMSE, allNSE
 
