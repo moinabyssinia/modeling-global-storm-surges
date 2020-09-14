@@ -63,9 +63,10 @@ def getFiles(data):
 
         #implement subsetting
         surgeSubset = subsetFiles(reconSurge, obsSurge)
-
+        if surgeSubset.empty:
+            continue
         #get extremes 
-        surgeExtremes = getExtremes(surgeSubset, 0.95)
+        surgeExtremes = getExtremes(surgeSubset)
 
         #implement validation
         corr, rmse, nse = getMetrics(surgeExtremes)[0], getMetrics(surgeExtremes)[1], getNSE(surgeExtremes)
@@ -92,7 +93,7 @@ def subsetFiles(reconSurge, obsSurge):
 
     reconSurge = reconSurge[(reconSurge['ymd'] >= '1980-01-03') & (reconSurge['ymd'] < '2011-01-01')]
     obsSurge = obsSurge[(obsSurge['ymd'] >= '1980-01-03') & (obsSurge['ymd'] < '2011-01-01')]
-    
+
     #merge reconSurge and obsSurge on 'ymd'
     surgeMerged = pd.merge(reconSurge, obsSurge, on='ymd', how='left')
     
@@ -107,22 +108,27 @@ def subsetFiles(reconSurge, obsSurge):
 
     return surgeMerged
 
-def getExtremes(surgeMerged, percentile = 0.95):
+def getExtremes(dat):
     """
-    this function gets the observed surge
-    time series above 95 %ile threshold and 
-    its corresponding reconstructed surge
-
-    percentile: percentile threshold [0,1]
+    this function gets the five highest surge 
+    values for each year
     """
     ##get unique year values
+    #get the year
+    getYear = lambda x: x.split('-')[0]
+    dat['year'] = pd.DataFrame(list(map(getYear, dat['ymd'])))
+    years = dat['year'].unique()
     
+    highFive = pd.DataFrame(columns=['ymd', 'lon_x', 'lat_x', 
+                                     'surge_reconsturcted', 'surge', 'year'])
     ##for each year extract the five highest values
+    for yr in years:
+        currentYear = dat[dat['year'] == yr]
+        # print(currentYear)
+        highFive = pd.concat([highFive, currentYear.sort_values(by = 'surge', 
+                                                                ascending=False).head(5)], axis = 0)
     
-    ##concatenate them and return this dataframe
-    
-    
-    return surgeMerged[surgeMerged['surge'] >= surgeMerged['surge'].quantile(percentile)]
+    return highFive
 
 def getMetrics(surgeMerged):
     """
