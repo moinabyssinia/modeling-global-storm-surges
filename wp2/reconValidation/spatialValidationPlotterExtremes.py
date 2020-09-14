@@ -22,9 +22,9 @@ def starter():
     #get metrics for all reanalysis concatented by column
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[1]
-    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
+    allNNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
 
-    return allCorr, allRMSE, allNSE
+    return allCorr, allRMSE, allNNSE
 
 def plotExtremeGlobal(metric):
     """
@@ -42,9 +42,9 @@ def plotExtremeGlobal(metric):
         bubbleSizeMultiplier = 250
     elif metric == 'nse':
         dat = starter()[2]
-        varToPlot = 'NSE(%)'
-        title = 'NSE(%) - 1980-2010'  
-        bubbleSizeMultiplier = 3
+        varToPlot = 'NNSE'
+        title = 'NNSE - 1980-2010'  
+        bubbleSizeMultiplier = 300
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -62,8 +62,10 @@ def plotExtremeGlobal(metric):
 
     #draw parallels and meridians 
     parallels = np.arange(-80,81,20.)
+    meridians = np.arange(-180.,180.,40.)
     m.drawparallels(parallels,labels=[True,False,False,False], linewidth = 0)
-
+    m.drawparallels(parallels,labels=[True,True,False,False], linewidth = 0.5)
+    m.drawmeridians(meridians,labels=[False,False,False,True], linewidth = 0.5)
     m.bluemarble(alpha = 0.8) 
     
     #define markers
@@ -84,8 +86,11 @@ def plotExtremeGlobal(metric):
     sns.scatterplot(x = x, y = y, markers = markers, style = 'Reanalysis',\
                     size = varToPlot, sizes=(minSize, maxSize),\
                         hue = 'Reanalysis',  palette = color_dict, data = dat)
-    plt.legend(loc = 'lower left')
+    plt.legend(loc = 'lower left', ncol = 12)
     plt.title(title)
+    os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes\\percentile\\plotFiles")
+    saveName = 'allReanalysesExtremes'+metric+'.svg'
+    plt.savefig(saveName, dpi = 400)
 
 
 
@@ -123,20 +128,20 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:8].idxmin(axis = 1)
 
     #get max nse values 
-    allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)
+    allNSE['NNSE'] = 1/(2 - 0.01*allNSE.iloc[:,3:8].max(axis = 1))
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
 
     #filter out NAN rows
     ##remove rows where all reanalysis are nan
     allCorr = allCorr[~allCorr['Correlation'].isna()]
     allRMSE = allRMSE[~allRMSE['RMSE(cm)'].isna()]
-    allNSE = allNSE[~allNSE['NSE(%)'].isna()]
+    allNNSE = allNSE[~allNSE['NNSE'].isna()]
 
     allCorr.to_csv("allCorr.csv")
     allRMSE.to_csv("allRMSE.csv")
-    allNSE.to_csv("allNSE.csv")
+    allNNSE.to_csv("allNNSE.csv")
     
-    return allCorr, allRMSE, allNSE
+    return allCorr, allRMSE, allNNSE
 
 def loadData():
     """
