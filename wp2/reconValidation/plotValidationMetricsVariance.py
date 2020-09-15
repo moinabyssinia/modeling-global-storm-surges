@@ -81,4 +81,4 @@ def plotMetricVariance(metric):
     plt.title(title)
     os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
     saveName = 'allReanalyses'+metric+'STD.svg'
-    plt.savefig(saveName, dpi = 400)
+    #plt.savefig(saveName, dpi = 400)

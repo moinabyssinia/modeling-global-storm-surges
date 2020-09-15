@@ -37,6 +37,8 @@ def plotExtremeGlobal(metric):
     #call processData here
     if metric == 'corr':
         dat = starter()[0]
+        #remove tg that have negative correlation
+        dat = dat[~(dat['Correlation'] < 0)] 
         varToPlot = 'Correlation'
         title = 'Pearson\'s Correlation - 1980-2010 - above 95%ile'
         bubbleSizeMultiplier = 250
@@ -88,9 +90,9 @@ def plotExtremeGlobal(metric):
                         hue = 'Reanalysis',  palette = color_dict, data = dat)
     plt.legend(loc = 'lower left', ncol = 12)
     plt.title(title)
-    os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes\\percentile\\plotFiles")
-    saveName = 'allReanalysesExtremes'+metric+'.svg'
-    plt.savefig(saveName, dpi = 400)
+    # os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes\\percentile\\plotFiles")
+    # saveName = 'allReanalysesExtremes'+metric+'.svg'
+    # plt.savefig(saveName, dpi = 400)
 
 
 
