@@ -63,3 +63,10 @@ sns.scatterplot(x = x, y = y, markers = markers, style = 'bestLongTerm',\
                     hue = 'bestLongTerm',  palette = color_dict, data = dat)
 plt.legend(loc = 'lower left')
 plt.title('RMSE(m) - Common Perdiod (1980-2010) Validation for 20CR and ERA-20C')
+
+
+
+#add histogram of metrics
+plt.figure()
+plt.style.use('classic')
+plt.hist(dat['bestLTvsbest'], bins=50)
