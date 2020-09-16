@@ -74,6 +74,7 @@ twcr = pd.read_csv('20cr_Validation.csv')
 era20c = pd.read_csv('era20c_Validation.csv')
 eraint = pd.read_csv('eraint_Validation.csv')
 merra = pd.read_csv('merra_Validation.csv')
+erafive = pd.read_csv('erafiveRenamed.csv')
 
 #dealign with extensions
 
@@ -84,7 +85,7 @@ extenstion = ['_glossdm_bodc', '_uhslc', '_jma', '_bodc', '_noaa',\
                           '_itt', '_comune_venezia', '_johnhunter', '_university_zagreb']
 
 #change reanalysis here
-dat = merra.copy()  
+dat = erafive.copy()  
 dat['path'] = 'nan'  
 
 for ii in range(0, len(dat)):
@@ -100,37 +101,41 @@ for ii in range(0, len(dat)):
             #rename file
             dat.iloc[ii, 1] = new_name
             #change path location here
-            dat.iloc[ii, 11] = "./merra/"+new_name
+            dat.iloc[ii, 11] = "./erafive/"+new_name
             break
         
 dat = dat[['tg', 'lon', 'lat', 'path']]
 
 #save metadat as csv
-dat.to_csv('merraMetadata.csv')
+dat.to_csv('erafiveMetadata.csv')
 ###############################################################################
 #rename columns
 twcr.columns = ['Unnamed: 0', 'tg', 'lon', 'lat', 'twcrPath']
 era20c.columns = ['Unnamed: 0', 'tg', 'lonx', 'latx', 'era20cPath']
 eraint.columns = ['Unnamed: 0', 'tg', 'lony', 'laty', 'eraintPath']
 merra.columns = ['Unnamed: 0', 'tg', 'lonz', 'latz', 'merraPath']
+erafive.columns = ['Unnamed: 0', 'tg', 'lona', 'lata', 'erafivePath']
 
 ###############################################################################
 #merge all metadata files
-df = [twcr, era20c, eraint, merra]
+df = [twcr, era20c, eraint, merra, erafive]
 
 df_merged = reduce(lambda  left,right: pd.merge(left,right,on=['tg'],
                                             how='outer'), df)
 df_merged = df_merged[['tg', 'lon', 'lat', 'twcrPath', 'era20cPath', \
-                       'eraintPath', 'merraPath']]
+                       'eraintPath', 'merraPath', 'erafivePath']]
     
 #missing name for tide gauges
 df_merged.iloc[842,3] = './20cr/vigo_ieo_spain.csv'
 df_merged.iloc[842,4] = './era20c/vigo_ieo_spain.csv'
 df_merged.iloc[842,5] = './eraint/vigo_ieo_spain.csv'
-df_merged.iloc[842,6] = './merra/vigo_ieo_spain.csv'    
+df_merged.iloc[842,6] = './merra/vigo_ieo_spain.csv' 
+df_merged.iloc[842,7] = './erafive/vigo_ieo_spain.csv'    
+   
     
     
 df_merged.iloc[709,3] = './20cr/santander_ieo_spain.csv'
 df_merged.iloc[709,4] = './era20c/santander_ieo_spain.csv'
 df_merged.iloc[709,5] = './eraint/santander_ieo_spain.csv'
 df_merged.iloc[709,6] = './merra/santander_ieo_spain.csv'
+df_merged.iloc[709,7] = './erafive/santander_ieo_spain.csv'

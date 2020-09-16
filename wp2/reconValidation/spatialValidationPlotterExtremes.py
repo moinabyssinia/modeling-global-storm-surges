@@ -90,8 +90,8 @@ def plotExtremeGlobal(metric):
                         hue = 'Reanalysis',  palette = color_dict, data = dat)
     plt.legend(loc = 'lower left', ncol = 12)
     plt.title(title)
-    # os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes\\percentile\\plotFiles")
-    # saveName = 'allReanalysesExtremes'+metric+'.svg'
+    os.chdir("G:\\data\\allReconstructions\\validation\\commonPeriodValidationExtremes\\percentile\\plotFiles")
+    saveName = 'allReanalysesExtremes'+metric+'.svg'
     # plt.savefig(saveName, dpi = 400)
 
 
