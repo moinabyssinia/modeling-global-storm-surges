@@ -24,10 +24,10 @@ def starter():
     #get metrics for all reanalysis concatented by column
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[1]
-    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
+    allNNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
 
 
-    return allCorr, allRMSE, allNSE
+    return allCorr, allRMSE, allNNSE
 
 def plotGlobal(metric):
     """
@@ -45,9 +45,9 @@ def plotGlobal(metric):
         bubbleSizeMultiplier = 200
     elif metric == 'nse':
         dat = starter()[2]
-        varToPlot = 'NSE(%)'
-        title = 'NSE(%) - 1980-2010'  
-        bubbleSizeMultiplier = 3
+        varToPlot = 'NNSE'
+        title = 'NNSE - 1980-2010'  
+        bubbleSizeMultiplier = 300
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -127,13 +127,14 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:8].idxmin(axis = 1)
 
     #get max nse values 
-    allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)*100
+    ##normalize NSE values
+    allNSE['NNSE'] = 1/(2 - 0.01*allNSE.iloc[:,3:8].max(axis = 1))
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
     
     # #save metrics results 
     # allCorr.to_csv("allCorr.csv")
     # allRMSE.to_csv("allRMSE.csv")
-    # allNSE.to_csv("allNSE.csv")
+    allNSE.to_csv("allNSE.csv")
     
     return allCorr, allRMSE, allNSE
 
