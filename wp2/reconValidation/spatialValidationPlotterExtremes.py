@@ -22,9 +22,10 @@ def starter():
     #get metrics for all reanalysis concatented by column
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[1]
-    allNNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
+    allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
+    allNSE = allNSE[~(allNSE['NSE(%)'] < 0)]
 
-    return allCorr, allRMSE, allNNSE
+    return allCorr, allRMSE, allNSE
 
 def plotExtremeGlobal(metric):
     """
@@ -130,7 +131,7 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:8].idxmin(axis = 1)
 
     #get max nse values 
-    allNSE['NNSE'] = 1/(2 - 0.01*allNSE.iloc[:,3:8].max(axis = 1))
+    allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)*100
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
 
     #filter out NAN rows
@@ -143,7 +144,7 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allRMSE.to_csv("allRMSE.csv")
     allNNSE.to_csv("allNNSE.csv")
     
-    return allCorr, allRMSE, allNNSE
+    return allCorr, allRMSE, allNSE
 
 def loadData():
     """
