@@ -47,7 +47,7 @@ def plotGlobal(metric):
         dat = starter()[2]
         varToPlot = 'NNSE'
         title = 'NNSE - 1980-2010'  
-        bubbleSizeMultiplier = 300
+        bubbleSizeMultiplier = 200
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -88,11 +88,11 @@ def plotGlobal(metric):
     sns.scatterplot(x = x, y = y, markers = markers, style = 'Reanalysis',\
                     size = varToPlot, sizes=(minSize, maxSize),\
                         hue = 'Reanalysis',  palette = color_dict, data = dat)
-    plt.legend(loc = 'lower left')
+    plt.legend(loc = 'lower left', ncol = 12)
     plt.title(title)
-    # os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
-    # saveName = 'allReanalyses'+metric+'.svg'
-    # plt.savefig(saveName, dpi = 400)
+    os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
+    saveName = 'allReanalyses'+metric+'.svg'
+    plt.savefig(saveName, dpi = 400)
 
 def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     """
@@ -128,7 +128,7 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
 
     #get max nse values 
     ##normalize NSE values
-    allNSE['NNSE'] = 1/(2 - 0.01*allNSE.iloc[:,3:8].max(axis = 1))
+    allNSE['NNSE'] = 1/(2 - allNSE.iloc[:,3:8].max(axis = 1))
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
     
     # #save metrics results 
