@@ -23,7 +23,7 @@ def starter():
     allCorr = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[0]
     allRMSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[1]
     allNSE = processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat)[2]
-    allNSE = allNSE[~(allNSE['NSE(%)'] < 0)]
+    # allNSE = allNSE[~(allNSE['NSE(%)'] < 0)]
 
     return allCorr, allRMSE, allNSE
 
@@ -45,9 +45,9 @@ def plotExtremeGlobal(metric):
         bubbleSizeMultiplier = 250
     elif metric == 'nse':
         dat = starter()[2]
-        varToPlot = 'NNSE'
-        title = 'NNSE - 1980-2010'  
-        bubbleSizeMultiplier = 300
+        varToPlot = 'NSE(%)'
+        title = 'NSE - 1980-2010'  
+        bubbleSizeMultiplier = 900
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -131,18 +131,18 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:8].idxmin(axis = 1)
 
     #get max nse values 
-    allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)*100
+    allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
 
     #filter out NAN rows
     ##remove rows where all reanalysis are nan
     allCorr = allCorr[~allCorr['Correlation'].isna()]
     allRMSE = allRMSE[~allRMSE['RMSE(cm)'].isna()]
-    allNNSE = allNSE[~allNSE['NNSE'].isna()]
+    allNSE = allNSE[~allNSE['NSE(%)'].isna()]
 
     allCorr.to_csv("allCorr.csv")
     allRMSE.to_csv("allRMSE.csv")
-    allNNSE.to_csv("allNNSE.csv")
+    allNSE.to_csv("allNSE.csv")
     
     return allCorr, allRMSE, allNSE
 
