@@ -13,7 +13,7 @@ from d_define_grid import Coordinate, findPixels, findindx
 from c_read_netcdf import readnetcdf
 from f_era5_subsetV2 import subsetter
 
-def extract_data(delta= 3):
+def extract_data(delta= 1):
     """
     This is the master function that calls subsequent functions
     to extract uwnd, vwnd, slp for the specified
@@ -83,7 +83,8 @@ def extract_data(delta= 3):
                 #surge_with_date = add_date(surge)
         
                 #define tide gauge coordinate(lon, lat)
-                tg_cord = Coordinate(surge.iloc[0,0], surge.iloc[0,1])
+                tg_cord = Coordinate(surge.iloc[0,4], surge.iloc[0,5])
+                print(tg_cord)
                 
                 
                 #find closest grid points and their indices
@@ -133,4 +134,4 @@ def extract_data(delta= 3):
             os.chdir(nc_path[pf])
                         
 #run script
-extract_data(delta= 3)
+extract_data(delta= 1)

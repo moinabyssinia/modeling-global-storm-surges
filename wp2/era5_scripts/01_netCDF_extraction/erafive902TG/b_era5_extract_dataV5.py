@@ -61,8 +61,8 @@ def extract_data(delta= 1):
                 nc_file[3]
             
             
-            x = 513
-            y = 514
+            x = startVal
+            y = endVal
             
             #looping through individual tide gauges
             for t in range(x, y):
