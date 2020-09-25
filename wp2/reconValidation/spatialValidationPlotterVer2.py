@@ -46,9 +46,15 @@ def plotGlobal(metric):
         bubbleSizeMultiplier = 200
     elif metric == 'nse':
         dat = starter()[2]
+<<<<<<< HEAD
         varToPlot = 'NSE(%)'
         title = 'NSE(%) - 1980-2010'  
         bubbleSizeMultiplier = 3
+=======
+        varToPlot = 'NNSE'
+        title = 'NNSE - 1980-2010'  
+        bubbleSizeMultiplier = 200
+>>>>>>> kiko-stuff
     else:
         dat = starter()[1]
         varToPlot = 'RMSE(cm)'
@@ -130,7 +136,12 @@ def processData(twcrDat, era20cDat, eraintDat, merraDat, erafiveDat):
     allRMSE['Reanalysis'] = allRMSE.iloc[:, 3:8].idxmin(axis = 1)
 
     #get max nse values 
+<<<<<<< HEAD
     allNSE['NSE(%)'] = allNSE.iloc[:,3:8].max(axis = 1)*100
+=======
+    ##normalize NSE values
+    allNSE['NNSE'] = 1/(2 - allNSE.iloc[:,3:8].max(axis = 1))
+>>>>>>> kiko-stuff
     allNSE['Reanalysis'] = allNSE.iloc[:, 3:8].idxmax(axis = 1)
     
     # #save metrics results 
