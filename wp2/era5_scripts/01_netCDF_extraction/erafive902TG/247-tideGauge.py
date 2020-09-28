@@ -83,7 +83,7 @@ def extract_data(delta= 1):
                 #surge_with_date = add_date(surge)
         
                 #define tide gauge coordinate(lon, lat)
-                tg_cord = Coordinate(surge.iloc[0,4], surge.iloc[0,5])
+                tg_cord = Coordinate(float(surge.iloc[1,4]), float(surge.iloc[1,5]))
                 print(tg_cord)
                 
                 
@@ -103,7 +103,7 @@ def extract_data(delta= 1):
                 os.chdir(csv_path)
                 
                 #tide gauge directory
-                tg_name = tg.split('.mat.mat.csv')[0]
+                tg_name = tg.split('.csv')[0]
                 
                 try:
                     os.makedirs(tg_name)
