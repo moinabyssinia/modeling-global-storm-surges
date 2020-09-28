@@ -28,6 +28,11 @@ uwnd = uwnd.sort_values(by = 'date')
 vwnd = vwnd.sort_values(by = 'date')
 
 #reset indices
+uwnd.reset_index(inplace = True)
+vwnd.reset_index(inplace = True)
+
+uwnd.drop(['index'], axis = 1, inplace = True)
+vwnd.drop(['index'], axis = 1, inplace = True)
 
 #get squares of uwnd and vwnd
 uSquare = uwnd.iloc[:, 1:]**2
