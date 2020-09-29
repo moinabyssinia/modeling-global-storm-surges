@@ -15,8 +15,8 @@ os.chdir(dir_in)
 tgList = os.listdir()
 
 
-x = startVal
-y = endVal
+x = 106
+y = 107
 
 #looping through individual tide gauges
 for ii in range(x, y):
