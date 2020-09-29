@@ -14,13 +14,15 @@ dir_out = "/lustre/fs0/home/mtadesse/dailyPred"
 os.chdir(dir_in)
 tgList = os.listdir()
 
+x = 28
+y = 29
+
 #looping through individual tide gauges
 for ii in range(x, y):
     os.chdir(tgList[ii])
     
-    
-    
     #load file
+    wnd = pd.read_csv('wndRest.csv')
     wnd.drop(['Unnamed: 0'], axis = 1, inplace = True)
     
     #get daily time steps
