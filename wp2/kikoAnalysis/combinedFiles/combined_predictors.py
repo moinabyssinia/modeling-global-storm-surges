@@ -53,7 +53,7 @@ def combine():
             pred = pd.read_csv(csv_path[pr])
             
             #remove unwanted columns
-            pred.drop(['Unnamed: 0', 'Unnamed: 0.1'], axis = 1, inplace=True)
+            pred.drop(['Unnamed: 0'], axis = 1, inplace=True)
             
             #place date column to the first column
             firstCol = pred.pop('date')

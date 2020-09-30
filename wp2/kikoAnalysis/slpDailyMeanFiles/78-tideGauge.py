@@ -25,6 +25,16 @@ for ii in range(x, y):
     slp = pd.read_csv('slp.csv')
     slp.drop(['Unnamed: 0', 'Unnamed: 0.1'], axis = 1, inplace = True)
     
+    
+    #sort by date
+    slp = slp.sort_values(by = 'date')
+    
+    #reset indices
+    slp.reset_index(inplace = True)
+    
+    slp.drop(['index'], axis = 1, inplace = True)
+    
+    
     #get daily time steps
     getDays = lambda x: x.split()[0]
     slp['days'] = pd.DataFrame(list(map(getDays, slp['date'])))
