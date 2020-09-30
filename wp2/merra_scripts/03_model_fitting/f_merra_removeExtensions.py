@@ -15,8 +15,8 @@ def removeExtension():
     
     import os    
     
-    dir_in = 'G:\\05_era5\\08_era5_surge_reconstruction\\bestReconstruction\\surgeReconstructed'
-    dir_out = 'G:\\05_era5\\08_era5_surge_reconstruction\\bestReconstruction\\clean'
+    dir_in = 'G:\\05_era5\\kikoStuff\\05_dmax_surge_georef'
+    dir_out = 'G:\\05_era5\\kikoStuff\\dmaxRenamed'
 
 
     os.chdir(dir_in)

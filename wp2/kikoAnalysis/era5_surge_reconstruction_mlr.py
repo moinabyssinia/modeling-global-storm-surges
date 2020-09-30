@@ -30,7 +30,7 @@ def reconstruct():
    #defining directories    
     dir_in = 'G:\\05_era5\\kikoStuff\\combinedPred'
     dir_out = 'G:\\05_era5\\kikoStuff\\reconstruction'
-    surge_path = 'G:\05_era5\kikoStuff\05_dmax_surge_georef'
+    surge_path = 'G:\\05_era5\\kikoStuff\\05_dmax_surge_georef'
 
     
     #cd to the lagged predictors directory
@@ -71,15 +71,15 @@ def reconstruct():
         surge.drop('Unnamed: 0', axis = 1, inplace = True)
         
         #remove duplicated surge rows
-        surge.drop(surge[surge['ymd'].duplicated()].index, axis = 0, inplace = True)
+        surge.drop(surge[surge['date'].duplicated()].index, axis = 0, inplace = True)
         surge.reset_index(inplace = True)
         surge.drop('index', axis = 1, inplace = True)
         
         
         #adjust surge time format to match that of pred
-        time_str = lambda x: str(datetime.strptime(x, '%Y-%m-%d'))
-        surge_time = pd.DataFrame(list(map(time_str, surge['ymd'])), columns = ['date'])
-        time_stamp = lambda x: (datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+        time_str = lambda x: x.split()[0]
+        surge_time = pd.DataFrame(list(map(time_str, surge['date'])), columns = ['date'])
+        # time_stamp = lambda x: (datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
         surge_new = pd.concat([surge_time, surge[['surge', 'lon', 'lat']]], axis = 1)
     
         #merge predictors and surge to find common time frame
@@ -101,9 +101,9 @@ def reconstruct():
             continue
         
      
-        pred_surge['date'] = pd.DataFrame(list(map(time_stamp, \
-                                                   pred_surge['date'])), \
-                                          columns = ['date'])
+        # pred_surge['date'] = pd.DataFrame(list(map(time_stamp, \
+        #                                            pred_surge['date'])), \
+        #                                   columns = ['date'])
         
         #prepare data for training/testing
         X = pred_surge.iloc[:,1:-1]

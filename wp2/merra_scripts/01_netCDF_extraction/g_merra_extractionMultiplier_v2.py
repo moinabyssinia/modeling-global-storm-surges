@@ -8,7 +8,7 @@ MERRA multiple scripts producer
 """
 import os
 
-os.chdir('G:\\modeling_storm_surge\\wp2\\kikoAnalysis\\slpDailyMeanFiles')
+os.chdir('G:\\modeling_storm_surge\\wp2\\kikoAnalysis\\combinedFiles')
 
 
 for ii in range(0, 109):
@@ -17,7 +17,7 @@ for ii in range(0, 109):
     # save_name_nc = '_'.join(['era', '20c', var_name[var_list[ii]], \
     #                       str(years[jj]), '.nc'])
     save_name_py = ''.join([str(ii), '-tideGauge', '.py'])
-    f = open('getDailyMeanSLP.py', 'r')
+    f = open('combined_predictors.py', 'r')
     filedata = f.read()
     f.close()
     
