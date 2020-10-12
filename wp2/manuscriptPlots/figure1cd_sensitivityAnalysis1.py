@@ -7,8 +7,12 @@ Figure 1c and 1d
 @author: Michael Tadesse
 """
 
+import os 
+import matplotlib.pyplot as plt 
+import seaborn as sns
 #get the grid_stat file from 
 ##"F:\01_erainterim\06_eraint_results\grid_size"
+
 
 plt.figure(figsize = (10,6))
 markers = {"10x10": "o", "8x8": "o", "6x6":'o', "4x4":'o', "3x3":'o', "2x2":'o', "1x1":'o'}
