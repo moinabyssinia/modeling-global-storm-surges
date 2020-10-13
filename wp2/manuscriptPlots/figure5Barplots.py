@@ -23,9 +23,21 @@ import seaborn as sns
 leftPane = pd.read_csv('figure5leftpane.csv')
 rightPane = pd.read_csv('figure5rightpane.csv')
 
+
+#shorten region names for plotting purposes
+leftPane['region'].replace('US West Coast', 'UWC',inplace=True)
+leftPane['region'].replace('US East Coast', 'UEC',inplace=True)
+leftPane['region'].replace('South East Asia', 'SEA',inplace=True)
+
+rightPane['region'].replace('US West Coast', 'UWC',inplace=True)
+rightPane['region'].replace('US East Coast', 'UEC',inplace=True)
+rightPane['region'].replace('South East Asia', 'SEA',inplace=True)
+
+sns.set_context('notebook', font_scale = 2)
+
 fig, axes = plt.subplots(3, 2, figsize=(16, 10))
 #spacing between subplots
-fig.tight_layout(pad=1.0)
+fig.tight_layout(pad=0.5)
 palette = {"20CR":"green", "ERA-20C":"magenta", "ERA-Interim":"black", 
            "MERRA":"red", "ERA5":"cyan"}
 #correlation
@@ -63,3 +75,4 @@ axes[2,1].get_legend().set_visible(False)
 
 #save as svg
 os.chdir("G:\\data\\manuscriptFiles\\figures")
+fig.savefig("figure5.svg", dpi = 600)
