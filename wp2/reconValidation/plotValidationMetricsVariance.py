@@ -29,7 +29,7 @@ def plotMetricVariance(metric):
     
     #define validation output files
     validationFiles = {'corr' : 'allCorrelationMetricVariance.csv', 'rmse' : 'allRMSEMetricVariance.csv',
-                       'nse' : 'allNSEMetricVariance.csv'}
+                       'nnse' : 'allNSEMetricVariance_v2.csv'}
     
     chosenMetric = validationFiles[metric]
     
@@ -53,9 +53,9 @@ def plotMetricVariance(metric):
         bubbleSize = 60 
         title = 'RMSE - Metric Variation of Model Accuracy among Reanalyses (cm)'
     else:
-        dat['Metric STD'] = dat['Metric Variance']**0.5
-        bubbleSize = 350
-        title = 'NSE - Variation of Model Accuracy among Reanalyses'
+        dat['Metric STD'] = dat['metricSTD']
+        bubbleSize = 1500
+        title = 'NNSE - Variation of Model Accuracy among Reanalyses'
         
     sns.set_context('notebook', font_scale = 1.5)
     
@@ -81,4 +81,4 @@ def plotMetricVariance(metric):
     plt.title(title)
     os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
     saveName = 'allReanalyses'+metric+'STD.svg'
-    #plt.savefig(saveName, dpi = 400)
+    plt.savefig(saveName, dpi = 400)

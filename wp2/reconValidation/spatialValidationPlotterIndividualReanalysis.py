@@ -60,7 +60,7 @@ def plotGlobal(metric):
     ###################################
     #pick reanalysis you want to display
     ###################################
-    dat = dat[dat['Reanalysis'] == 'MERRA']
+    dat = dat[dat['Reanalysis'] == 'ERA-Interim']
 
 
     #increase plot font size
