@@ -76,7 +76,9 @@ def plotMetricVariance(metric):
     m.bluemarble(alpha = 0.8)
     sns.scatterplot(x = x, y = y, color = 'red', 
                     size = 'metricSTD', hue = 'Reanalysis',
-                    sizes = (minSize, maxSize), palette = ['black', 'cyan', 'magenta', 'red', 'green']
+                    sizes = (minSize, maxSize), 
+                    palette = {'ERA-Interim':'black', 'ERA-FIVE':'cyan', 'MERRA':'red', 
+                               'ERA-20C':'magenta', '20CR':'green'}
                     ,data = dat)
     plt.title(title)
     os.chdir('D:\\OneDrive - Knights - University of Central Florida\\UCF\\Projekt.28\\Report\\05-Spring-2020\\#2Paper\\p28DataDescriptor\\reView\\figures\\r1c25')
