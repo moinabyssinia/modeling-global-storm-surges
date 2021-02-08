@@ -82,7 +82,7 @@ def plotMetricVariance(metric):
     sns.scatterplot(x = x, y = y, color = 'red', 
                     size = 'Metric STD', hue = 'Reanalysis',
                     sizes = (minSize, maxSize), palette = {'ERA-Interim':'black', 'ERA-FIVE':'cyan', 'MERRA':'red', 
-                               'ERA-20C':'magenta', '20CR':'green'}
+                               'ERA-20c':'magenta', '20CR':'green'}
                     ,data = dat)
     plt.title(title)
     os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')

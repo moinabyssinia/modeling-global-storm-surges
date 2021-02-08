@@ -29,7 +29,7 @@ def plotMetricVariance(metric):
     
     #define validation output files
     validationFiles = {'corr' : 'allCorr.csv', 'rmse' : 'allRMSE.csv',
-                       'nnse' : 'allNNSE.csv'}
+                       'nnse' : 'allNNSE.csv', 'rrmse':'RRMSEOnly.csv'}
     
     chosenMetric = validationFiles[metric]
     
@@ -52,6 +52,10 @@ def plotMetricVariance(metric):
         dat['Metric STD'] = 100*dat['metricSTD']
         bubbleSize = 4000 
         title = 'RMSE - Metric Variation of Model Accuracy among Reanalyses (cm)'
+    elif metric == 'rrmse':
+        dat['Metric STD'] = dat['metricSTD']
+        bubbleSize = 50
+        title = 'RRMSE - Variation of Model Accuracy among Reanalyses'
     else:
         dat['Metric STD'] = dat['metricSTD']
         bubbleSize = 50
