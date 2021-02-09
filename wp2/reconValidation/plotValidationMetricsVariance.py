@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jul 24 09:47:48 2020
+edited on Tuw Feb 09 10:37:00 2021
 
 To plot variance of validation metrics
 
@@ -12,7 +13,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 #locate the file that basemap needs
-os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\Anaconda3\\Library\\share\\basemap";
+os.environ["PROJ_LIB"] = "C:\\Users\\WahlInstall\\"\
+    "Anaconda3\\Library\\share\\basemap";
 from mpl_toolkits.basemap import Basemap
 
 
@@ -24,11 +26,13 @@ def plotMetricVariance(metric):
     """
     
     #directories for the common period validation
-    csvPath = "G:\\data\\allReconstructions\\validation\\commonPeriodValidation"
+    csvPath = "G:\\data\\allReconstructions\\validation\\"\
+                        "commonPeriodValidation"
     os.chdir(csvPath)
     
     #define validation output files
-    validationFiles = {'corr' : 'allCorrelationMetricVariance.csv', 'rmse' : 'allRMSEMetricVariance.csv',
+    validationFiles = {'corr' : 'allCorrelationMetricVariance.csv', 
+                       'rmse' : 'allRMSEMetricVariance.csv',
                        'nnse' : 'allNSEMetricVariance_v2.csv',
                        'rrmse':'RRMSEOnly.csv'}
     
@@ -85,6 +89,9 @@ def plotMetricVariance(metric):
                                'ERA-20c':'magenta', '20CR':'green'}
                     ,data = dat)
     plt.title(title)
-    os.chdir('G:\\data\\allReconstructions\\validation\\commonPeriodValidation\\plotFiles')
+    
+    #saving as csv
+    os.chdir('G:\\data\\allReconstructions\\validation\\"\
+                 commonPeriodValidation\\plotFiles')
     saveName = 'allReanalyses'+metric+'STD.svg'
     plt.savefig(saveName, dpi = 400)

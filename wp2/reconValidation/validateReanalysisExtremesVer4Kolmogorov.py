@@ -69,7 +69,11 @@ def getFiles(data):
             continue
         #get extremes 
         surgeExtremes = getExtremes(surgeSubset)
-
+        
+        #save extremes as csv
+        os.chdir(outPath)
+        surgeExtremes.to_csv(tg)
+        
         #implement validation
         pval = getKTest(surgeExtremes)
 
