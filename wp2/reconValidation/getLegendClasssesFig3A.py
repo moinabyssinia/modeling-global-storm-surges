@@ -4,7 +4,7 @@ Created on Tue Feb 09 10:50:35 2021
 
 add a column of marker size - to create 
 only four classes of legends with distinct
-sizes
+sizes - for correlation - to plot figure 3A
 
 @author: Michael Tadesse
 """

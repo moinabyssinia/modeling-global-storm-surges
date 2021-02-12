@@ -41,6 +41,10 @@ def plotMetricVariance(metric):
     
     #read the validation file of choice
     dat = pd.read_csv(chosenMetric)
+    
+    #remove nans
+    dat = dat[dat['size'] != 'nan']
+    dat = dat[~dat['size'].isna()]
     #compute standard deviation of metrics for all reanalysis
     # metricColumns = dat[['20CR', 'ERA-20c', 'ERA-Interim', 'MERRA', 'ERA-FIVE']]
     # metricColumns.to_csv('justMetrics.csv')
@@ -85,13 +89,14 @@ def plotMetricVariance(metric):
     # minSize = min(dat['Metric STD'])*bubbleSize
     # maxSize = max(dat['Metric STD'])*bubbleSize
     
-    minSize = min(dat['size'])
-    maxSize = max(dat['size'])
+    # minSize = min(dat['size'])
+    # maxSize = max(dat['size'])
+    
     
     m.bluemarble(alpha = 0.8)
     sns.scatterplot(x = x, y = y, color = 'red', 
-                    size = 'Metric STD', hue = 'Reanalysis',
-                    sizes = (minSize, maxSize), \
+                    size = 'size', sizes = (30, 300),
+                        hue = 'Reanalysis',
                         palette = {'ERA-Interim':'black', 
                                    'ERA-FIVE':'cyan', 
                                    'MERRA':'red', 
@@ -100,8 +105,10 @@ def plotMetricVariance(metric):
                     ,data = dat)
     plt.title(title)
     
-    # #saving as csv
-    # os.chdir('G:\\data\\allReconstructions\\validation\\"\
-    #              commonPeriodValidation\\plotFiles')
-    # saveName = 'allReanalyses'+metric+'STD.svg'
-    # plt.savefig(saveName, dpi = 400)
+    plt.legend(ncol = 7)
+    
+    #saving as csv
+    os.chdir("G:\\data\\allReconstructions\\validation\\"\
+              "commonPeriodValidation\\plotFiles")
+    saveName = 'allReanalyses'+metric+'STDFixedLegend.svg'
+    plt.savefig(saveName, dpi = 400)
