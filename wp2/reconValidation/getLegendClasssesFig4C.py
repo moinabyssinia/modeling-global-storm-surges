@@ -15,7 +15,7 @@ os.chdir("G:\\data\\allReconstructions\\validation\\"\
              "commonPeriodValidationExtremes\\percentile")
 
 #load corr/rmse/rrmse files
-dat = pd.read_csv("allCorr.csv")
+dat = pd.read_csv("RRMSEOnly.csv")
 dat.drop('Unnamed: 0', axis = 1, inplace = True)
 
 #find the four classes - look at std histogram
@@ -25,18 +25,18 @@ dat.drop('Unnamed: 0', axis = 1, inplace = True)
 dat['size'] = 'nan'
 
 for ii in range(len(dat)):
-    row = dat['metricSTD'][ii] #already std
+    row = dat['metricSTD'][ii] #in cms
     print(row)
-    if (row <= 0.25):
+    if (row <= 3):
         dat['size'][ii] = 50
-    elif ((row > 0.25) & (row < 0.5)):
+    elif ((row > 3) & (row < 6)):
         dat['size'][ii] = 250
-    elif ((row >= 0.5) & (row < 0.75)):
+    elif ((row >= 6) & (row < 9)):
         dat['size'][ii] = 500
-    elif ((row >= 0.75) & (row <= 1.0)):
+    elif ((row >= 9) & (row <= 12)):
         dat['size'][ii] = 750
     else:
         "something is wrong!"
         
 #save as csv
-dat.to_csv("corrSTDFixedLegend.csv")
+dat.to_csv("rrmseSTDFixedLegend.csv")
