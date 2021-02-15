@@ -33,7 +33,7 @@ def plotMetricVariance(metric):
     
     #define validation output files
     validationFiles = {'corr' : 'corrSTDFixedLegend.csv', 
-                       'rmse' : 'allRMSEMetricVariance.csv',
+                       'rmse' : 'rmseSTDFixedLegend.csv',
                        'nnse' : 'allNSEMetricVariance_v2.csv',
                        'rrmse':'RRMSEOnly.csv'}
     
