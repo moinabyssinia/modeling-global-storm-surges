@@ -24,10 +24,10 @@ from sklearn.preprocessing import StandardScaler
 
 #defining directories    
 dir_in = 'G:\\05_era5\\kikoStuff\\combinedPred'
-dir_out = 'G:\\05_era5\\kikoStuff\\test'
+dir_out = 'G:\\05_era5\\kikoStuff\\regCoef'
 surge_path = 'G:\\05_era5\\kikoStuff\\05_dmax_surge_georef'
 
-def reconstruct():
+def getCoef():
     """
     run KFOLD method for regression 
     """
@@ -116,51 +116,55 @@ def reconstruct():
         longitude = surge['lon'][0]
         latitude = surge['lat'][0]
         
-        #surge reconstruction
-        pred_for_recon = pred[~pred.isna().any(axis = 1)]
-        pred_for_recon = pred_for_recon.reset_index().drop('index', axis = 1)
+        {
+                   # #surge reconstruction
+        # pred_for_recon = pred[~pred.isna().any(axis = 1)]
+        # pred_for_recon = pred_for_recon.reset_index().drop('index', axis = 1)
         
         
-        #standardize predictor data
-        dat = pred_for_recon.iloc[:,1:]
-        scaler = StandardScaler()
-        print(scaler.fit(dat))
-        dat_standardized = pd.DataFrame(scaler.transform(dat), \
-                                        columns = dat.columns)
-        pred_standardized = pd.concat([pred_for_recon['date'], dat_standardized], axis = 1)
+        # #standardize predictor data
+        # dat = pred_for_recon.iloc[:,1:]
+        # scaler = StandardScaler()
+        # print(scaler.fit(dat))
+        # dat_standardized = pd.DataFrame(scaler.transform(dat), \
+        #                                 columns = dat.columns)
+        # pred_standardized = pd.concat([pred_for_recon['date'], dat_standardized], axis = 1)
         
-        X_recon = pred_standardized.iloc[:, 1:]
+        # X_recon = pred_standardized.iloc[:, 1:]
         
-        #apply PCA
-        pca = PCA(num_pc) #use the same number of PCs used for training
-        pca.fit(X_recon)
-        X_pca_recon = pca.transform(X_recon)
-    
-    
+        # #apply PCA
+        # pca = PCA(num_pc) #use the same number of PCs used for training
+        # pca.fit(X_recon)
+        # X_pca_recon = pca.transform(X_recon) 
+            }
+
         #model preparation
         #first train model using observed surge and corresponding predictors
         X_pca = sm.add_constant(X_pca)
         est = sm.OLS(y['surge'], X_pca).fit()
+        coef = est.params
+        print(coef, "\n")
         
-        #predict with X_recon and get 95% prediction interval
-        X_pca_recon = sm.add_constant(X_pca_recon)
-        predictions = est.get_prediction(X_pca_recon).summary_frame(alpha = 0.05)
+        {
+                   # #predict with X_recon and get 95% prediction interval
+        # X_pca_recon = sm.add_constant(X_pca_recon)
+        # predictions = est.get_prediction(X_pca_recon).summary_frame(alpha = 0.05)
         
-        #drop confidence interval and mean_se columns 
-        predictions.drop(['mean_se', 'mean_ci_lower','mean_ci_upper'], \
-                         axis = 1, inplace = True)
+        # #drop confidence interval and mean_se columns 
+        # predictions.drop(['mean_se', 'mean_ci_lower','mean_ci_upper'], \
+        #                  axis = 1, inplace = True)
         
-        #final dataframe
-        final_dat = pd.concat([pred_standardized['date'], predictions], axis = 1)
-        final_dat['lon'] = longitude
-        final_dat['lat'] = latitude
-        final_dat.columns = ['date', 'surge_reconsturcted', 'pred_int_lower',\
-                             'pred_int_upper', 'lon', 'lat']
-
+        # #final dataframe
+        # final_dat = pd.concat([pred_standardized['date'], predictions], axis = 1)
+        # final_dat['lon'] = longitude
+        # final_dat['lat'] = latitude
+        # final_dat.columns = ['date', 'surge_reconsturcted', 'pred_int_lower',\
+        #                      'pred_int_upper', 'lon', 'lat'] 
+            }
 
         #save df as cs - in case of interruption
         os.chdir(dir_out)
-        final_dat.to_csv(tg_name)
+        coef.to_csv(tg_name)
         
         #cd to dir_in
         os.chdir(dir_in)
