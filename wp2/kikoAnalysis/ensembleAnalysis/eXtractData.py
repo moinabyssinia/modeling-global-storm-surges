@@ -4,7 +4,7 @@ Created on Tue Feb 23 08:59:27 2021
 
 Extract Data from Ensemble Data - Kiko
 
-@author: mi292519
+@author: Michael Tadesse
 """
 
 import os 
