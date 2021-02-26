@@ -49,7 +49,7 @@ for tg in tgList:
     print(tg)
     
     #cd to tg folder
-    os.chdir(tg)
+    os.chdir(dir_in + "\\" + tg)
     
     ensList = os.listdir()
     
@@ -57,6 +57,8 @@ for tg in tgList:
     for ens in ensList:
         
         print(ens)
+        
+        os.chdir(dir_in + "\\" + tg)
         
         #cd to ens folder
         os.chdir(ens)
@@ -66,11 +68,13 @@ for tg in tgList:
             print("slp found first")
             slp = pd.read_csv(os.listdir()[0])
             slp.drop('Unnamed: 0', axis = 1, inplace = True)
+            
             #rename columns here
             renameColumns(slp, 'slp')
             
             wsp = pd.read_csv(os.listdir()[1])
             wsp.drop('Unnamed: 0', axis = 1, inplace = True)
+            
             #rename columns here
             renameColumns(wsp, 'wsp')
             
@@ -78,11 +82,59 @@ for tg in tgList:
             print("slp found second")
             slp = pd.read_csv(os.listdir()[1])  
             slp.drop('Unnamed: 0', axis = 1, inplace = True)
+            
             #rename columns here
             renameColumns(slp, 'slp')
             
             wsp = pd.read_csv(os.listdir()[0]) 
             wsp.drop('Unnamed: 0', axis = 1, inplace = True)
+            
             #rename columns here
             renameColumns(wsp, 'wsp')
+            
+        #combine slp and wsp
+        pred_combined = pd.merge(slp, wsp, on = 'date')
+        saveName = ens.lower() + ".csv"
+        
+        #create tg folder
+        os.chdir(dir_out)
+        try:
+            os.makedirs(tg)
+            os.chdir(tg)
+            
+            #save ensemble combined predictors
+            pred_combined.to_csv(saveName)
+        except FileExistsError:
+           os.chdir(tg)
+           
+           #save ensemble combined predictors
+           pred_combined.to_csv(saveName)
+                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
