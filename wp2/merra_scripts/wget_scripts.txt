@@ -1,0 +1,9 @@
+wget --load-cookies C:\.urs_cookies--save-cookies C:\.urs_cookies --keep-session-cookies -r -c -nH -nd -np -A nc4 --no-parent --user=michaelg.tadesse --ask-password --recursive --content-disposition https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2I1NXASM.5.12.4/1980/01/
+
+wget --load-cookies C:\.urs_cookies--save-cookies C:\.urs_cookies --keep-session-cookies -r -c -nH -nd -np -A nc4 --user=michaelg.tadesse --ask-password --recursive --level 0 --content-disposition https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2I1NXASM.5.12.4/1980/01/
+
+wget --load-cookies C:\Users\mi292519\Documents\.urs_cookies--save-cookies C:\Users\mi292519\Documents\.urs_cookies -r -c -nH -nd -np -A nc4 --content-disposition https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2_MONTHLY/M2SMNXSLV.5.12.4/1981/
+
+
+
+wget --recursive --level 0 --content-disposition https://www.esrl.noaa.gov/psd/cgi-bin/db_search/DBListFiles.pl?did=203&tid=76928&vid=3798

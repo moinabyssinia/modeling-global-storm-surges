@@ -1,20 +1,6 @@
-# Modeling Storm Surge
-A collection of scripts used for my storm surge modeling project
+# Modeling Global Storm Surges in the Past, Present, and Future and the Associated Socio-Economic Impacts
 
-#define_grid
-Used to define the closest grid points for a specified tide gauge
+This is a collection of scripts used for the NASA funded project which is the modeling of global daily maximum surges.
+The results of the first work-package are published in Frontiers Marince Sciences journal and can be accessed [here](https://www.frontiersin.org/articles/10.3389/fmars.2020.00260/full).
 
-#read_netcdf_v2
-Used to read a NetCDF4 file and its components (u10, v10, msl)
-
-#starter
-The master script to initiate othe scripts
-
-#subset
-Used to filter predictor information for the closest grid points for the specified tide gauge
-
-#surgets
-Used to prepare the storm surge time series for training
-
-#timelag_v2
-Used to compute lagged variables for the predictors and predictand
+![alt text](https://www.frontiersin.org/files/Articles/512653/fmars-07-00260-HTML/image_m/fmars-07-00260-g002.jpg)
