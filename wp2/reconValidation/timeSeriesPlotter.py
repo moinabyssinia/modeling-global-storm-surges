@@ -17,7 +17,10 @@ from datetime import datetime
 # #define a plot object that can be manipulated
 #update the rows of the subplot here 
 fig, ax = plt.subplots(2, 1, figsize=(16, 10))
-fig.tight_layout(pad = 0.8)
+
+fig.delaxes(ax[1]) # use when using odd number of panes
+
+fig.tight_layout(pad = 4)
 
 def timeSeriesPlotter(tideGauge, data, row):
     """
@@ -203,8 +206,10 @@ def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5,
     #color = "gray", lw = 0.5)
     
     #define title location
-    ax[row].set_title(tideGauge, loc ='left')
+    ax[row].set_title(tideGauge, loc ='left', y = 0.9999999, fontweight="bold")
     
+
+    ax[row].set_ylabel("Surge Height (m)")
     
     #set legend
     if row == 0:
@@ -212,5 +217,8 @@ def plotTimeSeries(surgeTwcr, surgeEra20c, surgeEraint, surgeMerra, surgeEra5,
         pi_patch = mpatches.Patch(color='darkseagreen', 
                                   label='95% Prediction Interval')
         handles.append(pi_patch)
-        plt.legend(handles = handles, ncol = 6)
+        ax[row].legend(handles = handles, ncol = 7)
     
+    plt.show()
+
+timeSeriesPlotter("cocoa_beach,_fl_754a_usa", ["twcr", "era20c", "eraint", "merra", "erafive"], 0)
